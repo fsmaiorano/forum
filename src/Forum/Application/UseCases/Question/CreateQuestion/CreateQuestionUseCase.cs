@@ -7,9 +7,7 @@ public record CreateQuestionCommand(string Title, string Content, string AuthorI
 
 public record CreateQuestionResult(string QuestionId);
 
-public interface ICreateQuestionUseCase
-{
-}
+public interface ICreateQuestionUseCase;
 
 public sealed class CreateQuestionUseCase(ILogger<CreateQuestionUseCase> logger, IQuestionRepository questionRepository)
     : ICreateQuestionUseCase
