@@ -5,7 +5,7 @@ namespace Forum.Endpoints.Question;
 
 public record CreateQuestionResponse(string QuestionId);
 
-public class CreateQuestionEndpoint
+public static class CreateQuestionEndpoint
 {
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
