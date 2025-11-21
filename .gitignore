@@ -41,7 +41,4 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 
-.containers
-*.DotSettings.*
-discountdb
-discountdb-*
+src/Forum/Logs/*

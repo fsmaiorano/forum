@@ -1,6 +1,13 @@
-@Forum_HostAddress = http://localhost:5126
+#@Forum_HostAddress = http://localhost:5126
+@Forum_HostAddress = https://localhost:7123
 
-GET {{Forum_HostAddress}}/weatherforecast/
+POST {{Forum_HostAddress}}/question
+Content-Type: application/json
 Accept: application/json
+
+{
+  "title": "How to implement authentication in ASP.NET Core?",
+  "content": "I am looking for best practices to implement authentication in an ASP.NET Core web application. Any suggestions or resources would be appreciated?"
+}
 
 ###

@@ -1,6 +1,7 @@
 using Forum.Domain.Repositories;
 using Forum.Infrastructure.Data.Context;
 using Forum.Infrastructure.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Serilog;
 
@@ -24,10 +25,15 @@ public static partial class DependencyInjection
 
     private static void AddContexts(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ForumDbContext>((serviceProvider, options) => { });
-
         services.AddHttpContextAccessor();
         services.AddScoped<IForumDbContext, ForumDbContext>();
+
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        if (configuration.GetSection("UseInMemoryDatabase").Get<bool>())
+        {
+            services.AddDbContext<ForumDbContext>(options =>
+                options.UseInMemoryDatabase("ForumInMemoryDb"));
+        }
     }
 
     private static WebApplicationBuilder AddLogging(WebApplicationBuilder builder)

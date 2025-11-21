@@ -11,11 +11,27 @@ builder.Services.AddInfrastructure(builder.Configuration, builder);
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Forum API",
+        Version = "v1",
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Forum API v1");
+        options.RoutePrefix = "swagger";
+    });
 }
 
 app.UseMiddleware<CorrelationIdMiddleware>();
