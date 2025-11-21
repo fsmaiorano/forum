@@ -1,3 +1,4 @@
+using Forum.Domain.Entities.ValuesObjects;
 using UnitTests.Factories;
 
 namespace UnitTests.Application.UseCases.Question;

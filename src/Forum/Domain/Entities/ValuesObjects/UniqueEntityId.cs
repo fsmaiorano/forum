@@ -1,6 +1,6 @@
 using Forum.Domain.Exceptions;
 
-namespace Forum.Domain.Entities.Generic;
+namespace Forum.Domain.Entities.ValuesObjects;
 
 public sealed class UniqueEntityId : IEquatable<UniqueEntityId>
 {
