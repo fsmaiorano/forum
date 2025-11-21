@@ -13,13 +13,13 @@ public interface ICreateQuestionUseCase
     Task<Result<CreateQuestionResult>> CreateQuestionUseCaseHandler(CreateQuestionCommand command);
 }
 
-public sealed class CreateQuestionUseCase(IAppLogger<CreateQuestionUseCase> logger, IQuestionRepository questionRepository)
+public sealed class CreateQuestionUseCase(
+    IAppLogger<CreateQuestionUseCase> logger,
+    IQuestionRepository questionRepository)
     : ICreateQuestionUseCase
 {
     public async Task<Result<CreateQuestionResult>> CreateQuestionUseCaseHandler(CreateQuestionCommand command)
     {
-        logger.LogInformation(LogType.Application, "Creating question with title: {Title}", command.Title);
-        
         var question =
             Domain.Entities.Question.Create(
                 command.AuthorId,
@@ -28,10 +28,9 @@ public sealed class CreateQuestionUseCase(IAppLogger<CreateQuestionUseCase> logg
                 command.Slug);
 
         await questionRepository.Create(question);
-        
-        logger.LogInformation(LogType.Application, "Question created with ID: {QuestionId}", question.Id);
+
+        logger.LogInformation(LogType.Functional, $"The user {question.AuthorId} created a new question with ID: {question.Id}");
 
         return Result<CreateQuestionResult>.Success(new CreateQuestionResult(question.Id.ToString()));
     }
 }
-
