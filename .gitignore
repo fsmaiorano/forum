@@ -42,3 +42,4 @@ msbuild.err
 msbuild.wrn
 
 src/Forum/Logs/*
+Forum.sln.DotSettings.user

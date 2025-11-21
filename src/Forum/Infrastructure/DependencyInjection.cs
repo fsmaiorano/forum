@@ -54,6 +54,12 @@ public static partial class DependencyInjection
                     rollingInterval: RollingInterval.Day,
                     outputTemplate:
                     "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] [{LogType}] {Message:lj}{NewLine}{Exception}"))
+            .WriteTo.Logger(lc => lc
+                .Filter.ByIncludingOnly("LogType = 'Exception'")
+                .WriteTo.File("Logs/Exception/log-.txt",
+                    rollingInterval: RollingInterval.Day,
+                    outputTemplate:
+                    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] [{LogType}] {Message:lj}{NewLine}{Exception}"))
             .WriteTo.Console());
 
         return builder;
