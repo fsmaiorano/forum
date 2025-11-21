@@ -1,3 +1,4 @@
+using Forum.Domain.Base;
 using Forum.Domain.Repositories;
 
 namespace Forum.Application.UseCases.Question.CreateQuestion;
@@ -13,7 +14,7 @@ public interface ICreateQuestionUseCase
 public sealed class CreateQuestionUseCase(ILogger<CreateQuestionUseCase> logger, IQuestionRepository questionRepository)
     : ICreateQuestionUseCase
 {
-    public async Task<CreateQuestionResult> CreateQuestionUseCaseHandler(CreateQuestionCommand command)
+    public async Task<Result<CreateQuestionResult>> CreateQuestionUseCaseHandler(CreateQuestionCommand command)
     {
         var question =
             Domain.Entities.Question.Create(
@@ -24,6 +25,6 @@ public sealed class CreateQuestionUseCase(ILogger<CreateQuestionUseCase> logger,
 
         await questionRepository.Create(question);
 
-        return new CreateQuestionResult(question.Id.ToString());
+        return Result<CreateQuestionResult>.Success(new CreateQuestionResult(question.Id.ToString()));
     }
 }

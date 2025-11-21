@@ -15,7 +15,7 @@ public class CreateQuestionUnitTest(DatabaseFixture fixture) : BaseTest(fixture)
         var result = await useCase.CreateQuestionUseCaseHandler(command);
 
         var storedQuestion = await Context.Question
-            .FirstOrDefaultAsync(q => q.Id == UniqueEntityId.Of(result.QuestionId));
+            .FirstOrDefaultAsync(q => q.Id == UniqueEntityId.Of(result.Value.QuestionId));
 
         Assert.NotNull(storedQuestion);
         Assert.Equal(command.Title, storedQuestion.Title);
