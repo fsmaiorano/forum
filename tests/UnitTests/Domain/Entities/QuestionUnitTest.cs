@@ -1,3 +1,5 @@
+using UnitTests.Factories;
+
 namespace UnitTests.Domain.Entities;
 
 public class QuestionUnitTest
@@ -5,34 +7,18 @@ public class QuestionUnitTest
     [Fact]
     public void Create_ShouldCreateQuestionWithValidInputs()
     {
-        const string authorId = "author-123";
-        const string title = "Sample Title";
-        const string content = "Sample Content";
-        const string slug = "sample-title";
+        var mock = MakeQuestion.Create();
 
-        var question = Question.Create(authorId, title, content, slug);
+        var question = Question.Create(
+            mock.AuthorId.ToString(),
+            mock.Title,
+            mock.Content,
+            mock.Slug?.Value);
 
-
-        Assert.Equal(authorId, question.AuthorId.ToString());
-        Assert.Equal(title, question.Title);
-        Assert.Equal(content, question.Content);
-        Assert.NotNull(question.Slug);
-        Assert.Equal(slug, question.Slug!.Value);
-    }
-
-    [Fact]
-    public void Create_ShouldCreateQuestionWithNullSlug()
-    {
-        const string authorId = "author-123";
-        const string title = "Sample Title";
-        const string content = "Sample Content";
-
-        var question = Question.Create(authorId, title, content);
-
-        Assert.Equal(authorId, question.AuthorId.ToString());
-        Assert.Equal(title, question.Title);
-        Assert.Equal(content, question.Content);
-        Assert.Null(question.Slug);
+        Assert.Equal(mock.AuthorId.ToString(), question.AuthorId.ToString());
+        Assert.Equal(mock.Title, question.Title);
+        Assert.Equal(mock.Content, question.Content);
+        Assert.Equal(mock.Slug?.Value, question.Slug?.Value);
     }
 
     [Fact]

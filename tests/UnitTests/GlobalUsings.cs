@@ -8,4 +8,5 @@ global using Forum.Infrastructure.Data.Repositories;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Logging;
 global using Moq;
+global using UnitTests.Base;
 global using UnitTests.Fixtures;
