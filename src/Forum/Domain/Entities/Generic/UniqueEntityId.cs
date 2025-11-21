@@ -9,7 +9,7 @@ public sealed class UniqueEntityId : IEquatable<UniqueEntityId>
     public UniqueEntityId(string? value = null)
     {
         _value = value is null
-            ? Guid.NewGuid()
+            ? GenerateNewGuid()
             : Guid.TryParse(value, out var guidValue)
                 ? guidValue
                 : throw new ArgumentException("Invalid GUID format.", nameof(value));
@@ -47,7 +47,7 @@ public sealed class UniqueEntityId : IEquatable<UniqueEntityId>
     /// </summary>
     public static UniqueEntityId NewId()
     {
-        return new UniqueEntityId(Guid.NewGuid());
+        return new UniqueEntityId(GenerateNewGuid());
     }
 
     #region Equality Members
@@ -101,4 +101,6 @@ public sealed class UniqueEntityId : IEquatable<UniqueEntityId>
     public static explicit operator UniqueEntityId(string value) => Of(value);
 
     #endregion
+    
+    private static Guid GenerateNewGuid() => Guid.CreateVersion7();
 }

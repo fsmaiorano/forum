@@ -9,6 +9,7 @@ namespace Forum.Domain.Base;
 public class Result
 {
     public bool IsSuccess { get; }
+
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Error { get; }
 

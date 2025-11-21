@@ -7,7 +7,7 @@ public class DatabaseFixture : IDisposable
     public DatabaseFixture()
     {
         var options = new DbContextOptionsBuilder<ForumDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .UseInMemoryDatabase(databaseName: Guid.CreateVersion7().ToString())
             .Options;
 
         Context = new ForumDbContext(options);
