@@ -1,3 +1,5 @@
+using Forum.Domain.Entities.ValuesObjects;
+
 namespace UnitTests.Factories;
 
 public static class MakeQuestion
@@ -19,13 +21,17 @@ public static class MakeQuestion
     public static CreateQuestionCommand CreateQuestionCommand(
         string? authorId = null,
         string? title = null,
-        string? content = null)
+        string? content = null,
+        string? slug = null,
+        List<Attachment>? attachments = null)
     {
         var faker = new Bogus.Faker();
         return new CreateQuestionCommand(
             Title: title ?? faker.Lorem.Sentence(3),
             Content: content ?? faker.Lorem.Paragraph(),
-            AuthorId: authorId ?? faker.Random.Uuid().ToString()
+            AuthorId: authorId ?? faker.Random.Uuid().ToString(),
+            Slug: slug ?? faker.Lorem.Slug(),
+            Attachment: attachments ?? []
         );
     }
 }

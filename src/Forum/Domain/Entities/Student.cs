@@ -2,7 +2,7 @@ using Forum.BuildingBlocks.Base;
 
 namespace Forum.Domain.Entities;
 
-public record Student : Entity
+public sealed record Student : Entity
 {
     public string Name { get; private set; } = string.Empty;
 

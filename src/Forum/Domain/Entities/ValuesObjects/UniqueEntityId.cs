@@ -2,7 +2,7 @@ using Forum.BuildingBlocks.Exceptions;
 
 namespace Forum.Domain.Entities.ValuesObjects;
 
-public sealed class UniqueEntityId : IEquatable<UniqueEntityId>
+public sealed record UniqueEntityId
 {
     private readonly Guid _value;
 
@@ -58,27 +58,9 @@ public sealed class UniqueEntityId : IEquatable<UniqueEntityId>
         return ReferenceEquals(this, other) || _value.Equals(other._value);
     }
 
-    public override bool Equals(object? obj)
-    {
-        if (obj is null) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        return obj is UniqueEntityId other && Equals(other);
-    }
-
     public override int GetHashCode()
     {
         return _value.GetHashCode();
-    }
-
-    public static bool operator ==(UniqueEntityId? left, UniqueEntityId? right)
-    {
-        if (left is null) return right is null;
-        return left.Equals(right);
-    }
-
-    public static bool operator !=(UniqueEntityId? left, UniqueEntityId? right)
-    {
-        return !(left == right);
     }
 
     #endregion
@@ -101,6 +83,6 @@ public sealed class UniqueEntityId : IEquatable<UniqueEntityId>
     public static explicit operator UniqueEntityId(string value) => Of(value);
 
     #endregion
-    
+
     private static Guid GenerateNewGuid() => Guid.CreateVersion7();
 }

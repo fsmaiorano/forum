@@ -3,7 +3,7 @@ using Forum.Infrastructure.Data.Context;
 
 namespace Forum.Infrastructure.Data.Repositories;
 
-public class QuestionRepository(IForumDbContext context) : IQuestionRepository
+public sealed class QuestionRepository(IForumDbContext context) : IQuestionRepository
 {
     public async Task Create(Question question)
     {

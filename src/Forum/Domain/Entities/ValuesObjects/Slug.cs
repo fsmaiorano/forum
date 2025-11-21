@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Forum.Domain.Entities.ValuesObjects;
 
-public class Slug(string value)
+public sealed record Slug(string Value)
 {
     [MaxLength(200)]
-    public string Value { get; private set; } = value;
+    public string Value { get; private set; } = Value;
 
     public static Slug CreateFromText(string text)
     {

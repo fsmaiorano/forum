@@ -9,18 +9,19 @@ public record Question : Entity
     public string Title { get; private set; } = null!;
     public string Content { get; private set; } = null!;
     public Slug? Slug { get; private set; } = null;
+    public virtual IEnumerable<Attachment> Attachments { get; private set; } = [];
 
     public static Question Create(string authorId, string title, string content, string? slug = null)
     {
         var question = new Question()
         {
-            Id   = new UniqueEntityId(),
+            Id = new UniqueEntityId(),
             AuthorId = new UniqueEntityId(authorId),
             Title = title,
             Content = content,
-            Slug = string.IsNullOrWhiteSpace(slug) ? null : new Slug(slug)
+            Slug = string.IsNullOrWhiteSpace(slug) ? null : new Slug(slug),
         };
-        
+
         return question;
     }
 
