@@ -7,9 +7,9 @@ public class CreateQuestionUnitTest(DatabaseFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task CreateQuestionUseCaseHandler_ShouldCreateQuestionWithSuccess()
     {
-        var repo = new QuestionRepository(Context);
+        var repository = new QuestionRepository(Context);
         var loggerMock = CreateLoggerMock<CreateQuestionUseCase>();
-        var useCase = new CreateQuestionUseCase(loggerMock.Object, repo);
+        var useCase = new CreateQuestionUseCase(loggerMock.Object, repository);
 
         var command = MakeQuestion.CreateQuestionCommand();
         var result = await useCase.CreateQuestionUseCaseHandler(command);

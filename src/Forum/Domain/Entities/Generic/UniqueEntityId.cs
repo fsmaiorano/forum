@@ -1,3 +1,5 @@
+using Forum.Domain.Exceptions;
+
 namespace Forum.Domain.Entities.Generic;
 
 public sealed class UniqueEntityId : IEquatable<UniqueEntityId>
@@ -28,10 +30,10 @@ public sealed class UniqueEntityId : IEquatable<UniqueEntityId>
     public static UniqueEntityId Of(string value)
     {
         return string.IsNullOrWhiteSpace(value)
-            ? throw new ArgumentException("UniqueEntityId cannot be null or empty.", nameof(value))
+            ? throw new DomainException("The UniqueEntityId value cannot be null or empty.")
             : new UniqueEntityId(value);
     }
-    
+
     /// <summary>
     /// Creates a new UniqueEntityId from a Guid value.
     /// </summary>
@@ -53,8 +55,7 @@ public sealed class UniqueEntityId : IEquatable<UniqueEntityId>
     public bool Equals(UniqueEntityId? other)
     {
         if (other is null) return false;
-        if (ReferenceEquals(this, other)) return true;
-        return _value.Equals(other._value);
+        return ReferenceEquals(this, other) || _value.Equals(other._value);
     }
 
     public override bool Equals(object? obj)

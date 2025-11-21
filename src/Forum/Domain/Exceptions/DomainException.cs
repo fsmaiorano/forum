@@ -1,3 +1,3 @@
-namespace Forum.Domain.Errors;
+namespace Forum.Domain.Exceptions;
 
 public class DomainException(string message) : Exception(message);
