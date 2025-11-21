@@ -1,4 +1,5 @@
-using Forum.Domain.Base;
+using Forum.BuildingBlocks.Base;
+using Forum.BuildingBlocks.Logging;
 using Forum.Domain.Repositories;
 
 namespace Forum.Application.UseCases.Question.CreateQuestion;
@@ -9,11 +10,13 @@ public record CreateQuestionResult(string QuestionId);
 
 public interface ICreateQuestionUseCase;
 
-public sealed class CreateQuestionUseCase(ILogger<CreateQuestionUseCase> logger, IQuestionRepository questionRepository)
+public sealed class CreateQuestionUseCase(IAppLogger<CreateQuestionUseCase> logger, IQuestionRepository questionRepository)
     : ICreateQuestionUseCase
 {
     public async Task<Result<CreateQuestionResult>> CreateQuestionUseCaseHandler(CreateQuestionCommand command)
     {
+        logger.LogInformation(LogType.Application, "Creating question with title: {Title}", command.Title);
+        
         var question =
             Domain.Entities.Question.Create(
                 command.AuthorId,
@@ -22,7 +25,10 @@ public sealed class CreateQuestionUseCase(ILogger<CreateQuestionUseCase> logger,
                 command.Slug);
 
         await questionRepository.Create(question);
+        
+        logger.LogInformation(LogType.Application, "Question created with ID: {QuestionId}", question.Id);
 
         return Result<CreateQuestionResult>.Success(new CreateQuestionResult(question.Id.ToString()));
     }
 }
+

@@ -2,7 +2,6 @@
 
 global using Forum.Application.UseCases.Question.CreateQuestion;
 global using Forum.Domain.Entities;
-global using Forum.Domain.Entities.Generic;
 global using Forum.Infrastructure.Data.Context;
 global using Forum.Infrastructure.Data.Repositories;
 global using Microsoft.EntityFrameworkCore;

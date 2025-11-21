@@ -1,11 +1,13 @@
 using Forum.Application;
+using Forum.BuildingBlocks.Middleware;
+using Forum.Endpoints.Question;
 using Forum.Infrastructure;
-using Forum.Middleware;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration, builder);
 
 builder.Services.AddOpenApi();
 
@@ -18,6 +20,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<CorrelationIdMiddleware>();
 
+app.UseSerilogRequestLogging();
+
 app.UseHttpsRedirection();
+
+CreateQuestionEndpoint.MapEndpoint(app);
 
 app.Run();

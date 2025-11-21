@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Forum.Domain.Base;
+namespace Forum.BuildingBlocks.Base;
 
 /// <summary>
 /// Represents an operation result without data.

@@ -1,4 +1,4 @@
-using Forum.Domain.Exceptions;
+using Forum.BuildingBlocks.Exceptions;
 
 namespace Forum.Domain.Entities.ValuesObjects;
 

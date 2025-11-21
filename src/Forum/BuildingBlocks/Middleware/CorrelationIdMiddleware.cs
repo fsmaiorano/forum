@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Primitives;
 
-namespace Forum.Middleware;
+namespace Forum.BuildingBlocks.Middleware;
 
 public class CorrelationIdMiddleware(RequestDelegate next)
 {

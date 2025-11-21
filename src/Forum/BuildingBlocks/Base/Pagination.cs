@@ -1,4 +1,4 @@
-namespace Forum.Domain.Base;
+namespace Forum.BuildingBlocks.Base;
 
 public abstract class Pagination
 {

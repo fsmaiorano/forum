@@ -1,3 +1,5 @@
+using Forum.BuildingBlocks.Base;
+
 namespace Forum.Domain.Entities;
 
 public record Question : Entity

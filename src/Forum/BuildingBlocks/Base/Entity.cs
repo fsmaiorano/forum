@@ -1,4 +1,4 @@
-namespace Forum.Domain.Entities.Generic;
+namespace Forum.BuildingBlocks.Base;
 
 public abstract record Entity
 {

@@ -1,4 +1,4 @@
-namespace Forum.Domain.Exceptions;
+namespace Forum.BuildingBlocks.Exceptions;
 
 public class NotFoundException : Exception
 {
