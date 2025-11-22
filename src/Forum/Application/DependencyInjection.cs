@@ -1,4 +1,5 @@
 using Forum.Application.UseCases.Question.CreateQuestion;
+using Forum.Application.UseCases.Question.UpdateQuestion;
 using Forum.BuildingBlocks.Exceptions;
 using Forum.BuildingBlocks.Logging;
 
@@ -21,5 +22,6 @@ public static class DependencyInjection
     private static void AddUseCases(IServiceCollection services)
     {
         services.AddTransient<ICreateQuestionUseCase, CreateQuestionUseCase>();
+        services.AddTransient<IUpdateQuestionUseCase, UpdateQuestionUseCase>();
     }
 }

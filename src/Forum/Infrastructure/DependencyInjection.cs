@@ -21,6 +21,7 @@ public static partial class DependencyInjection
     private static void AddRepositories(IServiceCollection services)
     {
         services.AddTransient<IQuestionRepository, QuestionRepository>();
+        services.AddTransient<IAttachmentRepository, AttachmentRepository>();
     }
 
     private static void AddContexts(IServiceCollection services, IConfiguration configuration)

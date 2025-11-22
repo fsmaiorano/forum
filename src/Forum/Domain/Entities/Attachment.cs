@@ -23,4 +23,15 @@ public sealed record Attachment : Entity
 
         return attachment;
     }
+
+    public static Attachment Update(Attachment attachmentToUpdate, string title, string link)
+    {
+        var attachment = attachmentToUpdate with
+        {
+            Title = title,
+            Link = link
+        };
+
+        return attachment;
+    }
 }

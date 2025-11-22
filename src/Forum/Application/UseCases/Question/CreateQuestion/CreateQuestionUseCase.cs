@@ -10,7 +10,7 @@ public record CreateQuestionCommand(
     string Content,
     string AuthorId,
     string? Slug = null,
-    List<Attachment>? Attachment = null);
+    List<Attachment>? Attachments = null);
 
 public record CreateQuestionResult(string QuestionId);
 
@@ -34,10 +34,10 @@ public sealed class CreateQuestionUseCase(
                 command.Content,
                 command.Slug);
 
-        if (command.Attachment?.Count > 0)
+        if (command.Attachments?.Count > 0)
         {
             var attachments = new List<Attachment>();
-            attachments.AddRange(command.Attachment.Select(att =>
+            attachments.AddRange(command.Attachments.Select(att =>
                 Attachment.Create(question.Id.ToString(), AttachmentOwnerType.Question, att.Title, att.Link)));
             
             await attachmentRepository.Create(attachments);

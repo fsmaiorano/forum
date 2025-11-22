@@ -2,14 +2,14 @@ using Forum.BuildingBlocks.Base;
 
 namespace Forum.Domain.Entities;
 
-public record Question : Entity
+public sealed record Question : Entity
 {
     public UniqueEntityId AuthorId { get; private set; } = null!;
     public UniqueEntityId BestAnswerId { get; private set; } = null!;
     public string Title { get; private set; } = null!;
     public string Content { get; private set; } = null!;
     public Slug? Slug { get; private set; } = null;
-    public virtual IEnumerable<Attachment> Attachments { get; private set; } = [];
+    public IEnumerable<Attachment> Attachments { get; private set; } = [];
 
     public static Question Create(string authorId, string title, string content, string? slug = null)
     {
@@ -19,9 +19,18 @@ public record Question : Entity
             AuthorId = new UniqueEntityId(authorId),
             Title = title,
             Content = content,
-            Slug = string.IsNullOrWhiteSpace(slug) ? null : new Slug(slug),
+            Slug = string.IsNullOrWhiteSpace(slug) ? Slug.Create(title) : new Slug(slug),
         };
 
+        return question;
+    }
+
+    public static Question Update(Question question,string title, string content, string? slug = null)
+    {
+        question.Title = title;
+        question.Content = content;
+        question.Slug = string.IsNullOrWhiteSpace(slug) ? Slug.Create(title) : new Slug(slug);
+  
         return question;
     }
 
