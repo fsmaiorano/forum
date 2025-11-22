@@ -34,7 +34,7 @@ public sealed class CreateQuestionUseCase(
                 command.Content,
                 command.Slug);
 
-        if (command.Attachment is not null && command.Attachment.Count > 0)
+        if (command.Attachment?.Count > 0)
         {
             var attachments = new List<Attachment>();
             attachments.AddRange(command.Attachment.Select(att =>

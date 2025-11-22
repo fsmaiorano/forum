@@ -7,7 +7,7 @@ namespace UnitTests.Application.UseCases.Question;
 public class CreateQuestionUnitTest(DatabaseFixture fixture) : BaseTest(fixture)
 {
     [Fact]
-    public async Task CreateQuestionUseCaseHandler_ShouldCreateQuestionWithSuccess()
+    public async Task CreateQuestionUseCaseHandler_ShouldCreateQuestion()
     {
         var repository = new QuestionRepository(Context);
         var attachmentRepository = new AttachmentRepository(Context);
