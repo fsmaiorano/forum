@@ -1,6 +1,7 @@
 using Forum.BuildingBlocks.Base;
 using Forum.BuildingBlocks.Logging;
 using Forum.Domain;
+using Forum.Domain.Enums;
 using Forum.Domain.Repositories;
 
 namespace Forum.Application.UseCases.Question.CreateQuestion;

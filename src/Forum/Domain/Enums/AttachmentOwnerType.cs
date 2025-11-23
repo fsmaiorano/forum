@@ -1,4 +1,4 @@
-namespace Forum.Domain;
+namespace Forum.Domain.Enums;
 
 public enum AttachmentOwnerType
 {

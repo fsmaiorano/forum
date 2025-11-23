@@ -1,5 +1,6 @@
 using Forum.Domain;
 using Forum.Domain.Entities.ValuesObjects;
+using Forum.Domain.Enums;
 
 namespace UnitTests.Factories;
 

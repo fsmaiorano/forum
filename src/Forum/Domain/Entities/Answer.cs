@@ -1,4 +1,5 @@
 using Forum.BuildingBlocks.Base;
+using Forum.Domain.Enums;
 
 namespace Forum.Domain.Entities;
 
