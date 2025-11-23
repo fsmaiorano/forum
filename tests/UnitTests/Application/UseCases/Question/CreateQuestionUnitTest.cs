@@ -36,7 +36,7 @@ public class CreateQuestionUnitTest(DatabaseFixture fixture) : BaseTest(fixture)
 
         var attachments = new List<Attachment>();
         for (var i = 1; i <= 2; i++)
-            attachments.Add(MakeAttachment.Create(AttachmentOwnerType.Question));
+            attachments.Add(MakeAttachment.Create(new UniqueEntityId(), AttachmentOwnerType.Question));
 
         var command = MakeQuestion.CreateQuestionCommand(attachments: attachments);
         var result = await useCase.CreateQuestionUseCaseHandler(command);

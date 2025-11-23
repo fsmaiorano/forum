@@ -20,7 +20,6 @@ public sealed record Answer : Entity
         List<Attachment>? attachments = null
     )
     {
-        var id = new UniqueEntityId();
         return new Answer
         {
             AuthorId = new UniqueEntityId(authorId),
@@ -28,7 +27,7 @@ public sealed record Answer : Entity
             Content = content,
             IsClosed = isClosed,
             Attachments = attachments?.Count > 0
-                ? attachments.Select((att) => Attachment.Create(id.ToString(), AttachmentOwnerType.Answer, att.Title, att.Link))
+                ? attachments.Select((att) => Attachment.Create(new UniqueEntityId(questionId), AttachmentOwnerType.Answer, att.Title, att.Link))
                 : []
         };
     }

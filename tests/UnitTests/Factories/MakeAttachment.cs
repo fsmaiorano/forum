@@ -7,13 +7,14 @@ namespace UnitTests.Factories;
 public static class MakeAttachment
 {
     public static Attachment Create(
-        AttachmentOwnerType ownerType,
+        UniqueEntityId ownerId,
+        AttachmentOwnerType ownerType = AttachmentOwnerType.Question,
         string? title = null,
         string? link = null)
     {
         var faker = new Bogus.Faker();
         return Attachment.Create(
-            new UniqueEntityId().ToString(),
+            ownerId ?? new UniqueEntityId(),
             ownerType,
             title ?? faker.Lorem.Sentence(2),
             link ?? faker.Internet.Url());

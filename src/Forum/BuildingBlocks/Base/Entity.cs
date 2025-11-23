@@ -3,8 +3,8 @@ namespace Forum.BuildingBlocks.Base;
 public abstract record Entity
 {
     protected UniqueEntityId _id = null!;
-    private DateTime CreatedAt { get; set; }
-    private DateTime? UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; private set; }
+    public DateTime? UpdatedAt { get; private set; }
 
     public UniqueEntityId Id 
     { 

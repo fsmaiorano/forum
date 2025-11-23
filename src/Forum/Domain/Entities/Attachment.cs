@@ -11,12 +11,12 @@ public sealed record Attachment : Entity
     public string Link { get; private set; } = null!;
 
 
-    public static Attachment Create(string ownerId, AttachmentOwnerType ownerType, string title, string link)
+    public static Attachment Create(UniqueEntityId ownerId, AttachmentOwnerType ownerType, string title, string link)
     {
         var attachment = new Attachment()
         {
             Id = new UniqueEntityId(),
-            OwnerId = new UniqueEntityId(ownerId),
+            OwnerId = ownerId,
             OwnerType = ownerType,
             Title = title,
             Link = link

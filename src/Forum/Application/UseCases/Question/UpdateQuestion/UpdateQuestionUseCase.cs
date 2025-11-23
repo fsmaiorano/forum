@@ -1,7 +1,6 @@
 using Forum.BuildingBlocks.Base;
 using Forum.BuildingBlocks.Exceptions;
 using Forum.BuildingBlocks.Logging;
-using Forum.Domain;
 using Forum.Domain.Enums;
 using Forum.Domain.Repositories;
 
@@ -15,7 +14,7 @@ public record UpdateQuestionCommand(
     string? Slug = null,
     List<Attachment>? Attachments = null);
 
-public record UpdateQuestionResult(bool IsSuccess);
+public record UpdateQuestionResult();
 
 public interface IUpdateQuestionUseCase
 {
@@ -46,16 +45,16 @@ public class UpdateQuestionUseCase(
 
             var attachments = new List<Attachment>();
             attachments.AddRange(command.Attachments.Select(att =>
-                Attachment.Create(question.Id.ToString(), AttachmentOwnerType.Question, att.Title, att.Link)));
+                Attachment.Create(question.Id, AttachmentOwnerType.Question, att.Title, att.Link)));
 
             await attachmentRepository.Create(attachments);
         }
-        
+
         await questionRepository.Update(question);
 
         logger.LogInformation(LogType.Functional,
             $"The question with ID: {question.Id} was updated.");
 
-        return Result<UpdateQuestionResult>.Success(new UpdateQuestionResult(true));
+        return Result<UpdateQuestionResult>.Success(new UpdateQuestionResult());
     }
 }

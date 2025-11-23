@@ -39,7 +39,7 @@ public sealed class CreateQuestionUseCase(
         {
             var attachments = new List<Attachment>();
             attachments.AddRange(command.Attachments.Select(att =>
-                Attachment.Create(question.Id.ToString(), AttachmentOwnerType.Question, att.Title, att.Link)));
+                Attachment.Create(question.Id, AttachmentOwnerType.Question, att.Title, att.Link)));
             
             await attachmentRepository.Create(attachments);
         }
