@@ -18,9 +18,11 @@ public record UpdateQuestionResponse();
 
 public static class UpdateQuestionEndpoint
 {
+    private const string Route = "/question";
+
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("/question",
+        app.MapPut(Route,
                 async ([FromBody] UpdateQuestionRequest request, [FromServices] IUpdateQuestionUseCase handler) =>
                 {
                     var command = new UpdateQuestionCommand(

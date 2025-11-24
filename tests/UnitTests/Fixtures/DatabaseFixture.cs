@@ -1,6 +1,6 @@
 namespace UnitTests.Fixtures;
 
-public class DatabaseFixture : IDisposable
+public sealed class DatabaseFixture : IDisposable
 {
     public ForumDbContext Context { get; }
 

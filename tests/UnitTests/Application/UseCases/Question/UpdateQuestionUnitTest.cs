@@ -4,7 +4,7 @@ using UnitTests.Factories;
 
 namespace UnitTests.Application.UseCases.Question;
 
-public class UpdateQuestionUnitTest(DatabaseFixture fixture) : BaseTest(fixture)
+public class UpdateQuestionUnitTest(DatabaseFixture databaseFixture, HttpFixture httpFixture) : BaseTest(databaseFixture, httpFixture)
 {
     [Fact]
     public async Task UpdateQuestionUseCaseHandler_ShouldUpdateQuestion()

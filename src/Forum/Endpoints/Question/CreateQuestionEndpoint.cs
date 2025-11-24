@@ -9,15 +9,17 @@ public record CreateQuestionResponse(string QuestionId);
 
 public static class CreateQuestionEndpoint
 {
+    private const string Route = "/question";
+    
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/question",
+        app.MapPost(Route,
                 async ([FromBody] CreateQuestionRequest request, [FromServices] ICreateQuestionUseCase handler) =>
                 {
                     var command = new CreateQuestionCommand(request.Title, request.Content, request.AuthorId);
                     var result = await handler.CreateQuestionUseCaseHandler(command);
                     return result.IsSuccess
-                        ? Results.Ok(new CreateQuestionResponse(result.Value.QuestionId))
+                        ? Results.Created("", new CreateQuestionResponse(result.Value.QuestionId))
                         : Results.BadRequest(result.Error);
                 })
             .WithName("CreateQuestion")

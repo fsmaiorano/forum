@@ -4,7 +4,7 @@ using UnitTests.Factories;
 
 namespace UnitTests.Application.UseCases.Question;
 
-public class DeleteQuestionUnitTest(DatabaseFixture fixture) : BaseTest(fixture)
+public class DeleteQuestionUnitTest(DatabaseFixture databaseFixture, HttpFixture httpFixture) : BaseTest(databaseFixture, httpFixture)
 {
     [Fact]
     public async Task DeleteQuestionUseCaseHandler_ShouldDeleteQuestion()

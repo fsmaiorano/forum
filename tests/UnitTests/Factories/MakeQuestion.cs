@@ -1,5 +1,6 @@
 using Forum.Application.UseCases.Question.UpdateQuestion;
 using Forum.Domain.Entities.ValuesObjects;
+using Forum.Endpoints.Question;
 
 namespace UnitTests.Factories;
 
@@ -17,6 +18,20 @@ public static class MakeQuestion
             title ?? faker.Lorem.Sentence(3),
             content ?? faker.Lorem.Paragraph(),
             slug ?? faker.Lorem.Slug());
+    }
+
+    public static CreateQuestionRequest CreateQuestionRequest(
+        string? authorId = null,
+        string? title = null,
+        string? content = null
+    )
+    {
+        var faker = new Bogus.Faker();
+        return new CreateQuestionRequest(
+            title ?? faker.Lorem.Sentence(3),
+            content ?? faker.Lorem.Paragraph(),
+            authorId ?? faker.Random.Uuid().ToString()
+        );
     }
 
     public static CreateQuestionCommand CreateQuestionCommand(

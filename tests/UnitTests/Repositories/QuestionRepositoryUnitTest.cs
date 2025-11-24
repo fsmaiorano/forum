@@ -2,7 +2,7 @@ using UnitTests.Factories;
 
 namespace UnitTests.Repositories;
 
-public class QuestionRepositoryUnitTest(DatabaseFixture fixture) : BaseTest(fixture)
+public class QuestionRepositoryUnitTest(DatabaseFixture databaseFixture, HttpFixture httpFixture) : BaseTest(databaseFixture, httpFixture)
 {
     [Fact]
     public async Task Create_ShouldAddQuestionToContext()
