@@ -25,7 +25,7 @@ public class UpdateQuestionUnitTest(DatabaseFixture fixture) : BaseTest(fixture)
             slug: question.Slug?.Value
         );
 
-        var result = await useCase.UpdateQuestionUseCaseHandler(command);
+        await useCase.UpdateQuestionUseCaseHandler(command);
         var updatedQuestion = await repository.FindById(question.Id.ToString());
 
         Assert.NotNull(updatedQuestion);

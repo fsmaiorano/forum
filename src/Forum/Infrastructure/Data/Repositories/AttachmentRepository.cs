@@ -25,6 +25,18 @@ public class AttachmentRepository(IForumDbContext context) : IAttachmentReposito
             .Where(a => a.OwnerId == questionId)
             .ToListAsync();
     }
+
+    public async Task Update(Attachment attachment)
+    {
+        context.Attachment.Update(attachment);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task Update(List<Attachment> attachments)
+    {
+        context.Attachment.UpdateRange(attachments);
+        await context.SaveChangesAsync();
+    }
     
     public async Task DeleteByQuestionId(UniqueEntityId questionId)
     {
