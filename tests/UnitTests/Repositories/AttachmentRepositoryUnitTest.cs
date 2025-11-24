@@ -10,7 +10,7 @@ public class AttachmentRepositoryUnitTest(DatabaseFixture fixture) : BaseTest(fi
     {
         var repository = new AttachmentRepository(Context);
         var question = MakeQuestion.Create();
-        var attachment = MakeAttachment.Create(question.AuthorId, AttachmentOwnerType.Question);
+        var attachment = MakeAttachment.Create(question.AuthorId, AttachmentOwnerTypeEnum.Question);
         await repository.Create(attachment);
     }
 
@@ -19,10 +19,10 @@ public class AttachmentRepositoryUnitTest(DatabaseFixture fixture) : BaseTest(fi
     {
         var repository = new AttachmentRepository(Context);
         var question = MakeQuestion.Create();
-        var attachments = new List<Attachment>
+        var attachments = new List<AttachmentEntity>
         {
-            MakeAttachment.Create(question.AuthorId,AttachmentOwnerType.Question),
-            MakeAttachment.Create(question.AuthorId,AttachmentOwnerType.Question),
+            MakeAttachment.Create(question.AuthorId,AttachmentOwnerTypeEnum.Question),
+            MakeAttachment.Create(question.AuthorId,AttachmentOwnerTypeEnum.Question),
         };
 
         await repository.Create(attachments);
@@ -33,10 +33,10 @@ public class AttachmentRepositoryUnitTest(DatabaseFixture fixture) : BaseTest(fi
     {
         var repository = new AttachmentRepository(Context);
         var question = MakeQuestion.Create();
-        var attachments = new List<Attachment>
+        var attachments = new List<AttachmentEntity>
         {
-            MakeAttachment.Create(question.Id ,AttachmentOwnerType.Question),
-            MakeAttachment.Create(question.Id ,AttachmentOwnerType.Question),
+            MakeAttachment.Create(question.Id ,AttachmentOwnerTypeEnum.Question),
+            MakeAttachment.Create(question.Id ,AttachmentOwnerTypeEnum.Question),
         };
 
         await repository.Create(attachments);
@@ -50,10 +50,10 @@ public class AttachmentRepositoryUnitTest(DatabaseFixture fixture) : BaseTest(fi
     {
         var repository = new AttachmentRepository(Context);
         var question = MakeQuestion.Create();
-        var attachments = new List<Attachment>
+        var attachments = new List<AttachmentEntity>
         {
-            MakeAttachment.Create(question.Id,AttachmentOwnerType.Question),
-            MakeAttachment.Create(question.Id,AttachmentOwnerType.Question),
+            MakeAttachment.Create(question.Id,AttachmentOwnerTypeEnum.Question),
+            MakeAttachment.Create(question.Id,AttachmentOwnerTypeEnum.Question),
         };
 
         await repository.Create(attachments);

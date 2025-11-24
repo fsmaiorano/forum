@@ -11,7 +11,7 @@ public record CreateQuestionCommand(
     string Content,
     string AuthorId,
     string? Slug = null,
-    List<Attachment>? Attachments = null);
+    List<AttachmentEntity>? Attachments = null);
 
 public record CreateQuestionResult(string QuestionId);
 
@@ -29,7 +29,7 @@ public sealed class CreateQuestionUseCase(
     public async Task<Result<CreateQuestionResult>> CreateQuestionUseCaseHandler(CreateQuestionCommand command)
     {
         var question =
-            Domain.Entities.Question.Create(
+            QuestionEntity.Create(
                 command.AuthorId,
                 command.Title,
                 command.Content,
@@ -37,9 +37,9 @@ public sealed class CreateQuestionUseCase(
 
         if (command.Attachments?.Count > 0)
         {
-            var attachments = new List<Attachment>();
+            var attachments = new List<AttachmentEntity>();
             attachments.AddRange(command.Attachments.Select(att =>
-                Attachment.Create(question.Id, AttachmentOwnerType.Question, att.Title, att.Link)));
+                AttachmentEntity.Create(question.Id, AttachmentOwnerTypeEnum.Question, att.Title, att.Link)));
             
             await attachmentRepository.Create(attachments);
         }

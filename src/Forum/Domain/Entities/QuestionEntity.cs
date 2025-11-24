@@ -2,18 +2,18 @@ using Forum.BuildingBlocks.Base;
 
 namespace Forum.Domain.Entities;
 
-public sealed record Question : Entity
+public sealed record QuestionEntity : Entity
 {
     public UniqueEntityId AuthorId { get; private set; } = null!;
     public UniqueEntityId BestAnswerId { get; private set; } = null!;
     public string Title { get; private set; } = null!;
     public string Content { get; private set; } = null!;
     public Slug? Slug { get; private set; } = null;
-    public IEnumerable<Attachment> Attachments { get; private set; } = [];
+    public IEnumerable<AttachmentEntity> Attachments { get; private set; } = [];
 
-    public static Question Create(string authorId, string title, string content, string? slug = null)
+    public static QuestionEntity Create(string authorId, string title, string content, string? slug = null)
     {
-        var question = new Question()
+        var question = new QuestionEntity()
         {
             Id = new UniqueEntityId(),
             AuthorId = new UniqueEntityId(authorId),
@@ -25,13 +25,13 @@ public sealed record Question : Entity
         return question;
     }
 
-    public static Question Update(Question question,string title, string content, string? slug = null)
+    public static QuestionEntity Update(QuestionEntity questionEntity,string title, string content, string? slug = null)
     {
-        question.Title = title;
-        question.Content = content;
-        question.Slug = string.IsNullOrWhiteSpace(slug) ? Slug.Create(title) : new Slug(slug);
+        questionEntity.Title = title;
+        questionEntity.Content = content;
+        questionEntity.Slug = string.IsNullOrWhiteSpace(slug) ? Slug.Create(title) : new Slug(slug);
   
-        return question;
+        return questionEntity;
     }
 
     public static string Excerpt(string content, int maxLength = 200)

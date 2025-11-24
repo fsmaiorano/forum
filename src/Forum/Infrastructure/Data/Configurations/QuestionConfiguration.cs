@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Forum.Infrastructure.Data.Configurations;
 
-public class QuestionConfiguration : IEntityTypeConfiguration<Question>
+public class QuestionConfiguration : IEntityTypeConfiguration<QuestionEntity>
 {
-    public void Configure(EntityTypeBuilder<Question> builder)
+    public void Configure(EntityTypeBuilder<QuestionEntity> builder)
     {
         builder.HasKey(m => m.Id);
 

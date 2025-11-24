@@ -5,14 +5,14 @@ namespace UnitTests.Factories;
 
 public static class MakeQuestion
 {
-    public static Question Create(
+    public static QuestionEntity Create(
         string? authorId = null,
         string? title = null,
         string? content = null,
         string? slug = null)
     {
         var faker = new Bogus.Faker();
-        return Question.Create(
+        return QuestionEntity.Create(
             authorId ?? faker.Random.Uuid().ToString(),
             title ?? faker.Lorem.Sentence(3),
             content ?? faker.Lorem.Paragraph(),
@@ -24,7 +24,7 @@ public static class MakeQuestion
         string? title = null,
         string? content = null,
         string? slug = null,
-        List<Attachment>? attachments = null)
+        List<AttachmentEntity>? attachments = null)
     {
         var faker = new Bogus.Faker();
         return new CreateQuestionCommand(
@@ -42,7 +42,7 @@ public static class MakeQuestion
         string? title = null,
         string? content = null,
         string? slug = null,
-        List<Attachment>? attachments = null)
+        List<AttachmentEntity>? attachments = null)
     {
         var faker = new Bogus.Faker();
         return new UpdateQuestionCommand(

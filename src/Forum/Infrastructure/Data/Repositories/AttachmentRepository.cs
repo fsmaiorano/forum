@@ -7,32 +7,32 @@ namespace Forum.Infrastructure.Data.Repositories;
 
 public class AttachmentRepository(IForumDbContext context) : IAttachmentRepository
 {
-    public async Task Create(Attachment attachment)
+    public async Task Create(AttachmentEntity attachmentEntity)
     {
-        await context.Attachment.AddAsync(attachment);
+        await context.Attachment.AddAsync(attachmentEntity);
         await context.SaveChangesAsync();
     }
     
-    public async Task Create(List<Attachment> attachments)
+    public async Task Create(List<AttachmentEntity> attachments)
     {
         await context.Attachment.AddRangeAsync(attachments);
         await context.SaveChangesAsync();
     }
 
-    public async Task<List<Attachment>> FindByQuestionId(UniqueEntityId questionId)
+    public async Task<List<AttachmentEntity>> FindByQuestionId(UniqueEntityId questionId)
     {
         return await context.Attachment
             .Where(a => a.OwnerId == questionId)
             .ToListAsync();
     }
 
-    public async Task Update(Attachment attachment)
+    public async Task Update(AttachmentEntity attachmentEntity)
     {
-        context.Attachment.Update(attachment);
+        context.Attachment.Update(attachmentEntity);
         await context.SaveChangesAsync();
     }
 
-    public async Task Update(List<Attachment> attachments)
+    public async Task Update(List<AttachmentEntity> attachments)
     {
         context.Attachment.UpdateRange(attachments);
         await context.SaveChangesAsync();

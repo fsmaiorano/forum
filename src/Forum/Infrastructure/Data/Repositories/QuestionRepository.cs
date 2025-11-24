@@ -6,23 +6,23 @@ namespace Forum.Infrastructure.Data.Repositories;
 
 public sealed class QuestionRepository(IForumDbContext context) : IQuestionRepository
 {
-    public async Task Create(Question question)
+    public async Task Create(QuestionEntity questionEntity)
     {
-        await context.Question.AddAsync(question);
+        await context.Question.AddAsync(questionEntity);
         await context.SaveChangesAsync();
     }
 
-    public async Task<Question?> FindById(string questionId, bool asNoTracking = false)
+    public async Task<QuestionEntity?> FindById(string questionId, bool asNoTracking = false)
     {
         var query = context.Question.AsQueryable();
         if (asNoTracking) query = query.AsNoTracking();
         return await query.FirstOrDefaultAsync(q => q.Id.ToString().Equals(questionId));
     }
 
-    public async Task Update(Question question)
+    public async Task Update(QuestionEntity questionEntity)
     {
-        question.Touch();
-        context.Question.Update(question);
+        questionEntity.Touch();
+        context.Question.Update(questionEntity);
         await context.SaveChangesAsync();
     }
 }

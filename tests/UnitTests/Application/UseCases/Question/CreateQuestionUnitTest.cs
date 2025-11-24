@@ -34,9 +34,9 @@ public class CreateQuestionUnitTest(DatabaseFixture fixture) : BaseTest(fixture)
         var loggerMock = CreateLoggerMock<CreateQuestionUseCase>();
         var useCase = new CreateQuestionUseCase(loggerMock.Object, questionRepository, attachmentRepository);
 
-        var attachments = new List<Attachment>();
+        var attachments = new List<AttachmentEntity>();
         for (var i = 1; i <= 2; i++)
-            attachments.Add(MakeAttachment.Create(new UniqueEntityId(), AttachmentOwnerType.Question));
+            attachments.Add(MakeAttachment.Create(new UniqueEntityId(), AttachmentOwnerTypeEnum.Question));
 
         var command = MakeQuestion.CreateQuestionCommand(attachments: attachments);
         var result = await useCase.CreateQuestionUseCaseHandler(command);

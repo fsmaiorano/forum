@@ -12,7 +12,7 @@ public record UpdateQuestionCommand(
     string Title,
     string Content,
     string? Slug = null,
-    List<Attachment>? Attachments = null);
+    List<AttachmentEntity>? Attachments = null);
 
 public record UpdateQuestionResult();
 
@@ -37,15 +37,15 @@ public class UpdateQuestionUseCase(
         if (question.AuthorId.ToString() != command.AuthorId)
             throw new ForbiddenException("You are not allowed to update this question.");
 
-        question = Domain.Entities.Question.Update(question, command.Title, command.Content, command.Slug);
+        question = QuestionEntity.Update(question, command.Title, command.Content, command.Slug);
 
         if (question.Attachments?.Count() > 0 && command.Attachments is not null)
         {
             await attachmentRepository.DeleteByQuestionId(question.Id);
 
-            var attachments = new List<Attachment>();
+            var attachments = new List<AttachmentEntity>();
             attachments.AddRange(command.Attachments.Select(att =>
-                Attachment.Create(question.Id, AttachmentOwnerType.Question, att.Title, att.Link)));
+                AttachmentEntity.Create(question.Id, AttachmentOwnerTypeEnum.Question, att.Title, att.Link)));
 
             await attachmentRepository.Create(attachments);
         }

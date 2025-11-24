@@ -9,7 +9,7 @@ public class QuestionUnitTest
     {
         var mock = MakeQuestion.Create();
 
-        var question = Question.Create(
+        var question = QuestionEntity.Create(
             mock.AuthorId.ToString(),
             mock.Title,
             mock.Content,
@@ -26,7 +26,7 @@ public class QuestionUnitTest
     {
         const string content = "Short content";
 
-        var result = Question.Excerpt(content, 50);
+        var result = QuestionEntity.Excerpt(content, 50);
 
         Assert.Equal(content, result);
     }
@@ -34,14 +34,14 @@ public class QuestionUnitTest
     [Fact]
     public void Excerpt_ShouldReturnEmptyStringForNullContent()
     {
-        var result = Question.Excerpt(null!);
+        var result = QuestionEntity.Excerpt(null!);
         Assert.Equal(string.Empty, result);
     }
 
     [Fact]
     public void Excerpt_ShouldReturnEmptyStringForEmptyContent()
     {
-        var result = Question.Excerpt(string.Empty);
+        var result = QuestionEntity.Excerpt(string.Empty);
         Assert.Equal(string.Empty, result);
     }
 }

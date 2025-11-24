@@ -2,10 +2,10 @@ namespace Forum.Domain.Repositories;
 
 public interface IAttachmentRepository
 {
-    public Task Create(Attachment attachment);
-    public Task Create(List<Attachment> attachments);
-    public Task<List<Attachment>> FindByQuestionId(UniqueEntityId questionId);
-    public Task Update(Attachment attachment);
-    public Task Update(List<Attachment> attachments);
+    public Task Create(AttachmentEntity attachmentEntity);
+    public Task Create(List<AttachmentEntity> attachments);
+    public Task<List<AttachmentEntity>> FindByQuestionId(UniqueEntityId questionId);
+    public Task Update(AttachmentEntity attachmentEntity);
+    public Task Update(List<AttachmentEntity> attachments);
     public Task DeleteByQuestionId(UniqueEntityId questionId);
 }

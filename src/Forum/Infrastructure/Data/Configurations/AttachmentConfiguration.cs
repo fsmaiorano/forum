@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Forum.Infrastructure.Data.Configurations;
 
-public class AttachmentConfiguration : IEntityTypeConfiguration<Attachment>
+public class AttachmentConfiguration : IEntityTypeConfiguration<AttachmentEntity>
 {
-    public void Configure(EntityTypeBuilder<Attachment> builder)
+    public void Configure(EntityTypeBuilder<AttachmentEntity> builder)
     {
         builder.HasKey(m => m.Id);
 
@@ -23,7 +23,7 @@ public class AttachmentConfiguration : IEntityTypeConfiguration<Attachment>
                 value => UniqueEntityId.Of(value))
             .IsRequired();
 
-        builder.Property(c => c.OwnerType)
+        builder.Property(c => c.OwnerTypeEnum)
             .IsRequired();
 
         builder.Property(c => c.Title)

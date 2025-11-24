@@ -3,21 +3,21 @@ using Forum.Domain.Enums;
 
 namespace Forum.Domain.Entities;
 
-public sealed record Attachment : Entity
+public sealed record AttachmentEntity : Entity
 {
     public UniqueEntityId OwnerId { get; private set; } = null!;
-    public AttachmentOwnerType OwnerType { get; private set; }
+    public AttachmentOwnerTypeEnum OwnerTypeEnum { get; private set; }
     public string Title { get; private set; } = null!;
     public string Link { get; private set; } = null!;
 
 
-    public static Attachment Create(UniqueEntityId ownerId, AttachmentOwnerType ownerType, string title, string link)
+    public static AttachmentEntity Create(UniqueEntityId ownerId, AttachmentOwnerTypeEnum ownerTypeEnum, string title, string link)
     {
-        var attachment = new Attachment()
+        var attachment = new AttachmentEntity()
         {
             Id = new UniqueEntityId(),
             OwnerId = ownerId,
-            OwnerType = ownerType,
+            OwnerTypeEnum = ownerTypeEnum,
             Title = title,
             Link = link
         };
@@ -25,9 +25,9 @@ public sealed record Attachment : Entity
         return attachment;
     }
 
-    public static Attachment Update(Attachment attachmentToUpdate, string title, string link)
+    public static AttachmentEntity Update(AttachmentEntity attachmentEntityToUpdate, string title, string link)
     {
-        var attachment = attachmentToUpdate with
+        var attachment = attachmentEntityToUpdate with
         {
             Title = title,
             Link = link

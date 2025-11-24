@@ -2,13 +2,13 @@ using Forum.BuildingBlocks.Base;
 
 namespace Forum.Domain.Entities;
 
-public sealed record Student : Entity
+public sealed record InstructorEntity : Entity
 {
     public string Name { get; private set; } = string.Empty;
-
-    public static Student Create(string name)
+    
+    public static InstructorEntity Create(string name)
     {
-        return new Student
+        return new InstructorEntity
         {
             Name = name
         };

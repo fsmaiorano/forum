@@ -5,15 +5,15 @@ namespace Forum.Infrastructure.Data.Context;
 
 public interface IForumDbContext
 {
-    DbSet<Question> Question { get; }
-    DbSet<Attachment> Attachment { get; }
+    DbSet<QuestionEntity> Question { get; }
+    DbSet<AttachmentEntity> Attachment { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 
 public class ForumDbContext : DbContext, IForumDbContext
 {
-    public DbSet<Question> Question => Set<Question>();
-    public DbSet<Attachment> Attachment => Set<Attachment>();
+    public DbSet<QuestionEntity> Question => Set<QuestionEntity>();
+    public DbSet<AttachmentEntity> Attachment => Set<AttachmentEntity>();
 
     public ForumDbContext(DbContextOptions<ForumDbContext> options)
         : base(options)
