@@ -25,4 +25,10 @@ public sealed class QuestionRepository(IForumDbContext context) : IQuestionRepos
         context.Question.Update(questionEntity);
         await context.SaveChangesAsync();
     }
+
+    public async Task Delete(QuestionEntity questionEntity)
+    {
+        context.Question.Remove(questionEntity);
+        await context.SaveChangesAsync();
+    }
 }

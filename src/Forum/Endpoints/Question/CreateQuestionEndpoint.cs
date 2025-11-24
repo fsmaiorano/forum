@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Endpoints.Question;
 
+public record CreateQuestionRequest(string Title, string Content, string AuthorId);
+
 public record CreateQuestionResponse(string QuestionId);
 
 public static class CreateQuestionEndpoint
@@ -10,8 +12,9 @@ public static class CreateQuestionEndpoint
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("/question",
-                async ([FromBody] CreateQuestionCommand command, [FromServices] ICreateQuestionUseCase handler) =>
+                async ([FromBody] CreateQuestionRequest request, [FromServices] ICreateQuestionUseCase handler) =>
                 {
+                    var command = new CreateQuestionCommand(request.Title, request.Content, request.AuthorId);
                     var result = await handler.CreateQuestionUseCaseHandler(command);
                     return result.IsSuccess
                         ? Results.Ok(new CreateQuestionResponse(result.Value.QuestionId))

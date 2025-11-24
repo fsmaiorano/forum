@@ -1,23 +1,51 @@
 using Forum.Application.UseCases.Question.UpdateQuestion;
+using Forum.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Endpoints.Question;
 
-public record UpdateQuestionCommand();
+public abstract record AttachmentRequest(string OwnerId, int OwnerType, string Title, string Link);
 
-public record UpdateQuestionResponse(string QuestionId);
+public record UpdateQuestionRequest(
+    string QuestionId,
+    string AuthorId,
+    string Title,
+    string Content,
+    string? Slug = null,
+    List<AttachmentRequest>? Attachments = null);
+
+public record UpdateQuestionResponse();
 
 public static class UpdateQuestionEndpoint
 {
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPut("/question",
-                async ([FromBody] UpdateQuestionCommand command, [FromServices] IUpdateQuestionUseCase handler) =>
+                async ([FromBody] UpdateQuestionRequest request, [FromServices] IUpdateQuestionUseCase handler) =>
                 {
-                    // var result = await handler.UpdateQuestionUseCaseHandler(command);
-                    // return result.IsSuccess
-                    //     ? Results.Ok(new UpdateQuestionResponse(result.Value.QuestionId))
-                    //     : Results.BadRequest(result.Error);
+                    var command = new UpdateQuestionCommand(
+                        request.QuestionId,
+                        request.AuthorId,
+                        request.Title,
+                        request.Content,
+                        request.Slug,
+                        request.Attachments?.Select(att =>
+                        {
+                            AttachmentOwnerType.Of(att.OwnerType);
+                            var ownerType = AttachmentOwnerType.FromInt(att.OwnerType);
+
+                            return AttachmentEntity.Create(
+                                new UniqueEntityId(att.OwnerId),
+                                ownerType.Value,
+                                att.Title,
+                                att.Link
+                            );
+                        }).ToList());
+
+                    var result = await handler.UpdateQuestionUseCaseHandler(command);
+                    return result.IsSuccess
+                        ? Results.Ok(new UpdateQuestionResponse())
+                        : Results.BadRequest(result.Error);
                 })
             .WithName("UpdateQuestion")
             .WithTags("Question")

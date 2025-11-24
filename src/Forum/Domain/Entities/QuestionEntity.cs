@@ -10,6 +10,7 @@ public sealed record QuestionEntity : Entity
     public string Content { get; private set; } = null!;
     public Slug? Slug { get; private set; } = null;
     public IEnumerable<AttachmentEntity> Attachments { get; private set; } = [];
+    public bool IsOpen { get; private set; } = true;
 
     public static QuestionEntity Create(string authorId, string title, string content, string? slug = null)
     {
@@ -40,5 +41,11 @@ public sealed record QuestionEntity : Entity
             return string.Empty;
 
         return content.Length <= maxLength ? content : string.Concat(content.AsSpan(0, maxLength), "...");
+    }
+    
+    public void ChangeStatus()
+    {
+        IsOpen = !IsOpen;
+        Touch();
     }
 }

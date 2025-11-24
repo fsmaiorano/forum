@@ -6,7 +6,7 @@ namespace Forum.Domain.Entities;
 public sealed record AttachmentEntity : Entity
 {
     public UniqueEntityId OwnerId { get; private set; } = null!;
-    public AttachmentOwnerTypeEnum OwnerTypeEnum { get; private set; }
+    public AttachmentOwnerTypeEnum OwnerType { get; private set; }
     public string Title { get; private set; } = null!;
     public string Link { get; private set; } = null!;
 
@@ -17,7 +17,7 @@ public sealed record AttachmentEntity : Entity
         {
             Id = new UniqueEntityId(),
             OwnerId = ownerId,
-            OwnerTypeEnum = ownerTypeEnum,
+            OwnerType = ownerTypeEnum,
             Title = title,
             Link = link
         };

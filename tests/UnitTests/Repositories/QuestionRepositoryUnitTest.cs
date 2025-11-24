@@ -63,4 +63,19 @@ public class QuestionRepositoryUnitTest(DatabaseFixture fixture) : BaseTest(fixt
         Assert.Equal(question.Content, storedQuestion.Content);
         Assert.NotNull(storedQuestion.UpdatedAt);
     }
+    
+    [Fact]
+    public async Task Delete_ShouldDeleteQuestion()
+    {
+        var repository = new QuestionRepository(Context);   
+        
+        var question = MakeQuestion.Create();
+        await repository.Create(question);
+        await repository.Delete(question);
+        
+        var storedQuestion = await Context.Question
+            .FirstOrDefaultAsync(q => q.Id == question.Id);
+        
+        Assert.Null(storedQuestion);
+    }
 }

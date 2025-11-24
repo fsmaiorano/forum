@@ -23,7 +23,7 @@ public class AttachmentConfiguration : IEntityTypeConfiguration<AttachmentEntity
                 value => UniqueEntityId.Of(value))
             .IsRequired();
 
-        builder.Property(c => c.OwnerTypeEnum)
+        builder.Property(c => c.OwnerType)
             .IsRequired();
 
         builder.Property(c => c.Title)

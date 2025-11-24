@@ -1,4 +1,5 @@
 using Forum.Application.UseCases.Question.CreateQuestion;
+using Forum.Application.UseCases.Question.DeleteQuestion;
 using Forum.Application.UseCases.Question.UpdateQuestion;
 using Forum.BuildingBlocks.Exceptions;
 using Forum.BuildingBlocks.Logging;
@@ -23,5 +24,6 @@ public static class DependencyInjection
     {
         services.AddTransient<ICreateQuestionUseCase, CreateQuestionUseCase>();
         services.AddTransient<IUpdateQuestionUseCase, UpdateQuestionUseCase>();
+        services.AddTransient<IDeleteQuestionUseCase, DeleteQuestionUseCase>();
     }
 }
