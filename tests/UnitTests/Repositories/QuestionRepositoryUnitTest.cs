@@ -1,8 +1,9 @@
+using Forum.Domain.Entities.ValuesObjects;
 using UnitTests.Factories;
 
 namespace UnitTests.Repositories;
 
-public class QuestionRepositoryUnitTest(DatabaseFixture databaseFixture, HttpFixture httpFixture) : BaseTest(databaseFixture, httpFixture)
+public class QuestionRepositoryUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
     [Fact]
     public async Task Create_ShouldAddQuestionToContext()
@@ -29,7 +30,7 @@ public class QuestionRepositoryUnitTest(DatabaseFixture databaseFixture, HttpFix
         var question = MakeQuestion.Create();
         await repository.Create(question);
         
-        var storedQuestion = await repository.FindById(question.Id.ToString());
+        var storedQuestion = await repository.FindById(question.Id);
         
         Assert.NotNull(storedQuestion);
     }
@@ -38,8 +39,7 @@ public class QuestionRepositoryUnitTest(DatabaseFixture databaseFixture, HttpFix
     public async Task FindById_ShouldReturnNull_WhenQuestionDoesNotExist()
     {
         var repository = new QuestionRepository(Context);   
-        
-        var question = await repository.FindById("123");
+        var question = await repository.FindById(new UniqueEntityId());
         
         Assert.Null(question);
     }

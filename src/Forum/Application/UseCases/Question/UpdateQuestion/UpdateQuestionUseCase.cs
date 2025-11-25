@@ -7,8 +7,8 @@ using Forum.Domain.Repositories;
 namespace Forum.Application.UseCases.Question.UpdateQuestion;
 
 public record UpdateQuestionCommand(
-    string QuestionId,
-    string AuthorId,
+    UniqueEntityId QuestionId,
+    UniqueEntityId AuthorId,
     string Title,
     string Content,
     string? Slug = null,
@@ -34,7 +34,7 @@ public class UpdateQuestionUseCase(
         if (question is null)
             throw new NotFoundException(nameof(Question), command.QuestionId);
 
-        if (question.AuthorId.ToString() != command.AuthorId)
+        if (question.AuthorId != command.AuthorId)
             throw new ForbiddenException("You are not allowed to update this question.");
 
         question = QuestionEntity.Update(question, command.Title, command.Content, command.Slug);

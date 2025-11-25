@@ -3,14 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Endpoints.Question;
 
-public record CreateQuestionRequest(string Title, string Content, string AuthorId);
+public record CreateQuestionRequest(
+    string Title,
+    string Content,
+    string AuthorId,
+    List<AttachmentRequest>? Attachments = null);
 
 public record CreateQuestionResponse(string QuestionId);
 
 public static class CreateQuestionEndpoint
 {
     private const string Route = "/question";
-    
+
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(Route,

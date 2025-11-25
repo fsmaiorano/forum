@@ -1,18 +1,55 @@
 using System.Collections;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Reflection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace UnitTests.Fixtures;
 
-public sealed class HttpFixture : WebApplicationFixture
+public sealed class TestFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    private const string DatabaseName = "ForumInMemoryTestDb";
     private HttpClient? _httpClient;
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.UseEnvironment("Testing");
+
+        builder.ConfigureServices(services =>
+        {
+            var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ForumDbContext>));
+
+            if (descriptor != null)
+                services.Remove(descriptor);
+
+            var interfaceDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IForumDbContext));
+
+            if (interfaceDescriptor != null)
+                services.Remove(interfaceDescriptor);
+
+            services.AddDbContext<ForumDbContext>(options =>
+                options.UseInMemoryDatabase(DatabaseName));
+
+            services.AddScoped<IForumDbContext>(provider =>
+                provider.GetRequiredService<ForumDbContext>());
+        });
+
+        base.ConfigureWebHost(builder);
+    }
+
+    public ForumDbContext GetDbContext()
+    {
+        var scope = Services.CreateScope();
+        return scope.ServiceProvider.GetRequiredService<ForumDbContext>();
+    }
 
     private HttpClient GetHttpClient()
     {
         return _httpClient ??= CreateClient();
     }
+
+    #region HTTP Helper Methods
 
     public async Task<HttpResponseMessage> DoPost(string method, object request, string token = "",
         string culture = "en-US")
@@ -59,25 +96,21 @@ public sealed class HttpFixture : WebApplicationFixture
         ChangeRequestCulture(culture, client);
         AuthorizeRequest(token, client);
 
-        MultipartFormDataContent multipartContent = new MultipartFormDataContent();
+        var multipartContent = new MultipartFormDataContent();
 
-        List<PropertyInfo> requestProperties = request.GetType().GetProperties().ToList();
+        var requestProperties = request.GetType().GetProperties().ToList();
 
-        foreach (PropertyInfo property in requestProperties)
+        foreach (var property in requestProperties)
         {
-            object? propertyValue = property.GetValue(request);
+            var propertyValue = property.GetValue(request);
 
             if (string.IsNullOrWhiteSpace(propertyValue?.ToString()))
                 continue;
 
             if (propertyValue is IList list)
-            {
                 AddListToMultipartContent(multipartContent, property.Name, list);
-            }
             else
-            {
                 multipartContent.Add(new StringContent(propertyValue.ToString()!), property.Name);
-            }
         }
 
         return await client.PostAsync(method, multipartContent);
@@ -91,6 +124,10 @@ public sealed class HttpFixture : WebApplicationFixture
 
         return await client.DeleteAsync(method);
     }
+
+    #endregion
+
+    #region Private Helper Methods
 
     private void ChangeRequestCulture(string culture, HttpClient client)
     {
@@ -113,19 +150,13 @@ public sealed class HttpFixture : WebApplicationFixture
         string propertyName,
         IList list)
     {
-        Type itemType = list.GetType().GetGenericArguments().Single();
+        var itemType = list.GetType().GetGenericArguments().Single();
 
         if (itemType.IsClass && itemType != typeof(string))
-        {
             AddClassListToMultipartContent(multipartContent, propertyName, list);
-        }
         else
-        {
-            foreach (object? item in list)
-            {
+            foreach (var item in list)
                 multipartContent.Add(new StringContent(item.ToString()!), propertyName);
-            }
-        }
     }
 
     private static void AddClassListToMultipartContent(
@@ -133,19 +164,34 @@ public sealed class HttpFixture : WebApplicationFixture
         string propertyName,
         IList list)
     {
-        int index = 0;
+        var index = 0;
 
         foreach (object? item in list)
         {
-            List<PropertyInfo> classPropertiesInfo = item.GetType().GetProperties().ToList();
-
-            foreach (PropertyInfo prop in classPropertiesInfo)
+            var classPropertiesInfo = item.GetType().GetProperties().ToList();
+            foreach (var prop in classPropertiesInfo)
             {
-                object? value = prop.GetValue(item, null);
+                var value = prop.GetValue(item, null);
                 multipartContent.Add(new StringContent(value!.ToString()!), $"{propertyName}[{index}][{prop.Name}]");
             }
 
             index++;
         }
     }
+
+    #endregion
+
+    #region IAsyncLifetime Implementation
+
+    public Task InitializeAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    public new Task DisposeAsync()
+    {
+        return base.DisposeAsync().AsTask();
+    }
+
+    #endregion
 }

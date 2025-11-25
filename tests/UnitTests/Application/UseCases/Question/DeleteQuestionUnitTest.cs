@@ -4,7 +4,7 @@ using UnitTests.Factories;
 
 namespace UnitTests.Application.UseCases.Question;
 
-public class DeleteQuestionUnitTest(DatabaseFixture databaseFixture, HttpFixture httpFixture) : BaseTest(databaseFixture, httpFixture)
+public class DeleteQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
     [Fact]
     public async Task DeleteQuestionUseCaseHandler_ShouldDeleteQuestion()
@@ -17,15 +17,16 @@ public class DeleteQuestionUnitTest(DatabaseFixture databaseFixture, HttpFixture
         var command = MakeQuestion.CreateQuestionCommand();
         var result = await useCase.CreateQuestionUseCaseHandler(command);
 
-        var storedQuestion = await Context.Question
-            .FirstOrDefaultAsync(q => q.Id == UniqueEntityId.Of(result.Value.QuestionId));
+        var questionId = UniqueEntityId.Of(result.Value.QuestionId);
+        var storedQuestion = await repository.FindById(questionId);
 
         await repository.Delete(storedQuestion!);
 
-        storedQuestion = await Context.Question
-            .FirstOrDefaultAsync(q => q.Id == UniqueEntityId.Of(result.Value.QuestionId));
+        var deletedQuestion = await Context.Question
+            .AsNoTracking()
+            .FirstOrDefaultAsync(q => q.Id == questionId);
 
-        Assert.Null(storedQuestion);
+        Assert.Null(deletedQuestion);
     }
     
     [Fact]
@@ -44,18 +45,24 @@ public class DeleteQuestionUnitTest(DatabaseFixture databaseFixture, HttpFixture
         var result = await useCase.CreateQuestionUseCaseHandler(command);
 
         var storedQuestionId = UniqueEntityId.Of(result.Value.QuestionId);
-        var storedQuestion = await Context.Question
-            .FirstOrDefaultAsync(q => q.Id == storedQuestionId);
+        
+        // Find the question by ID from repository to get a fresh tracked instance
+        var storedQuestion = await questionRepository.FindById(storedQuestionId);
 
         await attachmentRepository.DeleteByQuestionId(storedQuestion!.Id);
         await questionRepository.Delete(storedQuestion!);
 
-        storedQuestion = await Context.Question
+        // Verify deletion with AsNoTracking to avoid tracking conflicts
+        var deletedQuestion = await Context.Question
+            .AsNoTracking()
             .FirstOrDefaultAsync(q => q.Id == storedQuestionId);
 
-        var storedAttachments = Context.Attachment.Where(a => a.OwnerId.Equals(storedQuestionId)).ToList();
+        var storedAttachments = await Context.Attachment
+            .AsNoTracking()
+            .Where(a => a.OwnerId.Equals(storedQuestionId))
+            .ToListAsync();
 
-        Assert.Null(storedQuestion);
+        Assert.Null(deletedQuestion);
         Assert.Empty(storedAttachments);
     }
 }

@@ -14,7 +14,7 @@ public class AttachmentOwnerTypeUnitTest
     [InlineData("ANSWER", AttachmentOwnerTypeEnum.Answer)]
     public void FromString_WithValidString_ShouldReturnSuccess(string input, AttachmentOwnerTypeEnum expected)
     {
-        var result = AttachmentOwnerType.FromString(input);
+           var result = AttachmentOwnerType.FromString(input);
 
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);

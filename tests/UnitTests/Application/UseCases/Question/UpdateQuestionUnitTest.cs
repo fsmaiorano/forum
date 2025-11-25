@@ -4,7 +4,7 @@ using UnitTests.Factories;
 
 namespace UnitTests.Application.UseCases.Question;
 
-public class UpdateQuestionUnitTest(DatabaseFixture databaseFixture, HttpFixture httpFixture) : BaseTest(databaseFixture, httpFixture)
+public class UpdateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
     [Fact]
     public async Task UpdateQuestionUseCaseHandler_ShouldUpdateQuestion()
@@ -26,7 +26,7 @@ public class UpdateQuestionUnitTest(DatabaseFixture databaseFixture, HttpFixture
         );
 
         await useCase.UpdateQuestionUseCaseHandler(command);
-        var updatedQuestion = await repository.FindById(question.Id.ToString());
+        var updatedQuestion = await repository.FindById(question.Id);
 
         Assert.NotNull(updatedQuestion);
         Assert.Equal(command.Title, updatedQuestion.Title);

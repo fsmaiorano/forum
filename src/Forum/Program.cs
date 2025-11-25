@@ -44,5 +44,7 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 CreateQuestionEndpoint.MapEndpoint(app);
+UpdateQuestionEndpoint.MapEndpoint(app);
+DeleteQuestionEndpoint.MapEndpoint(app);
 
 app.Run();

@@ -3,7 +3,7 @@ using UnitTests.Factories;
 
 namespace UnitTests.Repositories;
 
-public class AttachmentRepositoryUnitTest(DatabaseFixture databaseFixture, HttpFixture httpFixture) : BaseTest(databaseFixture, httpFixture)
+public class AttachmentRepositoryUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
     [Fact]
     public async Task Create_ShouldAddAttachmentToAnQuestion()

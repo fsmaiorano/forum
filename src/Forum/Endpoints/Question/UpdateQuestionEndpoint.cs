@@ -14,7 +14,7 @@ public record UpdateQuestionRequest(
     string? Slug = null,
     List<AttachmentRequest>? Attachments = null);
 
-public record UpdateQuestionResponse();
+// public record UpdateQuestionResponse();
 
 public static class UpdateQuestionEndpoint
 {
@@ -26,8 +26,8 @@ public static class UpdateQuestionEndpoint
                 async ([FromBody] UpdateQuestionRequest request, [FromServices] IUpdateQuestionUseCase handler) =>
                 {
                     var command = new UpdateQuestionCommand(
-                        request.QuestionId,
-                        request.AuthorId,
+                        new UniqueEntityId(request.QuestionId),
+                        new UniqueEntityId(request.AuthorId),
                         request.Title,
                         request.Content,
                         request.Slug,
@@ -46,12 +46,11 @@ public static class UpdateQuestionEndpoint
 
                     var result = await handler.UpdateQuestionUseCaseHandler(command);
                     return result.IsSuccess
-                        ? Results.Ok(new UpdateQuestionResponse())
+                        ? Results.NoContent()
                         : Results.BadRequest(result.Error);
                 })
             .WithName("UpdateQuestion")
             .WithTags("Question")
-            .Produces<UpdateQuestionResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
     }

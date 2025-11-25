@@ -12,11 +12,11 @@ public sealed class QuestionRepository(IForumDbContext context) : IQuestionRepos
         await context.SaveChangesAsync();
     }
 
-    public async Task<QuestionEntity?> FindById(string questionId, bool asNoTracking = false)
+    public async Task<QuestionEntity?> FindById(UniqueEntityId questionId, bool asNoTracking = false)
     {
         var query = context.Question.AsQueryable();
         if (asNoTracking) query = query.AsNoTracking();
-        return await query.FirstOrDefaultAsync(q => q.Id.ToString().Equals(questionId));
+        return await query.FirstOrDefaultAsync(q => q.Id.Equals(questionId));
     }
 
     public async Task Update(QuestionEntity questionEntity)

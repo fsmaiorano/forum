@@ -3,8 +3,8 @@ using UnitTests.Factories;
 
 namespace UnitTests.Endpoints.Question;
 
-public class CreateQuestionEndpointUnitTest(DatabaseFixture databaseFixture, HttpFixture httpFixture)
-    : BaseTest(databaseFixture, httpFixture)
+public class CreateQuestionEndpointUnitTest(TestFixture fixture)
+    : BaseTest(fixture)
 {
     [Fact]
     public async Task CreateQuestionEndpoint_ShouldReturn201()
