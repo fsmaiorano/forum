@@ -75,6 +75,13 @@ public class AnswerRepositoryUnitTest(TestFixture fixture) : BaseTest(fixture)
         await questionRepository.Create(question);
         
         var answer = MakeAnswer.Create(questionId: question.Id);
+        await answerRepository.Create(answer);
+        
+        await answerRepository.Delete(answer);
+        
+        var storedAnswer = await Context.Answer.FirstOrDefaultAsync(a => a.Id == answer.Id);
+        
+        Assert.Null(storedAnswer);
     }
 }
 

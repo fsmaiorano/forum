@@ -8,9 +8,7 @@ namespace Forum.Application.UseCases.Answer.UpdateAnswer;
 public record UpdateAnswerCommand(
     UniqueEntityId AnswerId,
     UniqueEntityId AuthorId,
-    string Title,
     string Content,
-    string? Slug = null,
     List<AttachmentEntity>? Attachments = null);
 
 public record UpdateAnswerResult();
