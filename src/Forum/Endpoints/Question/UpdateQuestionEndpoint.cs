@@ -1,10 +1,8 @@
 using Forum.Application.UseCases.Question.UpdateQuestion;
-using Forum.Domain.Enums;
+using Forum.Endpoints.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Endpoints.Question;
-
-public abstract record AttachmentRequest(string OwnerId, int OwnerType, string Title, string Link);
 
 public record UpdateQuestionRequest(
     string QuestionId,

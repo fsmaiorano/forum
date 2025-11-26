@@ -12,13 +12,13 @@ public sealed record QuestionEntity : Entity
     public WatchedList<AttachmentEntity> Attachments { get; private set; } = null!;
     public bool IsOpen { get; private set; } = true;
 
-    public static QuestionEntity Create(string authorId, string title, string content, string? slug = null,
+    public static QuestionEntity Create(UniqueEntityId authorId, string title, string content, string? slug = null,
         WatchedList<AttachmentEntity>? attachments = null)
     {
         var question = new QuestionEntity()
         {
             Id = new UniqueEntityId(),
-            AuthorId = new UniqueEntityId(authorId),
+            AuthorId = authorId,
             Title = title,
             Content = content,
             Slug = string.IsNullOrWhiteSpace(slug) ? Slug.Create(title) : new Slug(slug),

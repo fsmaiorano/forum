@@ -1,5 +1,6 @@
 using Forum.Application.UseCases.Question.UpdateQuestion;
 using Forum.Domain.Entities.ValuesObjects;
+using Forum.Endpoints.Dtos;
 using Forum.Endpoints.Question;
 
 namespace UnitTests.Factories;
@@ -7,14 +8,14 @@ namespace UnitTests.Factories;
 public static class MakeQuestion
 {
     public static QuestionEntity Create(
-        string? authorId = null,
+        UniqueEntityId? authorId = null,
         string? title = null,
         string? content = null,
         string? slug = null)
     {
         var faker = new Bogus.Faker();
         return QuestionEntity.Create(
-            authorId ?? faker.Random.Uuid().ToString(),
+            authorId ?? new UniqueEntityId(),
             title ?? faker.Lorem.Sentence(3),
             content ?? faker.Lorem.Paragraph(),
             slug ?? faker.Lorem.Slug());
@@ -36,7 +37,7 @@ public static class MakeQuestion
     }
 
     public static CreateQuestionCommand CreateQuestionCommand(
-        string? authorId = null,
+        UniqueEntityId? authorId = null,
         string? title = null,
         string? content = null,
         string? slug = null,
@@ -46,7 +47,7 @@ public static class MakeQuestion
         return new CreateQuestionCommand(
             Title: title ?? faker.Lorem.Sentence(3),
             Content: content ?? faker.Lorem.Paragraph(),
-            AuthorId: authorId ?? faker.Random.Uuid().ToString(),
+            AuthorId: authorId ?? new UniqueEntityId(),
             Slug: slug ?? faker.Lorem.Slug(),
             Attachments: attachments ?? []
         );

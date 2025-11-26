@@ -9,7 +9,7 @@ namespace Forum.Application.UseCases.Question.CreateQuestion;
 public record CreateQuestionCommand(
     string Title,
     string Content,
-    string AuthorId,
+    UniqueEntityId AuthorId,
     string? Slug = null,
     List<AttachmentEntity>? Attachments = null);
 
@@ -40,10 +40,10 @@ public sealed class CreateQuestionUseCase(
             var attachments = new List<AttachmentEntity>();
             attachments.AddRange(command.Attachments.Select(att =>
                 AttachmentEntity.Create(question.Id, AttachmentOwnerTypeEnum.Question, att.Title, att.Link)));
-            
+
             await attachmentRepository.Create(attachments);
         }
-        
+
         await questionRepository.Create(question);
 
         logger.LogInformation(LogType.Functional,

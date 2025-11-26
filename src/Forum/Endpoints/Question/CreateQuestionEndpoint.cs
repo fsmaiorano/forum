@@ -1,4 +1,5 @@
 using Forum.Application.UseCases.Question.CreateQuestion;
+using Forum.Endpoints.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Endpoints.Question;
@@ -7,7 +8,7 @@ public record CreateQuestionRequest(
     string Title,
     string Content,
     string AuthorId,
-    List<AttachmentRequest>? Attachments = null);
+    List<AttachmentRequest> Attachments = null!);
 
 public record CreateQuestionResponse(string QuestionId);
 
@@ -20,7 +21,7 @@ public static class CreateQuestionEndpoint
         app.MapPost(Route,
                 async ([FromBody] CreateQuestionRequest request, [FromServices] ICreateQuestionUseCase handler) =>
                 {
-                    var command = new CreateQuestionCommand(request.Title, request.Content, request.AuthorId);
+                    var command = new CreateQuestionCommand(request.Title, request.Content, new UniqueEntityId(request.AuthorId));
                     var result = await handler.CreateQuestionUseCaseHandler(command);
                     return result.IsSuccess
                         ? Results.Created("", new CreateQuestionResponse(result.Value.QuestionId))

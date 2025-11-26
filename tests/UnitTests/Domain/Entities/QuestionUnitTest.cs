@@ -10,7 +10,7 @@ public class QuestionUnitTest
         var mock = MakeQuestion.Create();
 
         var question = QuestionEntity.Create(
-            mock.AuthorId.ToString(),
+            mock.AuthorId,
             mock.Title,
             mock.Content,
             mock.Slug?.Value);
