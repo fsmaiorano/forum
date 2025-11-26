@@ -41,5 +41,7 @@ public class QuestionConfiguration : IEntityTypeConfiguration<QuestionEntity>
 
         builder.Property(c => c.Content)
             .IsRequired();
+
+        builder.Ignore(c => c.Attachments);
     }
 }

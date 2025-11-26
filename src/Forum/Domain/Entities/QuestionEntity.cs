@@ -9,7 +9,7 @@ public sealed record QuestionEntity : Entity
     public string Title { get; private set; } = null!;
     public string Content { get; private set; } = null!;
     public Slug? Slug { get; private set; } = null;
-    public IEnumerable<AttachmentEntity> Attachments { get; private set; } = [];
+    public WatchedList<AttachmentEntity> Attachments { get; private set; } = AttachmentList.Create();
     public bool IsOpen { get; private set; } = true;
 
     public static QuestionEntity Create(string authorId, string title, string content, string? slug = null)
@@ -48,32 +48,5 @@ public sealed record QuestionEntity : Entity
     {
         IsOpen = !IsOpen;
         Touch();
-    }
-
-    public void AddAttachment(AttachmentEntity attachment)
-    {
-        Attachments = Attachments.Append(attachment);
-    }
-    
-    public void AddAttachment(List<AttachmentEntity> attachments)
-    {
-        Attachments = Attachments.Concat(attachments);
-    }
-
-    public void UpdateAttachment(AttachmentEntity attachment)
-    {
-        Attachments = Attachments.Where(a => a.Id != attachment.Id).Append(attachment);
-        Touch();
-    }
-
-    public void DeleteAttachment(AttachmentEntity attachment)
-    {
-        Attachments = Attachments.Where(a => a.Id != attachment.Id);
-        Touch();
-    }
-
-    public void ClearAttachments()
-    {
-        Attachments = [];
     }
 }

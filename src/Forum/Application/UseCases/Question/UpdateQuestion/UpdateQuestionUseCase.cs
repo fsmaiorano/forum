@@ -39,15 +39,10 @@ public class UpdateQuestionUseCase(
 
         question = QuestionEntity.Update(question, command.Title, command.Content, command.Slug);
 
-        if (question.Attachments?.Count() > 0 && command.Attachments is not null)
+        if (question.Attachments?.GetItems().Count > 0 && command.Attachments is not null)
         {
-            await attachmentRepository.DeleteByQuestionId(question.Id);
-
-            var attachments = new List<AttachmentEntity>();
-            attachments.AddRange(command.Attachments.Select(att =>
-                AttachmentEntity.Create(question.Id, AttachmentOwnerTypeEnum.Question, att.Title, att.Link)));
-
-            await attachmentRepository.Create(attachments);
+            question.Attachments.Update(command.Attachments);
+            await attachmentRepository.Create(question.Attachments.CurrentItems);
         }
 
         await questionRepository.Update(question);

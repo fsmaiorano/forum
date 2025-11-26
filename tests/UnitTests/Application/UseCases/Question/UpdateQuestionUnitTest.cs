@@ -1,6 +1,5 @@
 using Forum.Application.UseCases.Question.UpdateQuestion;
 using Forum.BuildingBlocks.Exceptions;
-using Forum.Domain.Enums;
 using UnitTests.Factories;
 
 namespace UnitTests.Application.UseCases.Question;
@@ -64,10 +63,8 @@ public class UpdateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
         var useCase = new UpdateQuestionUseCase(loggerMock.Object, repository, attachmentRepository);
 
         var question = MakeQuestion.Create();
-        question.AddAttachment(
-            [
-                MakeAttachment.Create(question.Id, title: "1"),
-            ]
+        question.Attachments.Add(
+            MakeAttachment.Create(question.Id, title: "1")
         );
 
         await repository.Create(question);
@@ -87,10 +84,15 @@ public class UpdateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
 
         await useCase.UpdateQuestionUseCaseHandler(command);
         var updatedQuestion = await repository.FindById(question.Id);
-        
+
         Assert.NotNull(updatedQuestion);
         Assert.Equal(command.Title, updatedQuestion.Title);
         Assert.Equal(command.Content, updatedQuestion.Content);
         Assert.Equal(3, (await attachmentRepository.FindByQuestionId(question.Id)).Count);
+        
+        var storedAttachments = Context.Attachment.Where(a => a.OwnerId.Equals(question.Id)).ToList();
+        Assert.Equal(command.Attachments![0].Title, storedAttachments[0].Title);
+        Assert.Equal(command.Attachments![1].Title, storedAttachments[1].Title);
+        Assert.Equal(command.Attachments![2].Title, storedAttachments[2].Title);
     }
 }
