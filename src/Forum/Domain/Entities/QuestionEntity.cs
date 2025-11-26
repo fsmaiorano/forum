@@ -9,10 +9,11 @@ public sealed record QuestionEntity : Entity
     public string Title { get; private set; } = null!;
     public string Content { get; private set; } = null!;
     public Slug? Slug { get; private set; } = null;
-    public WatchedList<AttachmentEntity> Attachments { get; private set; } = AttachmentList.Create();
+    public WatchedList<AttachmentEntity> Attachments { get; private set; } = null!;
     public bool IsOpen { get; private set; } = true;
 
-    public static QuestionEntity Create(string authorId, string title, string content, string? slug = null)
+    public static QuestionEntity Create(string authorId, string title, string content, string? slug = null,
+        WatchedList<AttachmentEntity>? attachments = null)
     {
         var question = new QuestionEntity()
         {
@@ -21,17 +22,21 @@ public sealed record QuestionEntity : Entity
             Title = title,
             Content = content,
             Slug = string.IsNullOrWhiteSpace(slug) ? Slug.Create(title) : new Slug(slug),
+            Attachments = attachments ?? AttachmentList.Create()
         };
 
         return question;
     }
 
     public static QuestionEntity Update(QuestionEntity questionEntity, string title, string content,
-        string? slug = null)
+        string? slug = null, WatchedList<AttachmentEntity>? attachments = null)
     {
         questionEntity.Title = title;
         questionEntity.Content = content;
         questionEntity.Slug = string.IsNullOrWhiteSpace(slug) ? Slug.Create(title) : new Slug(slug);
+
+        if (attachments != null && attachments.GetItems().Count != 0 && questionEntity.Attachments.GetItems().Count > 0)
+            questionEntity.Attachments.Update(attachments.GetItems());
 
         return questionEntity;
     }

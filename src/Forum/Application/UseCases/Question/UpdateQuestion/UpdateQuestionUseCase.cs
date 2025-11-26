@@ -37,7 +37,8 @@ public class UpdateQuestionUseCase(
         if (question.AuthorId != command.AuthorId)
             throw new ForbiddenException("You are not allowed to update this question.");
 
-        question = QuestionEntity.Update(question, command.Title, command.Content, command.Slug);
+        question = QuestionEntity.Update(question, command.Title, command.Content, command.Slug,
+            command.Attachments is not null ? AttachmentList.Create(command.Attachments) : null);
 
         if (question.Attachments?.GetItems().Count > 0 && command.Attachments is not null)
         {

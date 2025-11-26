@@ -9,7 +9,7 @@ public sealed record AnswerEntity : Entity
     public UniqueEntityId QuestionId { get; private set; } = null!;
     public string Content { get; private set; } = null!;
     public bool IsClosed { get; private set; }
-    public IEnumerable<AttachmentEntity> Attachments { get; private set; } = [];
+    public WatchedList<AttachmentEntity> Attachments { get; private set; } = null!;
 
 
     public static AnswerEntity Create(
@@ -17,18 +17,27 @@ public sealed record AnswerEntity : Entity
         string questionId,
         string content,
         bool isClosed = false,
-        List<AttachmentEntity>? attachments = null
+        WatchedList<AttachmentEntity>? attachments = null
     )
     {
+        UniqueEntityId.Of(questionId);
+        UniqueEntityId.Of(authorId);
+        
         return new AnswerEntity
         {
             AuthorId = new UniqueEntityId(authorId),
             QuestionId = new UniqueEntityId(questionId),
             Content = content,
             IsClosed = isClosed,
-            Attachments = attachments?.Count > 0
-                ? attachments.Select((att) => AttachmentEntity.Create(new UniqueEntityId(questionId), AttachmentOwnerTypeEnum.Answer, att.Title, att.Link))
-                : []
+            Attachments = attachments ?? AttachmentList.Create()
         };
+    }
+    
+    public static string Excerpt(string content, int maxLength = 200)
+    {
+        if (string.IsNullOrEmpty(content))
+            return string.Empty;
+
+        return content.Length <= maxLength ? content : string.Concat(content.AsSpan(0, maxLength), "...");
     }
 }

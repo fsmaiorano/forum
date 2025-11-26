@@ -15,6 +15,11 @@ public class DeleteQuestionEndpointUnitTest(TestFixture fixture) : BaseTest(fixt
 
         var response = await DoDelete($"/question/{question.Id}");
 
+        var storedQuestion = await Context.Question.FirstOrDefaultAsync(q => q.Id.Equals(question.Id));
+        var storedAttachments = await Context.Attachment.Where(a => a.OwnerId.Equals(question.Id)).ToListAsync();
+
+        Assert.Null(storedQuestion);
+        Assert.Empty(storedAttachments);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 }
