@@ -12,13 +12,6 @@ public sealed class QuestionRepository(IForumDbContext context) : IQuestionRepos
         await context.SaveChangesAsync();
     }
 
-    public async Task<QuestionEntity?> FindById(UniqueEntityId questionId, bool asNoTracking = false)
-    {
-        var query = context.Question.AsQueryable();
-        if (asNoTracking) query = query.AsNoTracking();
-        return await query.FirstOrDefaultAsync(q => q.Id.Equals(questionId));
-    }
-
     public async Task Update(QuestionEntity questionEntity)
     {
         questionEntity.Touch();
@@ -30,5 +23,12 @@ public sealed class QuestionRepository(IForumDbContext context) : IQuestionRepos
     {
         context.Question.Remove(questionEntity);
         await context.SaveChangesAsync();
+    }
+
+    public async Task<QuestionEntity?> FindById(UniqueEntityId questionId, bool asNoTracking = false)
+    {
+        var query = context.Question.AsQueryable();
+        if (asNoTracking) query = query.AsNoTracking();
+        return await query.FirstOrDefaultAsync(q => q.Id.Equals(questionId));
     }
 }

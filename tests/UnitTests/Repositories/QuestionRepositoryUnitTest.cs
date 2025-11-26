@@ -12,7 +12,6 @@ public class QuestionRepositoryUnitTest(TestFixture fixture) : BaseTest(fixture)
 
         var question = MakeQuestion.Create();
         await repository.Create(question);
-        await Context.SaveChangesAsync();
 
         var storedQuestion = await Context.Question
             .FirstOrDefaultAsync(q => q.Id == question.Id);

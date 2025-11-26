@@ -13,8 +13,8 @@ public sealed record AnswerEntity : Entity
 
 
     public static AnswerEntity Create(
-        string authorId,
-        string questionId,
+        UniqueEntityId authorId,
+        UniqueEntityId questionId,
         string content,
         bool isClosed = false,
         WatchedList<AttachmentEntity>? attachments = null
@@ -22,17 +22,30 @@ public sealed record AnswerEntity : Entity
     {
         UniqueEntityId.Of(questionId);
         UniqueEntityId.Of(authorId);
-        
+
         return new AnswerEntity
         {
-            AuthorId = new UniqueEntityId(authorId),
-            QuestionId = new UniqueEntityId(questionId),
+            Id = new UniqueEntityId(),
+            AuthorId = authorId,
+            QuestionId = questionId,
             Content = content,
             IsClosed = isClosed,
             Attachments = attachments ?? AttachmentList.Create()
         };
     }
-    
+
+    public static AnswerEntity Update(AnswerEntity answerEntity, string content, bool isClosed = false,
+        WatchedList<AttachmentEntity>? attachments = null)
+    {
+        answerEntity.Content = content;
+        answerEntity.IsClosed = isClosed;
+        
+        if (attachments != null && attachments.GetItems().Count != 0 && answerEntity.Attachments.GetItems().Count > 0)
+            answerEntity.Attachments.Update(attachments.GetItems());
+        
+        return answerEntity;
+    }
+
     public static string Excerpt(string content, int maxLength = 200)
     {
         if (string.IsNullOrEmpty(content))
