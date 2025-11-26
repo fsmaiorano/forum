@@ -20,9 +20,9 @@ public static class MakeAnswer
     }
 
     public static CreateAnswerCommand CreateAnswerCommand(
-        UniqueEntityId? questionId,
-        UniqueEntityId? authorId,
-        string? content,
+        UniqueEntityId? questionId = null!,
+        UniqueEntityId? authorId = null!,
+        string? content = null!,
         bool isClosed = false,
         List<AttachmentEntity>? attachments = null)
     {
