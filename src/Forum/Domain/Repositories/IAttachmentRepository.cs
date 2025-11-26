@@ -7,5 +7,5 @@ public interface IAttachmentRepository
     public Task<List<AttachmentEntity>> FindByQuestionId(UniqueEntityId questionId);
     public Task Update(AttachmentEntity attachmentEntity);
     public Task Update(List<AttachmentEntity> attachments);
-    public Task DeleteByQuestionId(UniqueEntityId questionId);
+    public Task DeleteByOwnerId(UniqueEntityId ownerId);
 }

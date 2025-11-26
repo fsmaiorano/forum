@@ -49,7 +49,7 @@ public class DeleteQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
         // Find the question by ID from repository to get a fresh tracked instance
         var storedQuestion = await questionRepository.FindById(storedQuestionId);
 
-        await attachmentRepository.DeleteByQuestionId(storedQuestion!.Id);
+        await attachmentRepository.DeleteByOwnerId(storedQuestion!.Id);
         await questionRepository.Delete(storedQuestion!);
 
         // Verify deletion with AsNoTracking to avoid tracking conflicts

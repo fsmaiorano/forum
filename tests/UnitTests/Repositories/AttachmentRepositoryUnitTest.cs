@@ -57,7 +57,7 @@ public class AttachmentRepositoryUnitTest(TestFixture fixture) : BaseTest(fixtur
         };
 
         await repository.Create(attachments);
-        await repository.DeleteByQuestionId(question.Id);
+        await repository.DeleteByOwnerId(question.Id);
 
         var storedAttachments = Context.Attachment.Where(a => a.OwnerId.Equals(question.Id)).ToList();
         Assert.Empty(storedAttachments);

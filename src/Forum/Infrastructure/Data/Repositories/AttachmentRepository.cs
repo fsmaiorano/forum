@@ -38,10 +38,10 @@ public class AttachmentRepository(IForumDbContext context) : IAttachmentReposito
         await context.SaveChangesAsync();
     }
     
-    public async Task DeleteByQuestionId(UniqueEntityId questionId)
+    public async Task DeleteByOwnerId(UniqueEntityId ownerId)
     {
         var attachments = await context.Attachment
-            .Where(a => a.OwnerId == questionId)
+            .Where(a => a.OwnerId == ownerId)
             .ToListAsync();
 
         context.Attachment.RemoveRange(attachments);

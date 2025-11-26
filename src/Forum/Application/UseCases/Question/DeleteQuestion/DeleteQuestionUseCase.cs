@@ -24,7 +24,7 @@ public class DeleteQuestionUseCase(
         var question = await questionRepository.FindById(command.QuestionId) ??
                              throw new NotFoundException($"Question with ID {command.QuestionId} not found.");
 
-        await attachmentRepository.DeleteByQuestionId(question.Id);
+        await attachmentRepository.DeleteByOwnerId(question.Id);
         await questionRepository.Delete(question);
 
         logger.LogInformation(LogType.Functional, $"Question with ID {command.QuestionId} deleted successfully.");
