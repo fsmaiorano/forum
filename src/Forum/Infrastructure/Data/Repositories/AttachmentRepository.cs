@@ -19,7 +19,7 @@ public class AttachmentRepository(IForumDbContext context) : IAttachmentReposito
         await context.SaveChangesAsync();
     }
 
-    public async Task<List<AttachmentEntity>> FindByQuestionId(UniqueEntityId questionId)
+    public async Task<List<AttachmentEntity>> FindByOwnerId(UniqueEntityId questionId)
     {
         return await context.Attachment
             .Where(a => a.OwnerId == questionId)

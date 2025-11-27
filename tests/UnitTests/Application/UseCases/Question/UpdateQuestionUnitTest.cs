@@ -88,7 +88,7 @@ public class UpdateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
         Assert.NotNull(updatedQuestion);
         Assert.Equal(command.Title, updatedQuestion.Title);
         Assert.Equal(command.Content, updatedQuestion.Content);
-        Assert.Equal(3, (await attachmentRepository.FindByQuestionId(question.Id)).Count);
+        Assert.Equal(3, (await attachmentRepository.FindByOwnerId(question.Id)).Count);
         
         var storedAttachments = Context.Attachment.Where(a => a.OwnerId.Equals(question.Id)).ToList();
         Assert.Equal(command.Attachments![0].Title, storedAttachments[0].Title);

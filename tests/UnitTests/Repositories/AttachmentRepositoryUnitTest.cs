@@ -40,7 +40,7 @@ public class AttachmentRepositoryUnitTest(TestFixture fixture) : BaseTest(fixtur
         };
 
         await repository.Create(attachments);
-        var storedAttachments = await repository.FindByQuestionId(question.Id); 
+        var storedAttachments = await repository.FindByOwnerId(question.Id); 
 
         Assert.Equal(attachments.Count, storedAttachments.Count);
     }
