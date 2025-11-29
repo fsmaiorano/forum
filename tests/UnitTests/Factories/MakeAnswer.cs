@@ -66,4 +66,19 @@ public static class MakeAnswer
             Attachments: attachments ?? []
         );
     }
+
+    public static UpdateAnswerRequest UpdateAnswerRequest(string answerId,
+        string authorId,
+        string? content = null,
+        bool? isClosed = false,
+        List<AttachmentRequest>? attachments = null)
+    {
+        var faker = new Bogus.Faker();
+        return new UpdateAnswerRequest(
+            AnswerId: answerId,
+            AuthorId: authorId,
+            Content: content ?? faker.Lorem.Paragraph(),
+            Attachments: attachments ?? []
+        );
+    }
 }

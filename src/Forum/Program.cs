@@ -49,5 +49,7 @@ UpdateQuestionEndpoint.MapEndpoint(app);
 DeleteQuestionEndpoint.MapEndpoint(app);
 
 CreateAnswerEndpoint.MapEndpoint(app);
+UpdateAnswerEndpoint.MapEndpoint(app);
+DeleteAnswerEndpoint.MapEndpoint(app);
 
 app.Run();

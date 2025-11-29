@@ -1,4 +1,6 @@
 using Forum.Application.UseCases.Answer.CreateAnswer;
+using Forum.Application.UseCases.Answer.DeleteAnswer;
+using Forum.Application.UseCases.Answer.UpdateAnswer;
 using Forum.Application.UseCases.Question.CreateQuestion;
 using Forum.Application.UseCases.Question.DeleteQuestion;
 using Forum.Application.UseCases.Question.UpdateQuestion;
@@ -28,5 +30,7 @@ public static class DependencyInjection
         services.AddTransient<IDeleteQuestionUseCase, DeleteQuestionUseCase>();
 
         services.AddTransient<ICreateAnswerUseCase, CreateAnswerUseCase>();
+        services.AddTransient<IUpdateAnswerUseCase, UpdateAnswerUseCase>();
+        services.AddTransient<IDeleteAnswerUseCase, DeleteAnswerUseCase>();
     }
 }
