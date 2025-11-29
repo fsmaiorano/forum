@@ -21,7 +21,19 @@ public static class CreateQuestionEndpoint
         app.MapPost(Route,
                 async ([FromBody] CreateQuestionRequest request, [FromServices] ICreateQuestionUseCase handler) =>
                 {
-                    var command = new CreateQuestionCommand(request.Title, request.Content, new UniqueEntityId(request.AuthorId));
+                    var command = new CreateQuestionCommand(request.Title, request.Content,
+                        new UniqueEntityId(request.AuthorId), Attachments: request.Attachments?.Select(att =>
+                        {
+                            AttachmentOwnerType.Of(att.OwnerType);
+                            var ownerType = AttachmentOwnerType.FromInt(att.OwnerType);
+
+                            return AttachmentEntity.Create(
+                                new UniqueEntityId(att.OwnerId),
+                                ownerType.Value,
+                                att.Title,
+                                att.Link
+                            );
+                        }).ToList());
                     var result = await handler.CreateQuestionUseCaseHandler(command);
                     return result.IsSuccess
                         ? Results.Created("", new CreateQuestionResponse(result.Value.QuestionId))
@@ -29,7 +41,7 @@ public static class CreateQuestionEndpoint
                 })
             .WithName("CreateQuestion")
             .WithTags("Question")
-            .Produces<CreateQuestionResponse>(StatusCodes.Status200OK)
+            .Produces<CreateQuestionResponse>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
     }

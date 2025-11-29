@@ -1,6 +1,7 @@
 using Forum.Application.UseCases.Answer.CreateAnswer;
 using Forum.Application.UseCases.Answer.UpdateAnswer;
 using Forum.Domain.Entities.ValuesObjects;
+using Forum.Endpoints.Answer;
 using Forum.Endpoints.Dtos;
 
 namespace UnitTests.Factories;
@@ -32,6 +33,19 @@ public static class MakeAnswer
         return new CreateAnswerCommand(
             AuthorId: authorId ?? new UniqueEntityId(),
             QuestionId: questionId ?? new UniqueEntityId(),
+            Content: content ?? faker.Lorem.Paragraph(),
+            Attachments: attachments ?? []
+        );
+    }
+
+    public static CreateAnswerRequest CreateAnswerRequest(string? questionId, string? authorId = null,
+        string? content = null,
+        List<AttachmentRequest>? attachments = null)
+    {
+        var faker = new Bogus.Faker();
+        return new CreateAnswerRequest(
+            QuestionId: questionId ?? new UniqueEntityId().ToString(),
+            AuthorId: authorId ?? new UniqueEntityId().ToString(),
             Content: content ?? faker.Lorem.Paragraph(),
             Attachments: attachments ?? []
         );

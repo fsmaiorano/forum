@@ -26,10 +26,6 @@
       <ProjectReference Include="..\..\src\Forum\Forum.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Endpoints/" />
-    </ItemGroup>
-
 </Project>
 
 

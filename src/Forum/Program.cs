@@ -1,5 +1,6 @@
 using Forum.Application;
 using Forum.BuildingBlocks.Middleware;
+using Forum.Endpoints.Answer;
 using Forum.Endpoints.Question;
 using Forum.Infrastructure;
 using Serilog;
@@ -46,5 +47,7 @@ app.UseHttpsRedirection();
 CreateQuestionEndpoint.MapEndpoint(app);
 UpdateQuestionEndpoint.MapEndpoint(app);
 DeleteQuestionEndpoint.MapEndpoint(app);
+
+CreateAnswerEndpoint.MapEndpoint(app);
 
 app.Run();

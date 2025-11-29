@@ -7,9 +7,9 @@ using Forum.Endpoints.Dtos;
 namespace Forum.Application.UseCases.Answer.CreateAnswer;
 
 public record CreateAnswerCommand(
-    string Content,
     UniqueEntityId AuthorId,
     UniqueEntityId QuestionId,
+    string Content,
     List<AttachmentEntity>? Attachments = null!);
 
 public record CreateAnswerResult(string AnswerId);

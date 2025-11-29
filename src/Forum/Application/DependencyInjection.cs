@@ -1,3 +1,4 @@
+using Forum.Application.UseCases.Answer.CreateAnswer;
 using Forum.Application.UseCases.Question.CreateQuestion;
 using Forum.Application.UseCases.Question.DeleteQuestion;
 using Forum.Application.UseCases.Question.UpdateQuestion;
@@ -11,10 +12,10 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddSingleton(typeof(IAppLogger<>), typeof(AppLogger<>));
-        
+
         services.AddExceptionHandler<CustomExceptionHandler>();
         services.AddProblemDetails();
-        
+
         AddUseCases(services);
 
         return services;
@@ -25,5 +26,7 @@ public static class DependencyInjection
         services.AddTransient<ICreateQuestionUseCase, CreateQuestionUseCase>();
         services.AddTransient<IUpdateQuestionUseCase, UpdateQuestionUseCase>();
         services.AddTransient<IDeleteQuestionUseCase, DeleteQuestionUseCase>();
+
+        services.AddTransient<ICreateAnswerUseCase, CreateAnswerUseCase>();
     }
 }
