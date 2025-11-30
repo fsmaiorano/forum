@@ -6,7 +6,7 @@ namespace UnitTests.Application.UseCases.Answer;
 public class DeleteAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
     [Fact]
-    public async void DeleteAnswerUseCaseHandler_ShouldDeleteAnswer()
+    public async Task DeleteAnswerUseCaseHandler_ShouldDeleteAnswer()
     {
         var answerRepository = new AnswerRepository(Context);
         var questionRepository = new QuestionRepository(Context);
