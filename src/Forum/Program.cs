@@ -30,7 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Forum API v1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Notification API v1");
         options.RoutePrefix = "swagger";
     });
 }

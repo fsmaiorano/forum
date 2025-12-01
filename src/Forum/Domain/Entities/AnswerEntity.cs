@@ -1,4 +1,5 @@
 using BuildingBlocks.Base;
+using BuildingBlocks.Extensions;
 using Forum.Domain.Enums;
 
 namespace Forum.Domain.Entities;
@@ -30,7 +31,7 @@ public sealed record AnswerEntity : Entity
             QuestionId = questionId,
             Content = content,
             IsClosed = isClosed,
-            Attachments = attachments ?? AttachmentList.Create()
+            Attachments = attachments ?? AttachmentList.Create(),
         };
     }
 
@@ -39,18 +40,15 @@ public sealed record AnswerEntity : Entity
     {
         answerEntity.Content = content;
         answerEntity.IsClosed = isClosed;
-        
+
         if (attachments != null && attachments.GetItems().Count != 0 && answerEntity.Attachments.GetItems().Count > 0)
             answerEntity.Attachments.Update(attachments.GetItems());
-        
+
         return answerEntity;
     }
 
     public static string Excerpt(string content, int maxLength = 200)
     {
-        if (string.IsNullOrEmpty(content))
-            return string.Empty;
-
-        return content.Length <= maxLength ? content : string.Concat(content.AsSpan(0, maxLength), "...");
+        return string.IsNullOrEmpty(content) ? string.Empty : content.Excerpt(maxLength);
     }
 }

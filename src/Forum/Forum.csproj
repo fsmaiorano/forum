@@ -20,7 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="BuildingBlocks\" />
       <Folder Include="Logs\" />
     </ItemGroup>
 
