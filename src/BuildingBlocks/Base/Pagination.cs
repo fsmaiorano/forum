@@ -1,0 +1,7 @@
+namespace BuildingBlocks.Base;
+
+public abstract class Pagination
+{
+    public int Page { get; set; }
+    public int PageSize { get; set; }
+}

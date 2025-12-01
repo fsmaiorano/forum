@@ -1,0 +1,12 @@
+﻿services:
+  forum:
+    image: forum
+    build:
+      context: .
+      dockerfile: src/Forum/Dockerfile
+  notification:
+    image: notification
+    build:
+      context: .
+      dockerfile: src/Notification/Dockerfile
+

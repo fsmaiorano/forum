@@ -1,5 +1,5 @@
+using BuildingBlocks.Middleware;
 using Forum.Application;
-using Forum.BuildingBlocks.Middleware;
 using Forum.Endpoints.Answer;
 using Forum.Endpoints.Question;
 using Forum.Infrastructure;

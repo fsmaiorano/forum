@@ -1,3 +1,4 @@
+using BuildingBlocks.Base;
 using Forum.Domain.Repositories;
 using Forum.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;

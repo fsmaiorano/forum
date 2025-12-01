@@ -1,4 +1,4 @@
-using Forum.BuildingBlocks.Base;
+using BuildingBlocks.Base;
 
 namespace Forum.Domain.Entities;
 

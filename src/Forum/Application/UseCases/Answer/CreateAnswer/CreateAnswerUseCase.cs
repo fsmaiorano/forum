@@ -1,5 +1,5 @@
-using Forum.BuildingBlocks.Base;
-using Forum.BuildingBlocks.Logging;
+using BuildingBlocks.Base;
+using BuildingBlocks.Logging;
 using Forum.Domain.Enums;
 using Forum.Domain.Repositories;
 using Forum.Endpoints.Dtos;

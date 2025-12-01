@@ -1,3 +1,5 @@
+using BuildingBlocks.Base;
+
 namespace Forum.Domain.Repositories;
 
 public interface IAnswerRepository

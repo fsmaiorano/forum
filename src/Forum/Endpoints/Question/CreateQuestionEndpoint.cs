@@ -1,3 +1,4 @@
+using BuildingBlocks.Base;
 using Forum.Application.UseCases.Question.CreateQuestion;
 using Forum.Endpoints.Dtos;
 using Microsoft.AspNetCore.Mvc;

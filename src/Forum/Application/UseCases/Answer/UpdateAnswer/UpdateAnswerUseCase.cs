@@ -1,6 +1,6 @@
-using Forum.BuildingBlocks.Base;
-using Forum.BuildingBlocks.Exceptions;
-using Forum.BuildingBlocks.Logging;
+using BuildingBlocks.Base;
+using BuildingBlocks.Exceptions;
+using BuildingBlocks.Logging;
 using Forum.Domain.Repositories;
 
 namespace Forum.Application.UseCases.Answer.UpdateAnswer;

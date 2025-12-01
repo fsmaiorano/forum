@@ -1,3 +1,4 @@
+using BuildingBlocks.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

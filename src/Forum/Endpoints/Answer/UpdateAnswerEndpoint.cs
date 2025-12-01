@@ -1,3 +1,4 @@
+using BuildingBlocks.Base;
 using Forum.Application.UseCases.Answer.UpdateAnswer;
 using Forum.Endpoints.Dtos;
 using Microsoft.AspNetCore.Mvc;

@@ -1,3 +1,4 @@
+using BuildingBlocks.Base;
 using Forum.Application.UseCases.Answer.DeleteAnswer;
 using Microsoft.AspNetCore.Mvc;
 
