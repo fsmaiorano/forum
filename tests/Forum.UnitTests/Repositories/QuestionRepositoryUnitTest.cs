@@ -78,4 +78,20 @@ public class QuestionRepositoryUnitTest(TestFixture fixture) : BaseTest(fixture)
         
         Assert.Null(storedQuestion);
     }
+
+    [Fact]
+    public async Task Patch_ShouldSelectBestAnswer()
+    {
+        var repository = new QuestionRepository(Context);   
+        
+        var question = MakeQuestion.Create();
+        await repository.Create(question);
+        
+        var storedQuestion = await Context.Question
+            .FirstOrDefaultAsync(q => q.Id == question.Id);
+
+        QuestionEntity.SelectBestAnswer(storedQuestion!, new UniqueEntityId());
+        
+        Assert.NotNull(storedQuestion!.BestAnswerId);
+    }
 }

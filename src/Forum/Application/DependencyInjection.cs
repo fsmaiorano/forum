@@ -5,6 +5,7 @@ using Forum.Application.UseCases.Answer.DeleteAnswer;
 using Forum.Application.UseCases.Answer.UpdateAnswer;
 using Forum.Application.UseCases.Question.CreateQuestion;
 using Forum.Application.UseCases.Question.DeleteQuestion;
+using Forum.Application.UseCases.Question.PatchQuestionSetBestAnswer;
 using Forum.Application.UseCases.Question.UpdateQuestion;
 
 namespace Forum.Application;
@@ -27,6 +28,7 @@ public static class DependencyInjection
     {
         services.AddTransient<ICreateQuestionUseCase, CreateQuestionUseCase>();
         services.AddTransient<IUpdateQuestionUseCase, UpdateQuestionUseCase>();
+        services.AddTransient<IPatchQuestionSetBestAnswerUseCase, PatchQuestionSetBestAnswerUseCase>();
         services.AddTransient<IDeleteQuestionUseCase, DeleteQuestionUseCase>();
 
         services.AddTransient<ICreateAnswerUseCase, CreateAnswerUseCase>();

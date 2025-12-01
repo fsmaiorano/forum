@@ -20,6 +20,13 @@ public sealed class QuestionRepository(IForumDbContext context) : IQuestionRepos
         await context.SaveChangesAsync();
     }
 
+    public Task SelectBestAnswer(QuestionEntity questionEntity)
+    {
+        questionEntity.Touch();
+        context.Question.Update(questionEntity);
+        return context.SaveChangesAsync();
+    }
+
     public async Task Delete(QuestionEntity questionEntity)
     {
         context.Question.Remove(questionEntity);

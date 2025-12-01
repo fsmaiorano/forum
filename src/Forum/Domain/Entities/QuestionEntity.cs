@@ -1,8 +1,9 @@
 using BuildingBlocks.Base;
+using BuildingBlocks.Events;
 
 namespace Forum.Domain.Entities;
 
-public sealed record QuestionEntity : Entity
+public sealed record QuestionEntity : Aggregate
 {
     public UniqueEntityId AuthorId { get; private set; } = null!;
     public UniqueEntityId BestAnswerId { get; private set; } = null!;
@@ -38,6 +39,14 @@ public sealed record QuestionEntity : Entity
         if (attachments != null && attachments.GetItems().Count != 0 && questionEntity.Attachments.GetItems().Count > 0)
             questionEntity.Attachments.Update(attachments.GetItems());
 
+        return questionEntity;
+    }
+
+    public static QuestionEntity SelectBestAnswer(QuestionEntity questionEntity, UniqueEntityId answerId)
+    {
+        questionEntity.BestAnswerId = answerId;
+        questionEntity.Touch();
+        
         return questionEntity;
     }
 

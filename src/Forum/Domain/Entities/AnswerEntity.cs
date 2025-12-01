@@ -1,10 +1,12 @@
 using BuildingBlocks.Base;
+using BuildingBlocks.Events;
 using BuildingBlocks.Extensions;
 using Forum.Domain.Enums;
+using Forum.Domain.Events;
 
 namespace Forum.Domain.Entities;
 
-public sealed record AnswerEntity : Entity
+public sealed record AnswerEntity : Aggregate
 {
     public UniqueEntityId AuthorId { get; private set; } = null!;
     public UniqueEntityId QuestionId { get; private set; } = null!;
@@ -24,7 +26,7 @@ public sealed record AnswerEntity : Entity
         UniqueEntityId.Of(questionId);
         UniqueEntityId.Of(authorId);
 
-        return new AnswerEntity
+        var answer =  new AnswerEntity
         {
             Id = new UniqueEntityId(),
             AuthorId = authorId,
@@ -33,6 +35,10 @@ public sealed record AnswerEntity : Entity
             IsClosed = isClosed,
             Attachments = attachments ?? AttachmentList.Create(),
         };
+        
+        answer.AddDomainEvent(new AnswerCreatedEvent(answer));
+        
+        return answer;
     }
 
     public static AnswerEntity Update(AnswerEntity answerEntity, string content, bool isClosed = false,

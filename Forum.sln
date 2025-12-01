@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks", "src\BuildingBlocks\BuildingBlocks.csproj", "{DA139C2B-2AA5-409E-B1A4-DE2653178C4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forum.Notification", "tests\Forum.Notification\Forum.Notification.csproj", "{2DB12831-B52C-4E1B-BF8D-303D9ADF67D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notification.UnitTest", "tests\Notification.UnitTest\Notification.UnitTest.csproj", "{2DB12831-B52C-4E1B-BF8D-303D9ADF67D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
