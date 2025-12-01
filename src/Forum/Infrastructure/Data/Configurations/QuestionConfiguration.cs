@@ -43,6 +43,12 @@ public class QuestionConfiguration : IEntityTypeConfiguration<QuestionEntity>
         builder.Property(c => c.Content)
             .IsRequired();
 
+        builder.Property(a => a.CreatedAt)
+            .IsRequired();
+
+        builder.Property(a => a.UpdatedAt)
+            .IsRequired(false);
+
         builder.Ignore(c => c.Attachments);
     }
 }

@@ -1,12 +1,13 @@
 using BuildingBlocks.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Notification.Domain.Entities;
 
-namespace Forum.Infrastructure.Data.Configurations;
+namespace Notification.Infrastructure.Data.Configurations;
 
-public class AnswerConfiguration : IEntityTypeConfiguration<AnswerEntity>
+public class NotificationConfiguration : IEntityTypeConfiguration<NotificationEntity>
 {
-    public void Configure(EntityTypeBuilder<AnswerEntity> builder)
+    public void Configure(EntityTypeBuilder<NotificationEntity> builder)
     {
         builder.HasKey(a => a.Id);
 
@@ -17,31 +18,26 @@ public class AnswerConfiguration : IEntityTypeConfiguration<AnswerEntity>
                 value => UniqueEntityId.Of(value));
 
         builder.HasIndex(a => a.Id).IsUnique();
-        
-        builder.Property(a => a.QuestionId)
+
+        builder.Property(a => a.RecipientId)
             .HasConversion(
                 id => id.ToString(),
                 value => UniqueEntityId.Of(value))
             .IsRequired();
 
-        builder.Property(a => a.AuthorId)
-            .HasConversion(
-                id => id.ToString(),
-                value => UniqueEntityId.Of(value))
+        builder.Property(a => a.Title)
             .IsRequired();
-        
+
         builder.Property(a => a.Content)
             .IsRequired();
-        
-        builder.Property(a => a.IsClosed)
-            .IsRequired();
+
+        builder.Property(a => a.ReadAt)
+            .IsRequired(false);
         
         builder.Property(a => a.CreatedAt)
             .IsRequired();
         
         builder.Property(a => a.UpdatedAt)
             .IsRequired(false);
-        
-        builder.Ignore(c => c.Attachments);
     }
 }

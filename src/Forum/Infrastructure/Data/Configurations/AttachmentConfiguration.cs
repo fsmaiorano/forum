@@ -33,5 +33,11 @@ public class AttachmentConfiguration : IEntityTypeConfiguration<AttachmentEntity
 
         builder.Property(c => c.Link)
             .IsRequired();
+        
+        builder.Property(a => a.CreatedAt)
+            .IsRequired();
+        
+        builder.Property(a => a.UpdatedAt)
+            .IsRequired(false);
     }
 }
