@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Notification.Domain.Repositories;
 using Notification.Infrastructure.Data.Context;
+using Notification.Infrastructure.Data.Repositories;
 using Serilog;
 
 namespace Notification.Infrastructure;
@@ -17,13 +19,14 @@ public static class DependencyInjection
 
     private static void AddRepositories(IServiceCollection services)
     {
+        services.AddScoped<INotificationRepository, NotificationRepository>();
     }
 
     private static void AddContexts(IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
         services.AddScoped<INotificationDbContext, NotificationDbContext>();
-        
+
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         if (configuration.GetSection("UseInMemoryDatabase").Get<bool>())
         {
@@ -32,7 +35,7 @@ public static class DependencyInjection
         }
     }
 
-    private static WebApplicationBuilder AddLogging(WebApplicationBuilder builder)
+    private static void AddLogging(WebApplicationBuilder builder)
     {
         builder.Host.UseSerilog((context, services, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration)
@@ -57,7 +60,5 @@ public static class DependencyInjection
                     outputTemplate:
                     "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] [{LogType}] {Message:lj}{NewLine}{Exception}"))
             .WriteTo.Console());
-
-        return builder;
     }
 }

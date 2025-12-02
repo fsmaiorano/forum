@@ -26,7 +26,7 @@ public sealed class ReadNotificationUseCase(
         if (notification is null)
             throw new NotFoundException($"Notification with ID {command.NotificationId} not found.");
 
-        if (notification.RecipientId != command.RecipientId)
+        if (!Equals(notification.RecipientId, command.RecipientId))
             throw new ForbiddenException("You are not allowed to read this notification.");
 
         notification.MarkAsRead();
