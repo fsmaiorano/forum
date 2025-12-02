@@ -41,7 +41,7 @@ public sealed class CreateAnswerUseCase(
 
         logger.LogInformation(LogType.Functional,
             $"The user {answer.AuthorId} created a new answer with ID: {answer.Id} for question ID: {answer.QuestionId}");
-
+        
         return Result<CreateAnswerResult>.Success(new CreateAnswerResult(answer.Id.ToString()));
     }
 }

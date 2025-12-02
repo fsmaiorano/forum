@@ -1,4 +1,5 @@
 using BuildingBlocks.Base;
+using BuildingBlocks.Events;
 using Forum.Domain.Repositories;
 using Forum.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ public sealed class AnswerRepository(IForumDbContext context) : IAnswerRepositor
     {
         await context.Answer.AddAsync(answerEntity);
         await context.SaveChangesAsync();
+        DomainEvents.DispatchEventsForAggregate(answerEntity.Id);
     }
 
     public async Task Update(AnswerEntity answerEntity)

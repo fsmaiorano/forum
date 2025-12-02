@@ -45,22 +45,21 @@ public static class DomainEvents
     {
         var aggregate = FindMarkedAggregateById(id);
 
-        if (aggregate != null)
-        {
-            DispatchAggregateEvents(aggregate);
-            aggregate.ClearEvents();
-            RemoveAggregateFromMarkedDispatchList(aggregate);
-        }
+        if (aggregate == null) return;
+        DispatchAggregateEvents(aggregate);
+        aggregate.ClearEvents();
+        RemoveAggregateFromMarkedDispatchList(aggregate);
     }
 
     public static void Register(DomainEventCallback callback, string eventClassName)
     {
-        if (!HandlersMap.ContainsKey(eventClassName))
+        if (!HandlersMap.TryGetValue(eventClassName, out var value))
         {
-            HandlersMap[eventClassName] = new List<DomainEventCallback>();
+            value = [];
+            HandlersMap[eventClassName] = value;
         }
 
-        HandlersMap[eventClassName].Add(callback);
+        value.Add(callback);
     }
 
     public static void ClearHandlers()
@@ -86,4 +85,3 @@ public static class DomainEvents
         }
     }
 }
-

@@ -1,4 +1,5 @@
 using BuildingBlocks.Base;
+using BuildingBlocks.Events;
 using Forum.Domain.Repositories;
 using Forum.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,12 @@ public sealed class QuestionRepository(IForumDbContext context) : IQuestionRepos
         await context.SaveChangesAsync();
     }
 
-    public Task SelectBestAnswer(QuestionEntity questionEntity)
+    public async Task SelectBestAnswer(QuestionEntity questionEntity)
     {
         questionEntity.Touch();
         context.Question.Update(questionEntity);
-        return context.SaveChangesAsync();
+        await context.SaveChangesAsync();
+        DomainEvents.DispatchEventsForAggregate(questionEntity.Id);
     }
 
     public async Task Delete(QuestionEntity questionEntity)

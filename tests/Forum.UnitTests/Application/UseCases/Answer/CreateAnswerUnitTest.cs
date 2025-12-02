@@ -20,6 +20,8 @@ public class CreateAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
         await Context.Question.AddAsync(question);
         await Context.SaveChangesAsync();
 
+        Thread.Sleep(100);
+
         var command = MakeAnswer.CreateAnswerCommand(question.Id);
         var result = await useCase.CreateAnswerUseCaseHandler(command);
 

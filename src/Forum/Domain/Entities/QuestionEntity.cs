@@ -1,5 +1,6 @@
 using BuildingBlocks.Base;
 using BuildingBlocks.Events;
+using Forum.Domain.Events;
 
 namespace Forum.Domain.Entities;
 
@@ -46,6 +47,8 @@ public sealed record QuestionEntity : Aggregate
     {
         questionEntity.BestAnswerId = answerId;
         questionEntity.Touch();
+        
+        questionEntity.AddDomainEvent(new QuestionBestAnswerChosenEvent(questionEntity, answerId));
         
         return questionEntity;
     }
