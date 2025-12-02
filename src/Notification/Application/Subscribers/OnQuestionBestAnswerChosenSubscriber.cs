@@ -1,7 +1,8 @@
 using BuildingBlocks.Base;
 using BuildingBlocks.Logging;
 using BuildingBlocks.Messaging;
-using BuildingBlocks.Messaging.Events;
+using BuildingBlocks.Messaging.IntegrationEvents;
+using BuildingBlocks.Messaging.IntegrationEvents.Interfaces;
 using Notification.Application.UseCases.SendNotification;
 
 namespace Notification.Application.Subscribers;
@@ -9,7 +10,7 @@ namespace Notification.Application.Subscribers;
 public class OnQuestionBestAnswerChosenSubscriber(
     IAppLogger<OnQuestionBestAnswerChosenSubscriber> logger,
     ISendNotificationUseCase sendNotificationUseCase)
-    : IEventHandler<QuestionBestAnswerChosenIntegrationEvent>
+    : IIntegrationEventHandler<QuestionBestAnswerChosenIntegrationEvent>
 {
     public async Task HandleAsync(QuestionBestAnswerChosenIntegrationEvent @event, CancellationToken cancellationToken = default)
     {

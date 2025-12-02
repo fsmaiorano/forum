@@ -1,6 +1,6 @@
 using BuildingBlocks.Base;
-using BuildingBlocks.Events;
 using BuildingBlocks.Extensions;
+using BuildingBlocks.Messaging.DomainEvents;
 using Forum.Domain.Enums;
 using Forum.Domain.Events;
 

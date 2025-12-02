@@ -1,18 +1,20 @@
 using BuildingBlocks.Base;
-using BuildingBlocks.Events;
+using BuildingBlocks.Messaging.DomainEvents;
 using Forum.Domain.Repositories;
 using Forum.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Forum.Infrastructure.Data.Repositories;
 
-public sealed class AnswerRepository(IForumDbContext context) : IAnswerRepository
+public sealed class AnswerRepository(IForumDbContext context, IDomainEventDispatcher eventDispatcher) : IAnswerRepository
 {
     public async Task Create(AnswerEntity answerEntity)
     {
         await context.Answer.AddAsync(answerEntity);
         await context.SaveChangesAsync();
-        DomainEvents.DispatchEventsForAggregate(answerEntity.Id);
+        
+        await eventDispatcher.DispatchAsync(answerEntity.DomainEvents);
+        answerEntity.ClearEvents();
     }
 
     public async Task Update(AnswerEntity answerEntity)

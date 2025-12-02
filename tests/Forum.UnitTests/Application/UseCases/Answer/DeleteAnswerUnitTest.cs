@@ -9,8 +9,8 @@ public class DeleteAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task DeleteAnswerUseCaseHandler_ShouldDeleteAnswer()
     {
-        var answerRepository = new AnswerRepository(Context);
-        var questionRepository = new QuestionRepository(Context);
+        var answerRepository = new AnswerRepository(Context, DomainEventDispatcher);
+        var questionRepository = new QuestionRepository(Context,DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<DeleteAnswerUseCase>();
         var useCase = new DeleteAnswerUseCase(loggerMock.Object, answerRepository, attachmentRepository);

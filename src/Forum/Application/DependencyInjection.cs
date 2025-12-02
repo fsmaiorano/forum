@@ -1,8 +1,9 @@
 using BuildingBlocks.Exceptions;
 using BuildingBlocks.Logging;
 using BuildingBlocks.Messaging;
+using BuildingBlocks.Messaging.DomainEvents;
+using BuildingBlocks.Messaging.DomainEvents.Interfaces;
 using Forum.Application.EventHandlers;
-using Forum.Application.HostedServices;
 using Forum.Application.UseCases.Answer.CreateAnswer;
 using Forum.Application.UseCases.Answer.DeleteAnswer;
 using Forum.Application.UseCases.Answer.UpdateAnswer;
@@ -10,6 +11,7 @@ using Forum.Application.UseCases.Question.CreateQuestion;
 using Forum.Application.UseCases.Question.DeleteQuestion;
 using Forum.Application.UseCases.Question.PatchQuestionSetBestAnswer;
 using Forum.Application.UseCases.Question.UpdateQuestion;
+using Forum.Domain.Events;
 
 namespace Forum.Application;
 
@@ -19,12 +21,13 @@ public static class DependencyInjection
     {
         services.AddSingleton(typeof(IAppLogger<>), typeof(AppLogger<>));
         services.AddSingleton<IEventBus, InMemoryEventBus>();
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
         services.AddExceptionHandler<CustomExceptionHandler>();
         services.AddProblemDetails();
 
         AddUseCases(services);
-        AddEventHandlers(services);
+        AddDomainEventHandlers(services);
 
         return services;
     }
@@ -41,11 +44,9 @@ public static class DependencyInjection
         services.AddTransient<IDeleteAnswerUseCase, DeleteAnswerUseCase>();
     }
 
-    private static void AddEventHandlers(IServiceCollection services)
+    private static void AddDomainEventHandlers(IServiceCollection services)
     {
-        services.AddSingleton<OnAnswerCreated>();
-        services.AddSingleton<OnQuestionBestAnswerChosen>();
-
-        services.AddHostedService<EventHandlerSubscriptionService>();
+        services.AddScoped<IDomainEventHandler<AnswerCreatedEvent>, OnAnswerCreatedEventHandler>();
+        services.AddScoped<IDomainEventHandler<QuestionBestAnswerChosenEvent>, OnQuestionBestAnswerChosenEventHandler>();
     }
 }

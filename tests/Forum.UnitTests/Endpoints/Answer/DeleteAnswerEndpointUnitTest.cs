@@ -9,13 +9,13 @@ public class DeleteAnswerEndpointUnitTest(TestFixture fixture) : BaseTest(fixtur
     [Fact]
     public async Task DeleteAnswerEndpoint_ShouldReturn204()
     {
-        var repository = new AnswerRepository(Context);
+        var repository = new AnswerRepository(Context, DomainEventDispatcher);
 
         var answer = MakeAnswer.Create();
         await repository.Create(answer);
 
         Thread.Sleep(1000);
-        
+
         var response = await DoDelete($"/answer/{answer.Id}");
 
         var storedAnswer = await Context.Answer.FirstOrDefaultAsync(q => q.Id.Equals(answer.Id));

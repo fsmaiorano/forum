@@ -1,7 +1,10 @@
-using BuildingBlocks.Base;
+using BuildingBlocks.Messaging.DomainEvents;
 
-namespace BuildingBlocks.Events;
+namespace BuildingBlocks.Base;
 
+/// <summary>
+/// Base class for aggregates that support domain events
+/// </summary>
 public abstract record Aggregate : Entity
 {
     private readonly List<IDomainEvent> _domainEvents = [];
@@ -11,7 +14,6 @@ public abstract record Aggregate : Entity
     protected void AddDomainEvent(IDomainEvent domainEvent)
     {
         _domainEvents.Add(domainEvent);
-        Events.DomainEvents.MarkAggregateForDispatch(this);
     }
 
     public void ClearEvents()

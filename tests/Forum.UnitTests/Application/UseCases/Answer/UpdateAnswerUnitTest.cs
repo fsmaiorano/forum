@@ -10,8 +10,8 @@ public class UpdateAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task UpdateAnswerUseCaseHandler_ShouldUpdateAnswer()
     {
-        var answerRepository = new AnswerRepository(Context);
-        var questionRepository = new QuestionRepository(Context);
+        var answerRepository = new AnswerRepository(Context,DomainEventDispatcher);
+        var questionRepository = new QuestionRepository(Context,DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<UpdateAnswerUseCase>();
         var useCase = new UpdateAnswerUseCase(loggerMock.Object, answerRepository, attachmentRepository);
@@ -38,8 +38,8 @@ public class UpdateAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task UpdateAnswerUseCaseHandler_ShouldUpdateAnswerWithAttachments()
     {
-        var answerRepository = new AnswerRepository(Context);
-        var questionRepository = new QuestionRepository(Context);
+        var answerRepository = new AnswerRepository(Context,DomainEventDispatcher);
+        var questionRepository = new QuestionRepository(Context,DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<UpdateAnswerUseCase>();
         var useCase = new UpdateAnswerUseCase(loggerMock.Object, answerRepository, attachmentRepository);

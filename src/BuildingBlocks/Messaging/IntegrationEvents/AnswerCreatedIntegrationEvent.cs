@@ -1,4 +1,6 @@
-namespace BuildingBlocks.Messaging.Events;
+using BuildingBlocks.Messaging.IntegrationEvents.Interfaces;
+
+namespace BuildingBlocks.Messaging.IntegrationEvents;
 
 /// <summary>
 /// Integration event published when a new answer is created

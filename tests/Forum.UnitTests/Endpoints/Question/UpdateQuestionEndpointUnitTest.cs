@@ -10,11 +10,11 @@ public class UpdateQuestionEndpointUnitTest(TestFixture fixture)
     [Fact]
     public async Task UpdateQuestionEndpoint_ShouldReturn204()
     {
-        var repository = new QuestionRepository(Context);
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
 
         var question = MakeQuestion.Create();
         await repository.Create(question);
-        
+
         var request = MakeQuestion.UpdateQuestionRequest(
             questionId: question.Id.ToString(),
             authorId: question.AuthorId.ToString(),
@@ -22,7 +22,7 @@ public class UpdateQuestionEndpointUnitTest(TestFixture fixture)
             content: question.Content + "_Updated",
             slug: question.Slug?.Value
         );
-        
+
         var response = await DoPut("/question", request);
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);

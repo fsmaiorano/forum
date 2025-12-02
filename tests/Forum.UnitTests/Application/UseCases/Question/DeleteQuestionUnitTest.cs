@@ -10,7 +10,7 @@ public class DeleteQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task DeleteQuestionUseCaseHandler_ShouldDeleteQuestion()
     {
-        var repository = new QuestionRepository(Context);
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<CreateQuestionUseCase>();
         var useCase = new CreateQuestionUseCase(loggerMock.Object, repository, attachmentRepository);
@@ -29,11 +29,11 @@ public class DeleteQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
 
         Assert.Null(deletedQuestion);
     }
-    
+
     [Fact]
     public async Task DeleteQuestionUseCasehandler_ShouldDeleteQuestionWithAttachments()
     {
-        var questionRepository = new QuestionRepository(Context);
+        var questionRepository = new QuestionRepository(Context, DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<CreateQuestionUseCase>();
         var useCase = new CreateQuestionUseCase(loggerMock.Object, questionRepository, attachmentRepository);
@@ -46,7 +46,7 @@ public class DeleteQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
         var result = await useCase.CreateQuestionUseCaseHandler(command);
 
         var storedQuestionId = UniqueEntityId.Of(result.Value.QuestionId);
-        
+
         var storedQuestion = await questionRepository.FindById(storedQuestionId);
 
         await attachmentRepository.DeleteByOwnerId(storedQuestion!.Id);

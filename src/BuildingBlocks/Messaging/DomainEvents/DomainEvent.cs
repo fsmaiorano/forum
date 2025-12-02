@@ -1,6 +1,6 @@
 using BuildingBlocks.Base;
 
-namespace BuildingBlocks.Events;
+namespace BuildingBlocks.Messaging.DomainEvents;
 
 public interface IDomainEvent
 {

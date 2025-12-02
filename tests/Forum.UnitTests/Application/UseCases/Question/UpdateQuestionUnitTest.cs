@@ -10,7 +10,7 @@ public class UpdateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task UpdateQuestionUseCaseHandler_ShouldUpdateQuestion()
     {
-        var repository = new QuestionRepository(Context);
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<UpdateQuestionUseCase>();
         var useCase = new UpdateQuestionUseCase(loggerMock.Object, repository, attachmentRepository);
@@ -37,7 +37,7 @@ public class UpdateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task UpdateQuestionUseCaseHandler_ShouldThrowNotFoundException_WhenQuestionDoesNotExist()
     {
-        var repository = new QuestionRepository(Context);
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<UpdateQuestionUseCase>();
         var useCase = new UpdateQuestionUseCase(loggerMock.Object, repository, attachmentRepository);
@@ -58,7 +58,7 @@ public class UpdateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task UpdateQuestionUseCaseHandler_ShouldUpdateQuestionWithAttachments()
     {
-        var repository = new QuestionRepository(Context);
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<UpdateQuestionUseCase>();
         var useCase = new UpdateQuestionUseCase(loggerMock.Object, repository, attachmentRepository);
@@ -69,9 +69,9 @@ public class UpdateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
         );
 
         await repository.Create(question);
-        
+
         Thread.Sleep(1000);
-        
+
         var command = MakeQuestion.UpdateQuestionCommand(
             questionId: question.Id.ToString(),
             authorId: question.AuthorId.ToString(),
@@ -92,7 +92,7 @@ public class UpdateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
         Assert.Equal(command.Title, updatedQuestion.Title);
         Assert.Equal(command.Content, updatedQuestion.Content);
         Assert.Equal(3, (await attachmentRepository.FindByOwnerId(question.Id)).Count);
-        
+
         var storedAttachments = Context.Attachment.Where(a => a.OwnerId.Equals(question.Id)).ToList();
         Assert.Equal(command.Attachments![0].Title, storedAttachments[0].Title);
         Assert.Equal(command.Attachments![1].Title, storedAttachments[1].Title);

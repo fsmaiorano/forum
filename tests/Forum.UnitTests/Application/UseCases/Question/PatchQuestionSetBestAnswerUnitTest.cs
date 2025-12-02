@@ -11,7 +11,7 @@ public class PatchQuestionSetBestAnswerUnitTest(TestFixture fixture) : BaseTest(
     [Fact]
     public async Task PatchQuestionSetBestAnswer_ShouldPatchBestAnswerId()
     {
-        var repository = new QuestionRepository(Context);
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
         var loggerMock = CreateLoggerMock<PatchQuestionSetBestAnswerUseCase>();
         var useCase = new PatchQuestionSetBestAnswerUseCase(loggerMock.Object, repository);
 

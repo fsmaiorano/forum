@@ -11,7 +11,7 @@ public class CreateAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task CreateAnswerUseCaseHandler_ShouldCreateAnswer()
     {
-        var answerRepository = new AnswerRepository(Context);
+        var answerRepository = new AnswerRepository(Context, DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<CreateAnswerUseCase>();
         var useCase = new CreateAnswerUseCase(loggerMock.Object, answerRepository, attachmentRepository);
@@ -36,7 +36,7 @@ public class CreateAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task CreateAnswerUseCaHandler_ShouldCreateAnswerWithAttachment()
     {
-        var answerRepository = new AnswerRepository(Context);
+        var answerRepository = new AnswerRepository(Context,DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<CreateAnswerUseCase>();
         var useCase = new CreateAnswerUseCase(loggerMock.Object, answerRepository, attachmentRepository);

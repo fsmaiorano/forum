@@ -10,7 +10,7 @@ public class CreateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task CreateQuestionUseCaseHandler_ShouldCreateQuestion()
     {
-        var repository = new QuestionRepository(Context);
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<CreateQuestionUseCase>();
         var useCase = new CreateQuestionUseCase(loggerMock.Object, repository, attachmentRepository);
@@ -29,7 +29,7 @@ public class CreateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task CreateQuestionUseCaseHandler_ShouldCreateQuestionWithAttachments()
     {
-        var questionRepository = new QuestionRepository(Context);
+        var questionRepository = new QuestionRepository(Context, DomainEventDispatcher);
         var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<CreateQuestionUseCase>();
         var useCase = new CreateQuestionUseCase(loggerMock.Object, questionRepository, attachmentRepository);

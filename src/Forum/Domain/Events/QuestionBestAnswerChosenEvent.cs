@@ -1,5 +1,5 @@
 using BuildingBlocks.Base;
-using BuildingBlocks.Events;
+using BuildingBlocks.Messaging.DomainEvents;
 
 namespace Forum.Domain.Events;
 

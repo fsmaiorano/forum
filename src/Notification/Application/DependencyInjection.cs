@@ -1,7 +1,9 @@
 using BuildingBlocks.Exceptions;
 using BuildingBlocks.Logging;
 using BuildingBlocks.Messaging;
-using BuildingBlocks.Messaging.Events;
+using BuildingBlocks.Messaging.IntegrationEvents;
+using BuildingBlocks.Messaging.IntegrationEvents.Interfaces;
+using Notification.Application.HostedServices;
 using Notification.Application.Subscribers;
 using Notification.Application.UseCases.ReadNotification;
 using Notification.Application.UseCases.SendNotification;
@@ -32,15 +34,12 @@ public static class DependencyInjection
 
     private static void AddSubscribers(IServiceCollection services)
     {
-        // Register subscribers
-        services.AddScoped<IEventHandler<AnswerCreatedIntegrationEvent>, OnAnswerCreatedSubscriber>();
-        services.AddScoped<IEventHandler<QuestionBestAnswerChosenIntegrationEvent>, OnQuestionBestAnswerChosenSubscriber>();
+        // Register integration event handlers
+        services.AddScoped<IIntegrationEventHandler<AnswerCreatedIntegrationEvent>, OnAnswerCreatedSubscriber>();
+        services.AddScoped<IIntegrationEventHandler<QuestionBestAnswerChosenIntegrationEvent>, OnQuestionBestAnswerChosenSubscriber>();
 
-        // Setup subscriptions
-        var serviceProvider = services.BuildServiceProvider();
-        var eventBus = serviceProvider.GetRequiredService<IEventBus>();
-        
-        eventBus.Subscribe<AnswerCreatedIntegrationEvent, OnAnswerCreatedSubscriber>();
-        eventBus.Subscribe<QuestionBestAnswerChosenIntegrationEvent, OnQuestionBestAnswerChosenSubscriber>();
+        // Setup subscriptions - this will be called after service provider is built
+        // We need to subscribe after the application starts
+        services.AddHostedService<IntegrationEventSubscriptionService>();
     }
 }

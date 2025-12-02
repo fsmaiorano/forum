@@ -9,7 +9,7 @@ public class DeleteQuestionEndpointUnitTest(TestFixture fixture) : BaseTest(fixt
     [Fact]
     public async Task DeleteQuestionEndpoint_ShouldReturn204()
     {
-        var repository = new QuestionRepository(Context);
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
 
         var question = MakeQuestion.Create();
         await repository.Create(question);

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using BuildingBlocks.Messaging.DomainEvents;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,12 @@ public sealed class TestFixture : WebApplicationFactory<Program>, IAsyncLifetime
 
             services.AddScoped<IForumDbContext>(provider =>
                 provider.GetRequiredService<ForumDbContext>());
+
+            var dispatcherDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IDomainEventDispatcher));
+            if (dispatcherDescriptor != null)
+                services.Remove(dispatcherDescriptor);
+
+            services.AddScoped<IDomainEventDispatcher, TestDomainEventDispatcher>();
         });
 
         base.ConfigureWebHost(builder);
@@ -42,6 +49,12 @@ public sealed class TestFixture : WebApplicationFactory<Program>, IAsyncLifetime
     {
         var scope = Services.CreateScope();
         return scope.ServiceProvider.GetRequiredService<ForumDbContext>();
+    }
+
+    public IDomainEventDispatcher GetDomainEventDispatcher()
+    {
+        var scope = Services.CreateScope();
+        return scope.ServiceProvider.GetRequiredService<IDomainEventDispatcher>();
     }
 
     private HttpClient GetHttpClient()

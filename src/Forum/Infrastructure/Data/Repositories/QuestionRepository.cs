@@ -1,12 +1,12 @@
 using BuildingBlocks.Base;
-using BuildingBlocks.Events;
+using BuildingBlocks.Messaging.DomainEvents;
 using Forum.Domain.Repositories;
 using Forum.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Forum.Infrastructure.Data.Repositories;
 
-public sealed class QuestionRepository(IForumDbContext context) : IQuestionRepository
+public sealed class QuestionRepository(IForumDbContext context, IDomainEventDispatcher eventDispatcher) : IQuestionRepository
 {
     public async Task Create(QuestionEntity questionEntity)
     {
@@ -26,7 +26,9 @@ public sealed class QuestionRepository(IForumDbContext context) : IQuestionRepos
         questionEntity.Touch();
         context.Question.Update(questionEntity);
         await context.SaveChangesAsync();
-        DomainEvents.DispatchEventsForAggregate(questionEntity.Id);
+        
+        await eventDispatcher.DispatchAsync(questionEntity.DomainEvents);
+        questionEntity.ClearEvents();
     }
 
     public async Task Delete(QuestionEntity questionEntity)

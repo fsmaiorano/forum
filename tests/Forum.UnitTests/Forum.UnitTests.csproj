@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\BuildingBlocks\BuildingBlocks.csproj" />
       <ProjectReference Include="..\..\src\Forum\Forum.csproj" />
     </ItemGroup>
 
