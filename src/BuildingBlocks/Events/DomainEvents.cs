@@ -76,12 +76,8 @@ public static class DomainEvents
     {
         var eventClassName = domainEvent.GetType().Name;
 
-        if (HandlersMap.TryGetValue(eventClassName, out var handlers))
-        {
-            foreach (var handler in handlers)
-            {
-                handler(domainEvent);
-            }
-        }
+        if (!HandlersMap.TryGetValue(eventClassName, out var handlers)) return;
+        foreach (var handler in handlers)
+            handler(domainEvent);
     }
 }

@@ -34,6 +34,7 @@ public class PatchQuestionSetBestAnswerUseCase(
             throw new ForbiddenException("You are not allowed to update this question.");
         
         QuestionEntity.SelectBestAnswer(question, command.AnswerId);
+        await questionRepository.SelectBestAnswer(question);
 
         return Result<PatchQuestionSetBestAnswerResult>.Success(new PatchQuestionSetBestAnswerResult());
     }
