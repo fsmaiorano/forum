@@ -1,5 +1,7 @@
+using BuildingBlocks.Events;
 using BuildingBlocks.Exceptions;
 using BuildingBlocks.Logging;
+using Forum.Application.EventHandlers;
 using Forum.Application.UseCases.Answer.CreateAnswer;
 using Forum.Application.UseCases.Answer.DeleteAnswer;
 using Forum.Application.UseCases.Answer.UpdateAnswer;
@@ -20,6 +22,7 @@ public static class DependencyInjection
         services.AddProblemDetails();
 
         AddUseCases(services);
+        AddEventHandlers(services);
 
         return services;
     }
@@ -34,5 +37,17 @@ public static class DependencyInjection
         services.AddTransient<ICreateAnswerUseCase, CreateAnswerUseCase>();
         services.AddTransient<IUpdateAnswerUseCase, UpdateAnswerUseCase>();
         services.AddTransient<IDeleteAnswerUseCase, DeleteAnswerUseCase>();
+    }
+
+    private static void AddEventHandlers(IServiceCollection services)
+    {
+        services.AddSingleton<IEventHandler, OnAnswerCreated>();
+        services.AddSingleton<IEventHandler, OnQuestionBestAnswerChosen>();
+
+        var serviceProvider = services.BuildServiceProvider();
+        var eventHandlers = serviceProvider.GetServices<IEventHandler>();
+
+        foreach (var handler in eventHandlers)
+            handler.SetupSubscriptions();
     }
 }
