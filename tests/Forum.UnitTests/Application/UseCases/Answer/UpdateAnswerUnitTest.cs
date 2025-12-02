@@ -52,6 +52,8 @@ public class UpdateAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
             MakeAttachment.Create(answer.Id, title: "1", ownerTypeEnum: AttachmentOwnerTypeEnum.Answer)
         );
         await answerRepository.Create(answer);
+        
+        Thread.Sleep(1000);
 
         var command = MakeAnswer.UpdateAnswerCommand(
             answerId: answer.Id.ToString(),

@@ -14,26 +14,20 @@ public static class DomainEvents
         var aggregateFound = FindMarkedAggregateById(aggregate.Id) != null;
 
         if (!aggregateFound)
-        {
             MarkedAggregates.Add(aggregate);
-        }
     }
 
     private static void DispatchAggregateEvents(Aggregate aggregate)
     {
         foreach (var domainEvent in aggregate.DomainEvents)
-        {
             Dispatch(domainEvent);
-        }
     }
 
     private static void RemoveAggregateFromMarkedDispatchList(Aggregate aggregate)
     {
         var index = MarkedAggregates.FindIndex(a => a.Equals(aggregate));
         if (index >= 0)
-        {
             MarkedAggregates.RemoveAt(index);
-        }
     }
 
     private static Aggregate? FindMarkedAggregateById(UniqueEntityId id)
@@ -77,7 +71,9 @@ public static class DomainEvents
         var eventClassName = domainEvent.GetType().Name;
 
         if (!HandlersMap.TryGetValue(eventClassName, out var handlers)) return;
-        foreach (var handler in handlers)
+
+        var handlersCopy = handlers.ToList();
+        foreach (var handler in handlersCopy)
             handler(domainEvent);
     }
 }

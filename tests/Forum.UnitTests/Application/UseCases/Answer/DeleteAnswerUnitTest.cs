@@ -19,6 +19,8 @@ public class DeleteAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
 
         var answer = MakeAnswer.Create(questionId: question.Id);
         await answerRepository.Create(answer);
+        
+        Thread.Sleep(1000);
 
         var command = new DeleteAnswerCommand(answer.Id);
         await useCase.DeleteAnswerUseCaseHandler(command);

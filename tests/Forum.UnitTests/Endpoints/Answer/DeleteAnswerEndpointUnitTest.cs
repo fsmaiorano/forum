@@ -14,6 +14,8 @@ public class DeleteAnswerEndpointUnitTest(TestFixture fixture) : BaseTest(fixtur
         var answer = MakeAnswer.Create();
         await repository.Create(answer);
 
+        Thread.Sleep(1000);
+        
         var response = await DoDelete($"/answer/{answer.Id}");
 
         var storedAnswer = await Context.Answer.FirstOrDefaultAsync(q => q.Id.Equals(answer.Id));

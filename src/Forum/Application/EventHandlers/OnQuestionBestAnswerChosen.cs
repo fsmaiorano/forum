@@ -1,10 +1,16 @@
 using BuildingBlocks.Events;
 using BuildingBlocks.Logging;
+using BuildingBlocks.Messaging;
+using BuildingBlocks.Messaging.Events;
 using Forum.Domain.Events;
+using Forum.Domain.Repositories;
 
 namespace Forum.Application.EventHandlers;
 
-public class OnQuestionBestAnswerChosen(IAppLogger<OnQuestionBestAnswerChosen> logger) : IEventHandler
+public class OnQuestionBestAnswerChosen(
+    IAppLogger<OnQuestionBestAnswerChosen> logger,
+    IEventBus eventBus,
+    IAnswerRepository answerRepository) : IEventHandler
 {
     public void SetupSubscriptions()
     {
@@ -22,5 +28,23 @@ public class OnQuestionBestAnswerChosen(IAppLogger<OnQuestionBestAnswerChosen> l
             bestAnswerEvent.BestAnswerId.ToString(),
             bestAnswerEvent.OccurredAt
         );
+
+        // Publish integration event for notification service
+        Task.Run(async () =>
+        {
+            var answer = await answerRepository.FindById(bestAnswerEvent.BestAnswerId);
+            if (answer is null) return;
+
+            var integrationEvent = new QuestionBestAnswerChosenIntegrationEvent
+            {
+                QuestionId = bestAnswerEvent.Question.Id.ToString(),
+                BestAnswerId = bestAnswerEvent.BestAnswerId.ToString(),
+                QuestionAuthorId = bestAnswerEvent.Question.AuthorId.ToString(),
+                AnswerAuthorId = answer.AuthorId.ToString(),
+                QuestionTitle = bestAnswerEvent.Question.Title
+            };
+
+            await eventBus.PublishAsync(integrationEvent);
+        });
     }
 }

@@ -1,7 +1,8 @@
-using BuildingBlocks.Events;
 using BuildingBlocks.Exceptions;
 using BuildingBlocks.Logging;
+using BuildingBlocks.Messaging;
 using Forum.Application.EventHandlers;
+using Forum.Application.HostedServices;
 using Forum.Application.UseCases.Answer.CreateAnswer;
 using Forum.Application.UseCases.Answer.DeleteAnswer;
 using Forum.Application.UseCases.Answer.UpdateAnswer;
@@ -17,6 +18,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddSingleton(typeof(IAppLogger<>), typeof(AppLogger<>));
+        services.AddSingleton<IEventBus, InMemoryEventBus>();
 
         services.AddExceptionHandler<CustomExceptionHandler>();
         services.AddProblemDetails();
@@ -41,13 +43,9 @@ public static class DependencyInjection
 
     private static void AddEventHandlers(IServiceCollection services)
     {
-        services.AddSingleton<IEventHandler, OnAnswerCreated>();
-        services.AddSingleton<IEventHandler, OnQuestionBestAnswerChosen>();
+        services.AddSingleton<OnAnswerCreated>();
+        services.AddSingleton<OnQuestionBestAnswerChosen>();
 
-        var serviceProvider = services.BuildServiceProvider();
-        var eventHandlers = serviceProvider.GetServices<IEventHandler>();
-
-        foreach (var handler in eventHandlers)
-            handler.SetupSubscriptions();
+        services.AddHostedService<EventHandlerSubscriptionService>();
     }
 }

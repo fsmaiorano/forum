@@ -69,7 +69,9 @@ public class UpdateQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
         );
 
         await repository.Create(question);
-
+        
+        Thread.Sleep(1000);
+        
         var command = MakeQuestion.UpdateQuestionCommand(
             questionId: question.Id.ToString(),
             authorId: question.AuthorId.ToString(),

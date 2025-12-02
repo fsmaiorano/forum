@@ -15,6 +15,8 @@ public class UpdateAnswerEndpointUnitTest(TestFixture fixture)
         var answer = MakeAnswer.Create();
         await repository.Create(answer);
         
+        Thread.Sleep(1000);
+        
         var request = MakeAnswer.UpdateAnswerRequest(
             answerId: answer.Id.ToString(),
             authorId: answer.AuthorId.ToString(),
