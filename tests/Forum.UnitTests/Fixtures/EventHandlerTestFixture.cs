@@ -9,24 +9,17 @@ namespace Forum.UnitTests.Fixtures;
 /// Fixture for testing event handlers with real dependencies and test event bus
 /// </summary>
 /// <typeparam name="TEventHandler">The event handler type to create</typeparam>
-public class EventHandlerTestFixture<TEventHandler> where TEventHandler : class
+public class EventHandlerTestFixture<TEventHandler>(TestFixture testFixture)
+    where TEventHandler : class
 {
-    private readonly TestFixture _testFixture;
-    
-    public TestEventBus EventBus { get; }
-    
-    public EventHandlerTestFixture(TestFixture testFixture)
-    {
-        _testFixture = testFixture;
-        EventBus = new TestEventBus();
-    }
+    public TestEventBus EventBus { get; } = new();
 
     /// <summary>
     /// Create an instance of the event handler with real dependencies
     /// </summary>
     public TEventHandler CreateHandler(params object[] additionalDependencies)
     {
-        var scope = _testFixture.Services.CreateScope();
+        var scope = testFixture.Services.CreateScope();
         var serviceProvider = scope.ServiceProvider;
         
         // Get constructor parameters

@@ -27,7 +27,7 @@ public class DeleteAnswerUseCase(
         await attachmentRepository.DeleteByOwnerId(answer.Id);
         await answerRepository.Delete(answer);
 
-        logger.LogInformation(LogType.Functional, $"Answer with ID {command.AnswerId} deleted successfully.");
+        logger.LogInformation(LogTypeEnum.Functional, $"Answer with ID {command.AnswerId} deleted successfully.");
 
         return Result<DeleteAnswerResult>.Success(new DeleteAnswerResult());
     }

@@ -27,7 +27,7 @@ public sealed class SendNotificationUseCase(
 
         await notificationRepository.Create(notification);
 
-        logger.LogInformation(LogType.Functional,
+        logger.LogInformation(LogTypeEnum.Functional,
             $"Notification sent to user {notification.RecipientId} with ID: {notification.Id}");
         
         return Result<SendNotificationResult>.Success(new SendNotificationResult());

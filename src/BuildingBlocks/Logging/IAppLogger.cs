@@ -2,7 +2,7 @@ namespace BuildingBlocks.Logging;
 
 public interface IAppLogger<T>
 {
-    void LogInformation(LogType logType, string message, params object[] args);
-    void LogWarning(LogType logType, string message, params object[] args);
-    void LogError(LogType logType, Exception? exception, string message, params object[] args);
+    void LogInformation(LogTypeEnum logTypeEnum, string message, params object[] args);
+    void LogWarning(LogTypeEnum logTypeEnum, string message, params object[] args);
+    void LogError(LogTypeEnum logTypeEnum, Exception? exception, string message, params object[] args);
 }

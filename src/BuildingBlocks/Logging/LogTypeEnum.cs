@@ -1,6 +1,6 @@
 namespace BuildingBlocks.Logging;
 
-public enum LogType
+public enum LogTypeEnum
 {
     Application,
     Functional,

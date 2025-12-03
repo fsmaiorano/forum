@@ -7,7 +7,7 @@ namespace BuildingBlocks.Middleware;
 
 public class RequestResponseLoggingMiddleware(RequestDelegate next, IAppLogger<RequestResponseLoggingMiddleware> logger)
 {
-    private const LogType LogType = Logging.LogType.Application;
+    private const LogTypeEnum LogType = Logging.LogTypeEnum.Application;
 
     public async Task InvokeAsync(HttpContext context)
     {

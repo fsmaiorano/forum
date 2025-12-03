@@ -33,7 +33,7 @@ public sealed class ReadNotificationUseCase(
 
         await notificationRepository.Update(notification);
 
-        logger.LogInformation(LogType.Functional,
+        logger.LogInformation(LogTypeEnum.Functional,
             $"Notification read for user {notification.RecipientId} with ID: {notification.Id}");
 
         return Result<ReadNotificationResult>.Success(new ReadNotificationResult());

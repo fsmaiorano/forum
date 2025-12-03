@@ -47,7 +47,7 @@ public class UpdateQuestionUseCase(
 
         await questionRepository.Update(question);
 
-        logger.LogInformation(LogType.Functional,
+        logger.LogInformation(LogTypeEnum.Functional,
             $"The question with ID: {question.Id} was updated.");
 
         return Result<UpdateQuestionResult>.Success(new UpdateQuestionResult());

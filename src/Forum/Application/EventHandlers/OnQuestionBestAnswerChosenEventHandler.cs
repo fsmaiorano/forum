@@ -19,7 +19,7 @@ public class OnQuestionBestAnswerChosenEventHandler(
     public async Task HandleAsync(QuestionBestAnswerChosenEvent @event, CancellationToken cancellationToken = default)
     {
         logger.LogInformation(
-            LogType.Functional,
+            LogTypeEnum.Functional,
             "Handling QuestionBestAnswerChosenEvent - QuestionId: {QuestionId}, BestAnswerId: {BestAnswerId}, OccurredAt: {OccurredAt}",
             @event.GetAggregateId().ToString(),
             @event.BestAnswerId.ToString(),
@@ -32,7 +32,7 @@ public class OnQuestionBestAnswerChosenEventHandler(
             if (answer is null)
             {
                 logger.LogWarning(
-                    LogType.Functional,
+                    LogTypeEnum.Functional,
                     "Answer not found for QuestionBestAnswerChosenEvent - AnswerId: {AnswerId}",
                     @event.BestAnswerId.ToString()
                 );
@@ -51,7 +51,7 @@ public class OnQuestionBestAnswerChosenEventHandler(
             await eventBus.PublishAsync(integrationEvent, cancellationToken);
 
             logger.LogInformation(
-                LogType.Functional,
+                LogTypeEnum.Functional,
                 "Published QuestionBestAnswerChosenIntegrationEvent - QuestionId: {QuestionId}, BestAnswerId: {BestAnswerId}",
                 @event.Question.Id.ToString(),
                 @event.BestAnswerId.ToString()
@@ -60,7 +60,7 @@ public class OnQuestionBestAnswerChosenEventHandler(
         catch (Exception ex)
         {
             logger.LogError(
-                LogType.Exception,
+                LogTypeEnum.Exception,
                 ex,
                 "Error handling QuestionBestAnswerChosenEvent - QuestionId: {QuestionId}",
                 @event.GetAggregateId().ToString()

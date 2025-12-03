@@ -15,7 +15,7 @@ public class OnQuestionBestAnswerChosenSubscriber(
     public async Task HandleAsync(QuestionBestAnswerChosenIntegrationEvent @event, CancellationToken cancellationToken = default)
     {
         logger.LogInformation(
-            LogType.Functional,
+            LogTypeEnum.Functional,
             "Received QuestionBestAnswerChosenIntegrationEvent - QuestionId: {QuestionId}, BestAnswerId: {BestAnswerId}",
             @event.QuestionId,
             @event.BestAnswerId
@@ -34,7 +34,7 @@ public class OnQuestionBestAnswerChosenSubscriber(
             await sendNotificationUseCase.SendNotificationUseCaseHandler(command);
 
             logger.LogInformation(
-                LogType.Functional,
+                LogTypeEnum.Functional,
                 "Notification sent for best answer chosen - AnswerId: {AnswerId}, RecipientId: {RecipientId}",
                 @event.BestAnswerId,
                 @event.AnswerAuthorId
@@ -43,7 +43,7 @@ public class OnQuestionBestAnswerChosenSubscriber(
         catch (Exception ex)
         {
             logger.LogError(
-                LogType.Exception,
+                LogTypeEnum.Exception,
                 ex,
                 "Error handling QuestionBestAnswerChosenIntegrationEvent - EventId: {EventId}",
                 @event.EventId

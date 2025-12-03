@@ -46,7 +46,7 @@ public sealed class CreateQuestionUseCase(
 
         await questionRepository.Create(question);
 
-        logger.LogInformation(LogType.Functional,
+        logger.LogInformation(LogTypeEnum.Functional,
             $"The user {question.AuthorId} created a new question with ID: {question.Id}");
 
         return Result<CreateQuestionResult>.Success(new CreateQuestionResult(question.Id.ToString()));

@@ -14,7 +14,7 @@ public class OnAnswerCreatedSubscriber(
     public async Task HandleAsync(AnswerCreatedIntegrationEvent @event, CancellationToken cancellationToken = default)
     {
         logger.LogInformation(
-            LogType.Functional,
+            LogTypeEnum.Functional,
             "Received AnswerCreatedIntegrationEvent - AnswerId: {AnswerId}, QuestionId: {QuestionId}",
             @event.AnswerId,
             @event.QuestionId
@@ -33,7 +33,7 @@ public class OnAnswerCreatedSubscriber(
             await sendNotificationUseCase.SendNotificationUseCaseHandler(command);
 
             logger.LogInformation(
-                LogType.Functional,
+                LogTypeEnum.Functional,
                 "Notification sent for new answer - AnswerId: {AnswerId}",
                 @event.AnswerId
             );
@@ -41,7 +41,7 @@ public class OnAnswerCreatedSubscriber(
         catch (Exception ex)
         {
             logger.LogError(
-                LogType.Exception,
+                LogTypeEnum.Exception,
                 ex,
                 "Error handling AnswerCreatedIntegrationEvent - EventId: {EventId}",
                 @event.EventId

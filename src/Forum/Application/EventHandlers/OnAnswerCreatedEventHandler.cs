@@ -18,7 +18,7 @@ public class OnAnswerCreatedEventHandler(
     public async Task HandleAsync(AnswerCreatedEvent @event, CancellationToken cancellationToken = default)
     {
         logger.LogInformation(
-            LogType.Functional,
+            LogTypeEnum.Functional,
             "Handling AnswerCreatedEvent - AggregateId: {AggregateId}, OccurredAt: {OccurredAt}",
             @event.GetAggregateId().ToString(),
             @event.OccurredAt
@@ -30,7 +30,7 @@ public class OnAnswerCreatedEventHandler(
             if (answer is null)
             {
                 logger.LogWarning(
-                    LogType.Functional,
+                    LogTypeEnum.Functional,
                     "Answer not found for AnswerCreatedEvent - AnswerId: {AnswerId}",
                     @event.GetAggregateId().ToString()
                 );
@@ -48,7 +48,7 @@ public class OnAnswerCreatedEventHandler(
             await eventBus.PublishAsync(integrationEvent, cancellationToken);
 
             logger.LogInformation(
-                LogType.Functional,
+                LogTypeEnum.Functional,
                 "Published AnswerCreatedIntegrationEvent - AnswerId: {AnswerId}",
                 answer.Id.ToString()
             );
@@ -56,7 +56,7 @@ public class OnAnswerCreatedEventHandler(
         catch (Exception ex)
         {
             logger.LogError(
-                LogType.Exception,
+                LogTypeEnum.Exception,
                 ex,
                 "Error handling AnswerCreatedEvent - AggregateId: {AggregateId}",
                 @event.GetAggregateId().ToString()

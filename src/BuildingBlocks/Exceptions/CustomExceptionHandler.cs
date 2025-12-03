@@ -105,6 +105,6 @@ public class CustomExceptionHandler(IAppLogger<CustomExceptionHandler> logger) :
         logMessage.AppendLine($"Stack Trace:");
         logMessage.AppendLine(exception.StackTrace ?? "No stack trace available");
 
-        logger.LogError(LogType.Exception, exception, logMessage.ToString());
+        logger.LogError(LogTypeEnum.Exception, exception, logMessage.ToString());
     }
 }
