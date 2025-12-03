@@ -4,7 +4,7 @@ namespace User.UnitTest.Factories;
 
 public static class MakeUser
 {
-    private static readonly Faker _faker = new Faker();
+    private static readonly Faker Faker = new();
 
     public static RegisterRequest CreateRegisterRequest(
         string? email = null,
@@ -12,8 +12,8 @@ public static class MakeUser
     {
         return new RegisterRequest
         {
-            Email = email ?? _faker.Internet.Email(),
-            Password = password ?? _faker.Internet.Password(8, false, "", "@1Aa")
+            Email = email ?? Faker.Internet.Email(),
+            Password = password ?? Faker.Internet.Password(8, false, "", "@1Aa")
         };
     }
 
@@ -23,8 +23,8 @@ public static class MakeUser
     {
         return new AuthRequest
         {
-            Email = email ?? _faker.Internet.Email(),
-            Password = password ?? _faker.Internet.Password(8)
+            Email = email ?? Faker.Internet.Email(),
+            Password = password ?? Faker.Internet.Password(8)
         };
     }
 
@@ -34,8 +34,8 @@ public static class MakeUser
     {
         return new RefreshRequest
         {
-            AccessToken = accessToken ?? _faker.Random.AlphaNumeric(100),
-            RefreshToken = refreshToken ?? _faker.Random.AlphaNumeric(100)
+            AccessToken = accessToken ?? Faker.Random.AlphaNumeric(100),
+            RefreshToken = refreshToken ?? Faker.Random.AlphaNumeric(100)
         };
     }
 
@@ -43,7 +43,7 @@ public static class MakeUser
         string? email = null,
         string? userName = null)
     {
-        var userEmail = email ?? _faker.Internet.Email();
+        var userEmail = email ?? Faker.Internet.Email();
         return new ApplicationUser
         {
             Email = userEmail,
@@ -60,20 +60,19 @@ public static class MakeUser
     {
         var refreshToken = new RefreshToken
         {
-            Token = token ?? Convert.ToBase64String(_faker.Random.Bytes(64)),
+            Token = token ?? Convert.ToBase64String(Faker.Random.Bytes(64)),
             UserId = userId,
             Expires = expires ?? DateTime.UtcNow.AddDays(30),
             Created = DateTime.UtcNow,
-            CreatedByIp = _faker.Internet.Ip()
+            CreatedByIp = Faker.Internet.Ip()
         };
 
         if (isRevoked)
         {
             refreshToken.Revoked = DateTime.UtcNow;
-            refreshToken.RevokedByIp = _faker.Internet.Ip();
+            refreshToken.RevokedByIp = Faker.Internet.Ip();
         }
 
         return refreshToken;
     }
 }
-

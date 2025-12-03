@@ -62,7 +62,7 @@ public abstract class BaseTest(TestFixture fixture) : IClassFixture<TestFixture>
     protected async Task<AuthResponse> CreateTestUserWithTokensAsync(string email, string password)
     {
         var user = await CreateTestUserAsync(email, password);
-        return await TokenService.CreateTokensAsync(user, "127.0.0.1");
+        return await TokenService.CreateTokensAsync(user, faker.Internet.Ip());
     }
 
     #endregion
