@@ -1,28 +1,16 @@
 using BuildingBlocks.Base;
-using BuildingBlocks.Logging;
 using BuildingBlocks.Messaging.IntegrationEvents;
 using Forum.Application.EventHandlers;
 using Forum.Domain.Events;
-using Forum.Domain.Repositories;
 using Forum.UnitTests.Factories;
 using Forum.UnitTests.Fixtures;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Forum.UnitTests.Application.EventHandlers;
 
 public class OnAnswerCreatedEventHandlerUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
-    private OnAnswerCreatedEventHandler CreateHandler(TestEventBus? eventBus = null)
-    {
-        var logger = new AppLogger<OnAnswerCreatedEventHandler>(
-            Fixture.Services.GetRequiredService<ILogger<OnAnswerCreatedEventHandler>>()
-        );
-        var testEventBus = eventBus ?? new TestEventBus();
-        var answerRepository = Fixture.Services.CreateScope().ServiceProvider
-            .GetRequiredService<IAnswerRepository>();
-
-        return new OnAnswerCreatedEventHandler(logger, testEventBus, answerRepository);
-    }
+    private readonly EventHandlerTestFixture<OnAnswerCreatedEventHandler> _eventHandlerFixture =
+        new(fixture);
 
     [Fact]
     public async Task HandleAsync_ShouldPublishIntegrationEvent_WhenAnswerExists()
@@ -32,13 +20,12 @@ public class OnAnswerCreatedEventHandlerUnitTest(TestFixture fixture) : BaseTest
         await Context.SaveChangesAsync();
 
         var domainEvent = new AnswerCreatedEvent(answer);
-        var testEventBus = new TestEventBus();
-        var handler = CreateHandler(testEventBus);
+        var handler = _eventHandlerFixture.CreateHandler();
 
         await handler.HandleAsync(domainEvent, CancellationToken.None);
 
-        Assert.Single(testEventBus.PublishedEvents);
-        var integrationEvent = testEventBus.PublishedEvents.First() as AnswerCreatedIntegrationEvent;
+        Assert.Single(_eventHandlerFixture.EventBus.PublishedEvents);
+        var integrationEvent = _eventHandlerFixture.GetEvent<AnswerCreatedIntegrationEvent>();
 
         Assert.NotNull(integrationEvent);
         Assert.Equal(answer.Id.ToString(), integrationEvent.AnswerId);
@@ -52,12 +39,11 @@ public class OnAnswerCreatedEventHandlerUnitTest(TestFixture fixture) : BaseTest
     {
         var answer = MakeAnswer.Create();
         var domainEvent = new AnswerCreatedEvent(answer);
-        var testEventBus = new TestEventBus();
-        var handler = CreateHandler(testEventBus);
+        var handler = _eventHandlerFixture.CreateHandler();
 
         await handler.HandleAsync(domainEvent, CancellationToken.None);
 
-        Assert.Empty(testEventBus.PublishedEvents);
+        Assert.Empty(_eventHandlerFixture.EventBus.PublishedEvents);
     }
 
     [Fact]
@@ -68,8 +54,8 @@ public class OnAnswerCreatedEventHandlerUnitTest(TestFixture fixture) : BaseTest
         await Context.SaveChangesAsync();
 
         var domainEvent = new AnswerCreatedEvent(answer);
-        var testEventBus = new TestEventBus { ShouldThrowOnPublish = true };
-        var handler = CreateHandler(testEventBus);
+        _eventHandlerFixture.EventBus.ShouldThrowOnPublish = true;
+        var handler = _eventHandlerFixture.CreateHandler();
 
         var exception =
             await Assert.ThrowsAsync<Exception>(async () =>
@@ -91,12 +77,11 @@ public class OnAnswerCreatedEventHandlerUnitTest(TestFixture fixture) : BaseTest
         await Context.SaveChangesAsync();
 
         var domainEvent = new AnswerCreatedEvent(answer);
-        var testEventBus = new TestEventBus();
-        var handler = CreateHandler(testEventBus);
+        var handler = _eventHandlerFixture.CreateHandler();
 
         await handler.HandleAsync(domainEvent, CancellationToken.None);
 
-        var integrationEvent = testEventBus.PublishedEvents.First() as AnswerCreatedIntegrationEvent;
+        var integrationEvent = _eventHandlerFixture.GetEvent<AnswerCreatedIntegrationEvent>();
         Assert.NotNull(integrationEvent);
         Assert.NotEqual(Guid.Empty, integrationEvent.EventId);
         Assert.True(integrationEvent.OccurredAt <= DateTime.UtcNow);
@@ -113,16 +98,15 @@ public class OnAnswerCreatedEventHandlerUnitTest(TestFixture fixture) : BaseTest
         await Context.Answer.AddRangeAsync(answer1, answer2, answer3);
         await Context.SaveChangesAsync();
 
-        var testEventBus = new TestEventBus();
-        var handler = CreateHandler(testEventBus);
+        var handler = _eventHandlerFixture.CreateHandler();
 
         await handler.HandleAsync(new AnswerCreatedEvent(answer1), CancellationToken.None);
         await handler.HandleAsync(new AnswerCreatedEvent(answer2), CancellationToken.None);
         await handler.HandleAsync(new AnswerCreatedEvent(answer3), CancellationToken.None);
 
-        Assert.Equal(3, testEventBus.PublishedEvents.Count);
+        Assert.Equal(3, _eventHandlerFixture.EventBus.PublishedEvents.Count);
 
-        var events = testEventBus.PublishedEvents.Cast<AnswerCreatedIntegrationEvent>().ToList();
+        var events = _eventHandlerFixture.GetEvents<AnswerCreatedIntegrationEvent>().ToList();
         Assert.Contains(events, e => e.AnswerId == answer1.Id.ToString());
         Assert.Contains(events, e => e.AnswerId == answer2.Id.ToString());
         Assert.Contains(events, e => e.AnswerId == answer3.Id.ToString());

@@ -4,7 +4,7 @@ public abstract class WatchedList<T>(List<T>? initialItems = null)
 {
     public List<T> CurrentItems { get; private set; } = initialItems ?? [];
     
-    private List<T> _initial = initialItems ?? [];
+    private readonly List<T> _initial = initialItems ?? [];
     private List<T> _new = [];
     private List<T> _removed = [];
 

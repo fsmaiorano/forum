@@ -1,7 +1,5 @@
 using BuildingBlocks.Logging;
-using BuildingBlocks.Messaging;
 using BuildingBlocks.Messaging.DomainEvents;
-using BuildingBlocks.Messaging.IntegrationEvents.Interfaces;
 using Forum.UnitTests.Fixtures;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +13,10 @@ public abstract class BaseTest(TestFixture fixture) : IClassFixture<TestFixture>
 
     protected TestFixture Fixture => fixture;
     protected ForumDbContext Context => _scope.ServiceProvider.GetRequiredService<ForumDbContext>();
-    protected IDomainEventDispatcher DomainEventDispatcher => _scope.ServiceProvider.GetRequiredService<IDomainEventDispatcher>();
+
+    protected IDomainEventDispatcher DomainEventDispatcher =>
+        _scope.ServiceProvider.GetRequiredService<IDomainEventDispatcher>();
+
     protected HttpClient HttpClient { get; } = fixture.CreateClient();
 
     #endregion
@@ -72,45 +73,6 @@ public abstract class BaseTest(TestFixture fixture) : IClassFixture<TestFixture>
     {
         _scope?.Dispose();
         GC.SuppressFinalize(this);
-    }
-
-    #endregion
-
-    #region Test Helpers
-
-    /// <summary>
-    /// Helper class to track published integration events in tests.
-    /// Use this to verify that integration events are published correctly without actual event bus infrastructure.
-    /// </summary>
-    protected class TestEventBus : IEventBus
-    {
-        public List<IIntegrationEvent> PublishedEvents { get; } = new();
-        public bool ShouldThrowOnPublish { get; set; }
-
-        public Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
-            where TEvent : class, IIntegrationEvent
-        {
-            if (ShouldThrowOnPublish)
-                throw new Exception("Event bus error");
-
-            PublishedEvents.Add(@event);
-            return Task.CompletedTask;
-        }
-
-        public void Subscribe<TEvent, THandler>()
-            where TEvent : class, IIntegrationEvent
-            where THandler : IIntegrationEventHandler<TEvent>
-        {
-            // Not needed for tests
-        }
-
-        public void Clear() => PublishedEvents.Clear();
-
-        public TEvent? GetEvent<TEvent>() where TEvent : class, IIntegrationEvent
-            => PublishedEvents.OfType<TEvent>().FirstOrDefault();
-
-        public IEnumerable<TEvent> GetEvents<TEvent>() where TEvent : class, IIntegrationEvent
-            => PublishedEvents.OfType<TEvent>();
     }
 
     #endregion
