@@ -1,4 +1,5 @@
 using BuildingBlocks.Base;
+using Notification.Endpoints.Notification;
 
 namespace Forum.Notification.Factories;
 
@@ -15,7 +16,7 @@ public static class MakeNotification
             recipientId ?? new UniqueEntityId(),
             title ?? faker.Lorem.Sentence(3),
             content ?? faker.Lorem.Paragraph());
-        
+
         return notification;
     }
 
@@ -41,5 +42,24 @@ public static class MakeNotification
             RecipientId: recipientId ?? new UniqueEntityId()
         );
     }
-}
 
+    public static SendNotificationRequest SendNotificationRequest(
+        string? recipientId = null,
+        string? title = null,
+        string? content = null)
+    {
+        var faker = new Bogus.Faker();
+        return new SendNotificationRequest(
+            RecipientId: recipientId ?? faker.Random.Uuid().ToString(),
+            Title: title ?? faker.Lorem.Sentence(20),
+            Content: content ?? faker.Lorem.Paragraph()
+        );
+    }
+
+    public static ReadNotificationRequest ReadNotificationRequest(string? notificationId, string? recipientId)
+    {
+        var faker = new Bogus.Faker();
+        return new ReadNotificationRequest(notificationId ?? faker.Random.Uuid().ToString(),
+            recipientId ?? faker.Random.Uuid().ToString());
+    }
+}

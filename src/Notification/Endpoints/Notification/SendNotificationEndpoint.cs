@@ -28,7 +28,7 @@ public static class SendNotificationEndpoint
                 })
             .WithName("SendNotification")
             .WithTags("Notification")
-            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
     }

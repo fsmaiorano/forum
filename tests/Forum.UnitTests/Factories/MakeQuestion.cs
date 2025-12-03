@@ -26,7 +26,7 @@ public static class MakeQuestion
         string? title = null,
         string? content = null,
         List<AttachmentRequest>? attachments = null)
-    {
+    {               
         var faker = new Bogus.Faker();
         return new CreateQuestionRequest(
             title ?? faker.Lorem.Sentence(3),
