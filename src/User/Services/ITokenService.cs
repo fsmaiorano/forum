@@ -1,0 +1,11 @@
+using User.DTOs;
+using User.Models;
+
+namespace User.Services;
+
+public interface ITokenService
+{
+    Task<AuthResponse> CreateTokensAsync(ApplicationUser user, string ipAddress);
+    Task<AuthResponse?> RefreshAsync(string accessToken, string refreshToken, string ipAddress);
+    Task RevokeRefreshTokenAsync(string refreshToken, string ipAddress);
+}

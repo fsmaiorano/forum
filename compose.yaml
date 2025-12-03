@@ -9,4 +9,9 @@
     build:
       context: .
       dockerfile: src/Notification/Dockerfile
+  user:
+    image: user
+    build:
+      context: .
+      dockerfile: src/User/Dockerfile
 
