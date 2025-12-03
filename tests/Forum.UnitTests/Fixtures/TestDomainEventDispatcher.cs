@@ -8,7 +8,7 @@ namespace Forum.UnitTests.Fixtures;
 /// </summary>
 public class TestDomainEventDispatcher : IDomainEventDispatcher
 {
-    private readonly List<IDomainEvent> _dispatchedEvents = new();
+    private readonly List<IDomainEvent> _dispatchedEvents = [];
 
     public IReadOnlyList<IDomainEvent> DispatchedEvents => _dispatchedEvents.AsReadOnly();
 

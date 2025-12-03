@@ -1,6 +1,8 @@
 using BuildingBlocks.Base;
+using BuildingBlocks.Messaging.DomainEvents;
 using Forum.Application.UseCases.Answer.CreateAnswer;
 using Forum.Domain.Enums;
+using Forum.Domain.Events;
 using Forum.UnitTests.Factories;
 using Forum.UnitTests.Fixtures;
 
@@ -31,6 +33,33 @@ public class CreateAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
         Assert.NotNull(storedAnswer);
         Assert.Equal(command.Content, storedAnswer.Content);
         Assert.Equal(command.QuestionId, storedAnswer.QuestionId);
+    }
+    
+    [Fact]
+    public async Task CreateAnswerUseCaseHandler_ShouldRaiseDomainEvent()
+    {
+        ClearDomainEvents();
+        
+        var answerRepository = new AnswerRepository(Context, DomainEventDispatcher);
+        var attachmentRepository = new AttachmentRepository(Context);
+        var loggerMock = CreateLoggerMock<CreateAnswerUseCase>();
+        var useCase = new CreateAnswerUseCase(loggerMock.Object, answerRepository, attachmentRepository);
+
+        var question = MakeQuestion.Create();
+        await Context.Question.AddAsync(question);
+        await Context.SaveChangesAsync();
+
+        var command = MakeAnswer.CreateAnswerCommand(question.Id);
+
+        var result = await useCase.CreateAnswerUseCaseHandler(command);
+
+        var dispatcher = GetTestDispatcher();
+        Assert.True(dispatcher.HasEvent<AnswerCreatedEvent>(), "AnswerCreatedEvent should have been dispatched");
+        
+        var domainEvent = dispatcher.GetEvent<AnswerCreatedEvent>();
+        Assert.NotNull(domainEvent);
+        Assert.Equal(UniqueEntityId.Of(result.Value.AnswerId), domainEvent.GetAggregateId());
+        Assert.True(domainEvent.OccurredAt <= DateTime.UtcNow);
     }
 
     [Fact]

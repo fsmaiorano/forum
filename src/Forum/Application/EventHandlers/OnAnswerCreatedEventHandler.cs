@@ -1,6 +1,5 @@
 using BuildingBlocks.Logging;
 using BuildingBlocks.Messaging;
-using BuildingBlocks.Messaging.DomainEvents;
 using BuildingBlocks.Messaging.DomainEvents.Interfaces;
 using BuildingBlocks.Messaging.IntegrationEvents;
 using Forum.Domain.Events;
