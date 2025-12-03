@@ -1,0 +1,77 @@
+using System.Net;
+using System.Net.Http.Json;
+using User.UnitTest.Factories;
+using User.UnitTest.Fixtures;
+
+namespace User.UnitTest.Endpoints;
+
+public class RegisterEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
+{
+    [Fact]
+    public async Task Register_WithValidData_ShouldReturn200AndTokens()
+    {
+        // Arrange
+        var request = MakeUser.CreateRegisterRequest();
+
+        // Act
+        var response = await DoPost("/api/auth/register", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        
+        var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+        Assert.NotNull(result);
+        Assert.NotEmpty(result.AccessToken);
+        Assert.NotEmpty(result.RefreshToken);
+        Assert.True(result.AccessTokenExpiration > DateTime.UtcNow);
+        Assert.True(result.RefreshTokenExpiration > DateTime.UtcNow);
+
+        // Verify user was created
+        var user = await UserManager.FindByEmailAsync(request.Email);
+        Assert.NotNull(user);
+        Assert.Equal(request.Email, user.Email);
+    }
+
+    [Fact]
+    public async Task Register_WithExistingEmail_ShouldReturn400()
+    {
+        // Arrange
+        var existingEmail = "existing@example.com";
+        await CreateTestUserAsync(existingEmail, "Password123!");
+        
+        var request = MakeUser.CreateRegisterRequest(email: existingEmail);
+
+        // Act
+        var response = await DoPost("/api/auth/register", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Register_WithWeakPassword_ShouldReturn400()
+    {
+        // Arrange
+        var request = MakeUser.CreateRegisterRequest(password: "123");
+
+        // Act
+        var response = await DoPost("/api/auth/register", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Register_WithInvalidEmail_ShouldReturn400()
+    {
+        // Arrange
+        var request = MakeUser.CreateRegisterRequest(email: "invalid-email");
+
+        // Act
+        var response = await DoPost("/api/auth/register", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+}
+

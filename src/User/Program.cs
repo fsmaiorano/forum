@@ -15,7 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 // DbContext
-var useInMemoryDatabase = builder.Configuration.GetValue<bool>("UseInMemoryDatabase");
+var useInMemoryDatabase = builder.Configuration.GetValue<bool>("UseInMemoryDatabase") || 
+                           builder.Environment.IsEnvironment("Testing");
+                           
 builder.Services.AddDbContext<UserDbContext>(options =>
 {
     if (useInMemoryDatabase)
