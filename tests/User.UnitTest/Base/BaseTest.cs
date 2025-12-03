@@ -1,3 +1,4 @@
+using Bogus;
 using Microsoft.Extensions.DependencyInjection;
 using User.UnitTest.Fixtures;
 
@@ -11,10 +12,16 @@ public abstract class BaseTest(TestFixture fixture) : IClassFixture<TestFixture>
 
     protected TestFixture Fixture => fixture;
     protected UserDbContext Context => _scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    protected UserManager<ApplicationUser> UserManager => _scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    protected SignInManager<ApplicationUser> SignInManager => _scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
+
+    protected UserManager<ApplicationUser> UserManager =>
+        _scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+    protected SignInManager<ApplicationUser> SignInManager =>
+        _scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
+
     protected ITokenService TokenService => _scope.ServiceProvider.GetRequiredService<ITokenService>();
     protected HttpClient HttpClient { get; } = fixture.CreateClient();
+    protected Faker faker = new Faker();
 
     #endregion
 
@@ -47,7 +54,8 @@ public abstract class BaseTest(TestFixture fixture) : IClassFixture<TestFixture>
         var user = new ApplicationUser { UserName = email, Email = email };
         var result = await UserManager.CreateAsync(user, password);
         if (!result.Succeeded)
-            throw new Exception($"Failed to create test user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            throw new Exception(
+                $"Failed to create test user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
         return user;
     }
 
@@ -69,4 +77,3 @@ public abstract class BaseTest(TestFixture fixture) : IClassFixture<TestFixture>
 
     #endregion
 }
-
