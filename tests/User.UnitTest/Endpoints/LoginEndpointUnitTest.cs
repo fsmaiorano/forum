@@ -11,7 +11,7 @@ public class LoginEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     public async Task Login_WithValidCredentials_ShouldReturn200AndTokens()
     {
         var email = faker.Internet.Email();
-        var password = faker.Internet.Password(25);
+        var password = faker.Internet.Password(25, false, string.Empty, "1");
         await CreateTestUserAsync(email, password);
 
         var request = MakeUser.CreateLoginRequest(email: email, password: password);

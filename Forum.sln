@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forum", "src\Forum\Forum.cs
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{493DBF39-4A48-4ED1-9F6B-3D1E442AE156}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forum.UnitTests", "tests\Forum.UnitTests\Forum.UnitTests.csproj", "{90F672E2-7AE3-47FF-A9CB-1A3107B2989E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forum.UnitTest", "tests\Forum.UnitTest\Forum.UnitTest.csproj", "{90F672E2-7AE3-47FF-A9CB-1A3107B2989E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notification", "src\Notification\Notification.csproj", "{D026253F-A908-4922-8CB2-3652422A809B}"
 EndProject
