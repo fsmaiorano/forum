@@ -6,18 +6,17 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using User;
 using User.Endpoints;
+using User.Extensions;
 using User.Models;
 using User.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// load config
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-// DbContext
-var useInMemoryDatabase = builder.Configuration.GetValue<bool>("UseInMemoryDatabase") || 
-                           builder.Environment.IsEnvironment("Testing");
-                           
+var useInMemoryDatabase = builder.Configuration.GetValue<bool>("UseInMemoryDatabase") ||
+                          builder.Environment.IsEnvironment("Testing");
+
 builder.Services.AddDbContext<UserDbContext>(options =>
 {
     if (useInMemoryDatabase)
@@ -26,7 +25,6 @@ builder.Services.AddDbContext<UserDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
         options.User.RequireUniqueEmail = true;
@@ -36,7 +34,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<UserDbContext>()
     .AddDefaultTokenProviders();
 
-// JWT settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()!;
 
@@ -85,6 +82,8 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "User API v1");
     options.RoutePrefix = "swagger";
 });
+
+await app.InitialiseDatabaseAsync();
 
 app.UseHttpsRedirection();
 

@@ -1,17 +1,46 @@
 ﻿services:
   forum:
     image: forum
+    container_name: forumapi
     build:
       context: .
       dockerfile: src/Forum/Dockerfile
+    networks:
+      - forum-network
   notification:
     image: notification
+    container_name: notificationapi
     build:
       context: .
       dockerfile: src/Notification/Dockerfile
+    networks:
+      - forum-network
   user:
     image: user
+    container_name: userapi
     build:
       context: .
       dockerfile: src/User/Dockerfile
+    networks:
+      - forum-network
+  userdb:
+    image: postgres
+    container_name: userdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=UserDb
+    restart: always
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_user:/var/lib/postgresql
+    networks:
+      - forum-network
+volumes:
+  postgres_user:
+networks:
+  forum-network:
+    driver: bridge
+  
 
