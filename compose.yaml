@@ -5,6 +5,9 @@
     build:
       context: .
       dockerfile: src/Forum/Dockerfile
+    ports:
+      - "6000:8080"
+      - "6060:8081"
     networks:
       - forum-network
   notification:
@@ -13,6 +16,9 @@
     build:
       context: .
       dockerfile: src/Notification/Dockerfile
+    ports:
+      - "6001:8080"
+      - "6061:8081"
     networks:
       - forum-network
   user:
@@ -21,6 +27,11 @@
     build:
       context: .
       dockerfile: src/User/Dockerfile
+    ports:
+      - "6002:8080"
+      - "6062:8081"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=userdb;Port=5432;Database=UserDb;Username=postgres;Password=postgres
     networks:
       - forum-network
   userdb:

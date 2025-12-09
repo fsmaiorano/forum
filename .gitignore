@@ -43,3 +43,10 @@ msbuild.wrn
 
 src/Forum/Logs/*
 Forum.sln.DotSettings.user
+
+# Frontend
+ui/forum-app/node_modules/
+ui/forum-app/dist/
+ui/forum-app/.env.local
+ui/forum-app/.env.*.local
+

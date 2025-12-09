@@ -67,11 +67,9 @@ public static class MakeUser
             CreatedByIp = Faker.Internet.Ip()
         };
 
-        if (isRevoked)
-        {
-            refreshToken.Revoked = DateTime.UtcNow;
-            refreshToken.RevokedByIp = Faker.Internet.Ip();
-        }
+        if (!isRevoked) return refreshToken;
+        refreshToken.Revoked = DateTime.UtcNow;
+        refreshToken.RevokedByIp = Faker.Internet.Ip();
 
         return refreshToken;
     }

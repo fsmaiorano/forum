@@ -28,7 +28,10 @@ builder.Services.AddDbContext<UserDbContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
         options.User.RequireUniqueEmail = true;
-        options.Password.RequiredLength = 6;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
         options.Password.RequireNonAlphanumeric = false;
     })
     .AddEntityFrameworkStores<UserDbContext>()
@@ -46,7 +49,7 @@ builder.Services.AddAuthentication(options =>
     })
     .AddJwtBearer(options =>
     {
-        options.RequireHttpsMetadata = true;
+        options.RequireHttpsMetadata = false; // Set to true in production
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -62,6 +65,16 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -85,7 +98,8 @@ app.UseSwaggerUI(options =>
 
 await app.InitialiseDatabaseAsync();
 
-app.UseHttpsRedirection();
+app.UseCors();
+
 
 app.UseAuthentication();
 app.UseAuthorization();

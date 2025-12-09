@@ -41,7 +41,7 @@ public static class AuthEndpoints
     {
         var existing = await userManager.FindByEmailAsync(dto.Email);
         if (existing != null)
-            return Results.BadRequest(new { message = "Email já registrado" });
+            return Results.BadRequest(new { message = "E-mail already exists." });
 
         var user = new ApplicationUser { UserName = dto.Email, Email = dto.Email };
         var result = await userManager.CreateAsync(user, dto.Password);
@@ -77,7 +77,7 @@ public static class AuthEndpoints
         HttpContext http)
     {
         var response = await tokenService.RefreshAsync(dto.AccessToken, dto.RefreshToken, GetIpAddress(http));
-        if (response == null) return Results.BadRequest(new { message = "Token inválido" });
+        if (response == null) return Results.BadRequest(new { message = "Invalid Token" });
         return Results.Ok(response);
     }
 
