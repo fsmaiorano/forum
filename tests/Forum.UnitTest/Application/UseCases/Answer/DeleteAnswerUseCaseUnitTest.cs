@@ -5,7 +5,7 @@ using Forum.UnitTest.Fixtures;
 
 namespace Forum.UnitTest.Application.UseCases.Answer;
 
-public class DeleteAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
+public class DeleteAnswerUseCaseUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
     [Fact]
     public async Task DeleteAnswerUseCaseHandler_ShouldDeleteAnswer()

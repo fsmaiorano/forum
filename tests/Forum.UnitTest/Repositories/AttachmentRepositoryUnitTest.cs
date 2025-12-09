@@ -46,6 +46,24 @@ public class AttachmentRepositoryUnitTest(TestFixture fixture) : BaseTest(fixtur
 
         Assert.Equal(attachments.Count, storedAttachments.Count);
     }
+    
+    [Fact]
+    public async Task FindByQuestionId_ShouldReturnAttachmentsByAnswerId()
+    {
+        var repository = new AttachmentRepository(Context);
+        var question = MakeQuestion.Create();
+        var answer = MakeAnswer.Create(questionId: question.Id);
+        var attachments = new List<AttachmentEntity>
+        {
+            MakeAttachment.Create(answer.Id ,AttachmentOwnerTypeEnum.Answer),
+            MakeAttachment.Create(answer.Id ,AttachmentOwnerTypeEnum.Answer),
+        };
+
+        await repository.Create(attachments);
+        var storedAttachments = await repository.FindByOwnerId(answer.Id); 
+
+        Assert.Equal(attachments.Count, storedAttachments.Count);
+    }
 
     [Fact]
     public async Task DeleteByQuestionId_ShouldDeleteAttachmentsByQuestionId()

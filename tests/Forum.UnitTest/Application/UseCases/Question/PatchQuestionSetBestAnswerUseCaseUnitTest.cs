@@ -8,7 +8,7 @@ using Forum.UnitTest.Fixtures;
 
 namespace Forum.UnitTest.Application.UseCases.Question;
 
-public class PatchQuestionSetBestAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
+public class PatchQuestionSetBestAnswerUseCaseUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
     [Fact]
     public async Task PatchQuestionSetBestAnswer_ShouldPatchBestAnswerId()

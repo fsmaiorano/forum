@@ -2,6 +2,7 @@ import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import {AuthProvider} from '@/contexts/AuthContext'
 import {ProtectedRoute} from '@/components/ProtectedRoute'
 import {QuestionsPage} from '@/pages/QuestionsPage'
+import {CreateQuestionPage} from '@/pages/CreateQuestionPage'
 import {AuthPage} from "@/pages/AuthPage";
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
                         path="/questions/create"
                         element={
                             <ProtectedRoute>
-                                <QuestionsPage/>
+                                <CreateQuestionPage/>
                             </ProtectedRoute>
                         }
                     />

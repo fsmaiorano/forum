@@ -6,7 +6,7 @@ using Forum.UnitTest.Fixtures;
 
 namespace Forum.UnitTest.Application.UseCases.Answer;
 
-public class UpdateAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
+public class UpdateAnswerUseCaseUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
     [Fact]
     public async Task UpdateAnswerUseCaseHandler_ShouldUpdateAnswer()

@@ -36,4 +36,9 @@ public sealed class AnswerRepository(IForumDbContext context, IDomainEventDispat
         if (asNoTracking) query = query.AsNoTracking();
         return await query.FirstOrDefaultAsync(q => q.Id.Equals(answerId));
     }
+
+    public async Task<IEnumerable<AnswerEntity>> GetByQuestionId(UniqueEntityId questionId)
+    {
+        return await context.Answer.AsNoTracking().Where(a => a.QuestionId.Equals(questionId)).ToListAsync();
+    }
 }

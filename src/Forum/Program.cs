@@ -50,10 +50,12 @@ app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
+GetQuestionsEndpoint.MapEndpoint(app);
 CreateQuestionEndpoint.MapEndpoint(app);
 UpdateQuestionEndpoint.MapEndpoint(app);
 DeleteQuestionEndpoint.MapEndpoint(app);
 
+GetAnswersEndpoint.MapEndpoint(app);
 CreateAnswerEndpoint.MapEndpoint(app);
 UpdateAnswerEndpoint.MapEndpoint(app);
 DeleteAnswerEndpoint.MapEndpoint(app);

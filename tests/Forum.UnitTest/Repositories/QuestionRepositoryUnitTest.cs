@@ -95,4 +95,47 @@ public class QuestionRepositoryUnitTest(TestFixture fixture) : BaseTest(fixture)
 
         Assert.NotNull(storedQuestion!.BestAnswerId);
     }
+
+    [Fact]
+    public async Task Get_ShouldReturnAllQuestions()
+    {
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
+        
+        for(var i = 0; i < 5; i++)
+        {
+            var question = MakeQuestion.Create();
+            await repository.Create(question);
+        }
+
+        var storedQuestions = await repository.GetAll();
+        Assert.Equal(5, storedQuestions.Count());
+    }
+    
+    [Fact]
+    public async Task Get_ShouldReturnQuestionsByAuthorId()
+    {
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
+        
+        var authorId = new UniqueEntityId();
+        for(var i = 0; i < 5; i++)
+        {
+            var question = MakeQuestion.Create(authorId: authorId);
+            await repository.Create(question);
+        }
+
+        var storedQuestions = await repository.GetByAuthor(authorId);
+        Assert.Equal(5, storedQuestions.Count());
+    }
+    
+    [Fact]
+    public async Task Get_ShouldReturnQuestionsById()
+    {
+        var repository = new QuestionRepository(Context, DomainEventDispatcher);
+        var question = MakeQuestion.Create();
+        await repository.Create(question);
+
+        var storedQuestion = await repository.GetById(question.Id);
+        Assert.NotNull(storedQuestion);
+        Assert.Equal(question.Title, storedQuestion.Title);
+    }
 }

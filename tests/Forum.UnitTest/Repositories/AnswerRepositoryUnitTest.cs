@@ -85,4 +85,25 @@ public class AnswerRepositoryUnitTest(TestFixture fixture) : BaseTest(fixture)
 
         Assert.Null(storedAnswer);
     }
+    
+    [Fact]
+    public async Task GetAll_ShouldReturnAllAnswersByQuestionId()
+    {
+        var answerRepository = new AnswerRepository(Context, DomainEventDispatcher);
+        var questionRepository = new QuestionRepository(Context, DomainEventDispatcher);
+
+        var question = MakeQuestion.Create();
+        await questionRepository.Create(question);
+
+        var answer1 = MakeAnswer.Create(questionId: question.Id);
+        var answer2 = MakeAnswer.Create(questionId: question.Id);
+        await answerRepository.Create(answer1);
+        await answerRepository.Create(answer2);
+
+        var allAnswers = await answerRepository.GetByQuestionId(question.Id);
+
+        var answerEntities = allAnswers.ToList();
+        Assert.Contains(answerEntities, a => a.Id == answer1.Id);
+        Assert.Contains(answerEntities, a => a.Id == answer2.Id);
+    }
 }

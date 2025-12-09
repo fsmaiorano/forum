@@ -6,9 +6,11 @@ using BuildingBlocks.Messaging.DomainEvents.Interfaces;
 using Forum.Application.EventHandlers;
 using Forum.Application.UseCases.Answer.CreateAnswer;
 using Forum.Application.UseCases.Answer.DeleteAnswer;
+using Forum.Application.UseCases.Answer.GetAnswers;
 using Forum.Application.UseCases.Answer.UpdateAnswer;
 using Forum.Application.UseCases.Question.CreateQuestion;
 using Forum.Application.UseCases.Question.DeleteQuestion;
+using Forum.Application.UseCases.Question.GetQuestions;
 using Forum.Application.UseCases.Question.PatchQuestionSetBestAnswer;
 using Forum.Application.UseCases.Question.UpdateQuestion;
 using Forum.Domain.Events;
@@ -35,11 +37,13 @@ public static class DependencyInjection
     private static void AddUseCases(IServiceCollection services)
     {
         services.AddTransient<ICreateQuestionUseCase, CreateQuestionUseCase>();
+        services.AddTransient<IGetQuestionsUseCase, GetQuestionsUseCase>();
         services.AddTransient<IUpdateQuestionUseCase, UpdateQuestionUseCase>();
         services.AddTransient<IPatchQuestionSetBestAnswerUseCase, PatchQuestionSetBestAnswerUseCase>();
         services.AddTransient<IDeleteQuestionUseCase, DeleteQuestionUseCase>();
 
         services.AddTransient<ICreateAnswerUseCase, CreateAnswerUseCase>();
+        services.AddTransient<IGetAnswersUseCase, GetAnswersUseCase>();
         services.AddTransient<IUpdateAnswerUseCase, UpdateAnswerUseCase>();
         services.AddTransient<IDeleteAnswerUseCase, DeleteAnswerUseCase>();
     }

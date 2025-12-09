@@ -9,7 +9,7 @@ using Forum.UnitTest.Fixtures;
 
 namespace Forum.UnitTest.Application.UseCases.Answer;
 
-public class CreateAnswerUnitTest(TestFixture fixture) : BaseTest(fixture)
+public class CreateAnswerUseCaseUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
     [Fact]
     public async Task CreateAnswerUseCaseHandler_ShouldCreateAnswer()

@@ -6,7 +6,7 @@ using Forum.UnitTest.Fixtures;
 
 namespace Forum.UnitTest.Application.UseCases.Question;
 
-public class DeleteQuestionUnitTest(TestFixture fixture) : BaseTest(fixture)
+public class DeleteQuestionUseCaseUnitTest(TestFixture fixture) : BaseTest(fixture)
 {
     [Fact]
     public async Task DeleteQuestionUseCaseHandler_ShouldDeleteQuestion()
