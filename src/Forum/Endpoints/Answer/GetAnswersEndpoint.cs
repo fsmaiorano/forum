@@ -15,7 +15,8 @@ public static class GetAnswersEndpoint
         app.MapGet(Route,
                 async (string questionId, [FromServices] IGetAnswersUseCase handler) =>
                 {
-                    var result = await handler.GetAnswersUseCaseHandler(questionId);
+                    var query = new GetAnswersQuery(questionId);
+                    var result = await handler.GetAnswersUseCaseHandler(query);
 
                     if (result.IsSuccess && !result.Value.Answers.Any())
                         return Results.NoContent();
