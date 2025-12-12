@@ -10,7 +10,7 @@ public class RefreshEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Refresh_WithValidTokens_ShouldReturn200AndNewTokens()
     {
-        var tokens = await CreateTestUserWithTokensAsync(faker.Internet.Email(), faker.Internet.Password(25, false, string.Empty, "1"));
+        var tokens = await CreateTestUserWithTokensAsync(Faker.Internet.Email(), Faker.Internet.Password(25, false, string.Empty, "1"));
         var request = MakeUser.CreateRefreshRequest(
             accessToken: tokens.AccessToken,
             refreshToken: tokens.RefreshToken);
@@ -30,7 +30,7 @@ public class RefreshEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Refresh_WithInvalidRefreshToken_ShouldReturn400()
     {
-        var tokens = await CreateTestUserWithTokensAsync(faker.Internet.Email(), faker.Internet.Password(25, false, string.Empty, "1"));
+        var tokens = await CreateTestUserWithTokensAsync(Faker.Internet.Email(), Faker.Internet.Password(25, false, string.Empty, "1"));
         var request = MakeUser.CreateRefreshRequest(
             accessToken: tokens.AccessToken,
             refreshToken: "invalid-refresh-token");
@@ -42,9 +42,9 @@ public class RefreshEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Refresh_WithRevokedToken_ShouldReturn400()
     {
-        var tokens = await CreateTestUserWithTokensAsync(faker.Internet.Email(), faker.Internet.Password(25, false, string.Empty, "1"));
+        var tokens = await CreateTestUserWithTokensAsync(Faker.Internet.Email(), Faker.Internet.Password(25, false, string.Empty, "1"));
 
-        await TokenService.RevokeRefreshTokenAsync(tokens.RefreshToken, faker.Internet.Ip());
+        await TokenService.RevokeRefreshTokenAsync(tokens.RefreshToken, Faker.Internet.Ip());
 
         var request = MakeUser.CreateRefreshRequest(
             accessToken: tokens.AccessToken,
@@ -57,7 +57,7 @@ public class RefreshEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Refresh_AfterUsingRefreshToken_OldTokenShouldBeInvalid()
     {
-        var tokens = await CreateTestUserWithTokensAsync(faker.Internet.Email(), faker.Internet.Password(25, false, string.Empty, "1"));
+        var tokens = await CreateTestUserWithTokensAsync(Faker.Internet.Email(), Faker.Internet.Password(25, false, string.Empty, "1"));
         var request = MakeUser.CreateRefreshRequest(
             accessToken: tokens.AccessToken,
             refreshToken: tokens.RefreshToken);

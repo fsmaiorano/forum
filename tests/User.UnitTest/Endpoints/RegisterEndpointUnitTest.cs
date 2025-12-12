@@ -30,8 +30,8 @@ public class RegisterEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Register_WithExistingEmail_ShouldReturn400()
     {
-        var existingEmail = faker.Internet.Email();
-        await CreateTestUserAsync(existingEmail, faker.Internet.Password(25, false, string.Empty, "1"));
+        var existingEmail = Faker.Internet.Email();
+        await CreateTestUserAsync(existingEmail, Faker.Internet.Password(25, false, string.Empty, "1"));
         
         var request = MakeUser.CreateRegisterRequest(email: existingEmail);
         var response = await DoPost("/api/auth/register", request);

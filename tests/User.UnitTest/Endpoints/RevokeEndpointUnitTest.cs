@@ -9,8 +9,8 @@ public class RevokeEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Revoke_WithValidRefreshToken_ShouldReturn204()
     {
-        var tokens = await CreateTestUserWithTokensAsync(faker.Internet.Email(),
-            faker.Internet.Password(25, false, string.Empty, "1"));
+        var tokens = await CreateTestUserWithTokensAsync(Faker.Internet.Email(),
+            Faker.Internet.Password(25, false, string.Empty, "1"));
         var request = MakeUser.CreateRefreshRequest(
             accessToken: tokens.AccessToken,
             refreshToken: tokens.RefreshToken);
@@ -42,8 +42,8 @@ public class RevokeEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Revoke_AlreadyRevokedToken_ShouldReturn204()
     {
-        var tokens = await CreateTestUserWithTokensAsync(faker.Internet.Email(),
-            faker.Internet.Password(25, false, string.Empty, "1"));
+        var tokens = await CreateTestUserWithTokensAsync(Faker.Internet.Email(),
+            Faker.Internet.Password(25, false, string.Empty, "1"));
         var request = MakeUser.CreateRefreshRequest(
             accessToken: tokens.AccessToken,
             refreshToken: tokens.RefreshToken);
@@ -57,8 +57,8 @@ public class RevokeEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Revoke_ThenRefresh_ShouldFail()
     {
-        var tokens = await CreateTestUserWithTokensAsync(faker.Internet.Email(),
-            faker.Internet.Password(25, false, string.Empty, "1"));
+        var tokens = await CreateTestUserWithTokensAsync(Faker.Internet.Email(),
+            Faker.Internet.Password(25, false, string.Empty, "1"));
         var revokeRequest = MakeUser.CreateRefreshRequest(
             accessToken: tokens.AccessToken,
             refreshToken: tokens.RefreshToken);

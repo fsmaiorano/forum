@@ -10,8 +10,8 @@ public class LoginEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Login_WithValidCredentials_ShouldReturn200AndTokens()
     {
-        var email = faker.Internet.Email();
-        var password = faker.Internet.Password(25, false, string.Empty, "1");
+        var email = Faker.Internet.Email();
+        var password = Faker.Internet.Password(25, false, string.Empty, "1");
         await CreateTestUserAsync(email, password);
 
         var request = MakeUser.CreateLoginRequest(email: email, password: password);
@@ -38,8 +38,8 @@ public class LoginEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Login_WithWrongPassword_ShouldReturn401()
     {
-        var email = faker.Internet.Email();
-        var password = faker.Internet.Password(25);
+        var email = Faker.Internet.Email();
+        var password = Faker.Internet.Password(25);
         await CreateTestUserAsync(email, password);
 
         var request = MakeUser.CreateLoginRequest(email: email, password: "WrongPassword123!");
@@ -50,8 +50,8 @@ public class LoginEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Login_MultipleTimes_ShouldGenerateDifferentTokens()
     {
-        var email = faker.Internet.Email();
-        var password = faker.Internet.Password(25);
+        var email = Faker.Internet.Email();
+        var password = Faker.Internet.Password(25);
         await CreateTestUserAsync(email, password);
 
         var request = MakeUser.CreateLoginRequest(email: email, password: password);

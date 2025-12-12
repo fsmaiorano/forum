@@ -5,21 +5,32 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Forum.Notification.Base;
 
-public abstract class BaseTest(TestFixture fixture) : IClassFixture<TestFixture>, IDisposable
+public abstract class BaseTest : IClassFixture<TestFixture>, IDisposable
 {
-    #region Fields and Properties
+     #region Fields and Properties
 
-    private readonly IServiceScope _scope = fixture.Services.CreateScope();
+    private readonly IServiceScope _scope;
 
-    protected TestFixture Fixture => fixture;
+    private TestFixture Fixture { get; }
+
     protected NotificationDbContext Context => _scope.ServiceProvider.GetRequiredService<NotificationDbContext>();
 
     protected IDomainEventDispatcher DomainEventDispatcher =>
         _scope.ServiceProvider.GetRequiredService<IDomainEventDispatcher>();
 
-    protected HttpClient HttpClient { get; } = fixture.CreateClient();
+    protected HttpClient HttpClient { get; }
 
     #endregion
+
+    protected BaseTest(TestFixture fixture)
+    {
+        Fixture = fixture;
+        _scope = fixture.Services.CreateScope();
+        HttpClient = fixture.CreateClient();
+
+        Context.Database.EnsureDeleted();
+        Context.Database.EnsureCreated();
+    }
 
     #region Domain Event Helpers
 
@@ -49,21 +60,21 @@ public abstract class BaseTest(TestFixture fixture) : IClassFixture<TestFixture>
 
     protected async Task<HttpResponseMessage> DoPost(string method, object request, string token = "",
         string culture = "en-US")
-        => await fixture.DoPost(method, request, token, culture);
+        => await Fixture.DoPost(method, request, token, culture);
 
     protected async Task<HttpResponseMessage> DoGet(string method, string token = "", string culture = "en-US")
-        => await fixture.DoGet(method, token, culture);
+        => await Fixture.DoGet(method, token, culture);
 
     protected async Task<HttpResponseMessage> DoPut(string method, object request, string token = "",
         string culture = "en-US")
-        => await fixture.DoPut(method, request, token, culture);
+        => await Fixture.DoPut(method, request, token, culture);
 
     protected async Task<HttpResponseMessage> DoPatch(string method, object request, string token = "",
         string culture = "en-US")
-        => await fixture.DoPatch(method, request, token, culture);
+        => await Fixture.DoPatch(method, request, token, culture);
 
     protected async Task<HttpResponseMessage> DoDelete(string method, string token = "", string culture = "en-US")
-        => await fixture.DoDelete(method, token, culture);
+        => await Fixture.DoDelete(method, token, culture);
 
     #endregion
 

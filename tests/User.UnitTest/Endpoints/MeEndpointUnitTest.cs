@@ -9,8 +9,8 @@ public class MeEndpointUnitTest(TestFixture fixture) : BaseTest(fixture)
     [Fact]
     public async Task Me_WithValidToken_ShouldReturn200AndUserInfo()
     {
-        var email = faker.Internet.Email();
-        var tokens = await CreateTestUserWithTokensAsync(email, faker.Internet.Password(25, false, string.Empty, "1"));
+        var email = Faker.Internet.Email();
+        var tokens = await CreateTestUserWithTokensAsync(email, Faker.Internet.Password(25, false, string.Empty, "1"));
 
         var response = await DoGet("/api/auth/me", token: tokens.AccessToken);
 

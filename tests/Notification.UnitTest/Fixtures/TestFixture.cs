@@ -9,7 +9,7 @@ namespace Forum.Notification.Fixtures;
 
 public sealed class TestFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private const string DatabaseName = "NotificationInMemoryTestDb";
+    private readonly string _databaseName = $"NotificationInMemoryTestDb_{Guid.NewGuid()}";
     private HttpClient? _httpClient;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -29,7 +29,7 @@ public sealed class TestFixture : WebApplicationFactory<Program>, IAsyncLifetime
                 services.Remove(interfaceDescriptor);
 
             services.AddDbContext<NotificationDbContext>(options =>
-                options.UseInMemoryDatabase(DatabaseName));
+                options.UseInMemoryDatabase(_databaseName));
 
             services.AddScoped<INotificationDbContext>(provider =>
                 provider.GetRequiredService<NotificationDbContext>());
@@ -140,7 +140,10 @@ public sealed class TestFixture : WebApplicationFactory<Program>, IAsyncLifetime
     private void AuthorizeRequest(string token, HttpClient client)
     {
         if (string.IsNullOrWhiteSpace(token))
+        {
+            client.DefaultRequestHeaders.Authorization = null;
             return;
+        }
 
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }

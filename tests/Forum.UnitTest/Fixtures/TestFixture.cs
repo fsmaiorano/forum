@@ -153,7 +153,10 @@ public sealed class TestFixture : WebApplicationFactory<Program>, IAsyncLifetime
     private void AuthorizeRequest(string token, HttpClient client)
     {
         if (string.IsNullOrWhiteSpace(token))
+        {
+            client.DefaultRequestHeaders.Authorization = null;
             return;
+        }
 
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
