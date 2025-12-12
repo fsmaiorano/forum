@@ -10,7 +10,7 @@ namespace Forum.UnitTest.Fixtures;
 
 public sealed class TestFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private const string DatabaseName = "ForumInMemoryTestDb";
+    private readonly string _databaseName = $"ForumInMemoryTestDb_{Guid.NewGuid()}";
     private HttpClient? _httpClient;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -30,7 +30,7 @@ public sealed class TestFixture : WebApplicationFactory<Program>, IAsyncLifetime
                 services.Remove(interfaceDescriptor);
 
             services.AddDbContext<ForumDbContext>(options =>
-                options.UseInMemoryDatabase(DatabaseName));
+                options.UseInMemoryDatabase(_databaseName));
 
             services.AddScoped<IForumDbContext>(provider =>
                 provider.GetRequiredService<ForumDbContext>());

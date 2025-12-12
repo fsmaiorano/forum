@@ -104,7 +104,8 @@ public class QuestionRepositoryUnitTest(TestFixture fixture) : BaseTest(fixture)
         for(var i = 0; i < 5; i++)
         {
             var question = MakeQuestion.Create();
-            await repository.Create(question);
+            Context.Question.Add(question);
+            await Context.SaveChangesAsync();
         }
 
         var storedQuestions = await repository.GetAll();
