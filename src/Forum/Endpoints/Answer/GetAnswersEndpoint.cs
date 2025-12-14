@@ -27,7 +27,7 @@ public static class GetAnswersEndpoint
                             AuthorId = answerEntity.AuthorId.ToString(),
                             QuestionId = answerEntity.QuestionId.ToString(),
                             Content = answerEntity.Content,
-                            Attachments = answerEntity.Attachments.CurrentItems.Select(a => new AttachmentDto
+                            Attachments = answerEntity.Attachments?.CurrentItems.Select(a => new AttachmentDto
                             {
                                 Id = a.Id.ToString(), OwnerId = a.OwnerId.ToString(), Link = a.Link, Title = a.Title
                             })
