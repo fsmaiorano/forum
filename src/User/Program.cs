@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using User;
+using User.Data;
+using User.Data.Models;
 using User.Endpoints;
 using User.Extensions;
-using User.Models;
 using User.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 var useInMemoryDatabase = builder.Configuration.GetValue<bool>("UseInMemoryDatabase") ||
                           builder.Environment.IsEnvironment("Testing");
@@ -96,10 +96,16 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = "swagger";
 });
 
+// if (app.Environment.IsDevelopment())
+// {
+//     using var scope = app.Services.CreateScope();
+//     var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+//     dbContext.Database.Migrate();
+// }
+
 await app.InitialiseDatabaseAsync();
 
 app.UseCors();
-
 
 app.UseAuthentication();
 app.UseAuthorization();

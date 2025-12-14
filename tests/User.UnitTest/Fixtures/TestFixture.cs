@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using User.Data;
+using User.Data.Models;
 
 namespace User.UnitTest.Fixtures;
 
@@ -132,4 +134,3 @@ public sealed class TestFixture : WebApplicationFactory<Program>, IAsyncLifetime
 
     #endregion
 }
-

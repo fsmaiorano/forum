@@ -1,4 +1,5 @@
 using Bogus;
+using User.Data.Models;
 
 namespace User.UnitTest.Factories;
 

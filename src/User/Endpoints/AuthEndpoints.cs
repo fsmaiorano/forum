@@ -1,7 +1,8 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using User.Data;
+using User.Data.Models;
 using User.DTOs;
-using User.Models;
 using User.Services;
 
 namespace User.Endpoints;
@@ -35,21 +36,49 @@ public static class AuthEndpoints
 
     private static async Task<IResult> Register(
         RegisterRequest dto,
+        UserDbContext dbContext,
         UserManager<ApplicationUser> userManager,
+        RoleManager<IdentityRole> roleManager,
         ITokenService tokenService,
         HttpContext http)
     {
-        var existing = await userManager.FindByEmailAsync(dto.Email);
-        if (existing != null)
-            return Results.BadRequest(new { message = "E-mail already exists." });
+        var isInMemory = dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+        var transaction = isInMemory ? null : await dbContext.Database.BeginTransactionAsync();
 
-        var user = new ApplicationUser { UserName = dto.Email, Email = dto.Email };
-        var result = await userManager.CreateAsync(user, dto.Password);
-        if (!result.Succeeded)
-            return Results.BadRequest(result.Errors);
+        try
+        {
+            var existing = await userManager.FindByEmailAsync(dto.Email);
+            if (existing is not null)
+                return Results.BadRequest(new { message = "E-mail already exists." });
 
-        var tokens = await tokenService.CreateTokensAsync(user, GetIpAddress(http));
-        return Results.Ok(tokens);
+            var user = new ApplicationUser { UserName = dto.Email, Email = dto.Email };
+
+            var identityResult = await userManager.CreateAsync(user, dto.Password);
+            if (!identityResult.Succeeded)
+                return Results.BadRequest(identityResult.Errors);
+
+            if (!await roleManager.RoleExistsAsync("Member"))
+                await roleManager.CreateAsync(new IdentityRole("Member"));
+
+            var addToRoleResult = await userManager.AddToRoleAsync(user, "Member");
+            if (!addToRoleResult.Succeeded)
+                return Results.BadRequest(new
+                {
+                    message = "Failed to assign role to user",
+                    errors = addToRoleResult.Errors
+                });
+
+            if (transaction is not null)
+                await transaction.CommitAsync();
+
+            var tokens = await tokenService.CreateTokensAsync(user, GetIpAddress(http));
+            return Results.Ok(tokens);
+        }
+        finally
+        {
+            if (transaction is not null)
+                await transaction.DisposeAsync();
+        }
     }
 
     private static async Task<IResult> Login(
@@ -99,8 +128,8 @@ public static class AuthEndpoints
 
     private static string GetIpAddress(HttpContext http)
     {
-        if (http.Request.Headers.ContainsKey("X-Forwarded-For"))
-            return http.Request.Headers["X-Forwarded-For"].ToString();
+        if (http.Request.Headers.TryGetValue("X-Forwarded-For", out var value))
+            return value.ToString();
         return http.Connection.RemoteIpAddress?.ToString() ?? "unknown";
     }
 }

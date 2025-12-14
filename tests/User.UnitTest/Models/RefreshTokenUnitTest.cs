@@ -1,3 +1,4 @@
+using User.Data.Models;
 using User.UnitTest.Factories;
 
 namespace User.UnitTest.Models;

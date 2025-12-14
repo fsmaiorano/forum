@@ -3,8 +3,9 @@ using BuildingBlocks.Logging;
 using BuildingBlocks.Messaging.DomainEvents;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using User.Data;
+using User.Data.Models;
 using User.UnitTest.Fixtures;
-using User.Models;
 
 namespace User.UnitTest.Base;
 

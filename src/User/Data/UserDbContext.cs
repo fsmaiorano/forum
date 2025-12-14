@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using User.Models;
+using User.Data.Models;
 
-namespace User;
+namespace User.Data;
 
 public class UserDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
 {
@@ -17,7 +17,7 @@ public class UserDbContext : IdentityDbContext<ApplicationUser, IdentityRole, st
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        
+
         builder.Entity<RefreshToken>()
             .HasIndex(rt => rt.Token)
             .IsUnique();
@@ -27,5 +27,13 @@ public class UserDbContext : IdentityDbContext<ApplicationUser, IdentityRole, st
             .WithMany()
             .HasForeignKey(rt => rt.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ApplicationUser>(entity =>
+        {
+            entity.Property(e => e.EnableNotifications)
+                .HasDefaultValue(true);
+        });
+      
+        builder.HasDefaultSchema("identity");
     }
 }
