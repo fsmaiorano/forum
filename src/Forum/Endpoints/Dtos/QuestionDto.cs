@@ -8,6 +8,6 @@ public record QuestionDto
     public string? Title { get; set; }
     public string? Content { get; set; }
     public string? Slug { get; set; }
-    public IEnumerable<AttachmentDto> Attachments { get; set; } = [];
+    public IEnumerable<AttachmentDto>? Attachments { get; set; } = [];
     public bool IsOpen { get; set; }
 }

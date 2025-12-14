@@ -11,7 +11,7 @@ public sealed record QuestionEntity : Aggregate
     public string Title { get; private set; } = null!;
     public string Content { get; private set; } = null!;
     public Slug? Slug { get; private set; } = null;
-    public WatchedList<AttachmentEntity> Attachments { get; private set; } = null!;
+    public WatchedList<AttachmentEntity> Attachments { get; private init; } = null!;
     public bool IsOpen { get; private set; } = true;
 
     public static QuestionEntity Create(UniqueEntityId authorId, string title, string content, string? slug = null,

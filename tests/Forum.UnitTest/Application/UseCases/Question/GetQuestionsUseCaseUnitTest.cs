@@ -21,9 +21,10 @@ public class GetQuestionsUseCaseUnitTest(TestFixture fixture) : BaseTest(fixture
         await Context.Question.AddAsync(question);
         await Context.SaveChangesAsync();
         
-        var repository = new QuestionRepository(Context, DomainEventDispatcher);
+        var questionRepository = new QuestionRepository(Context, DomainEventDispatcher);
+        var attachmentRepository = new AttachmentRepository(Context);
         var loggerMock = CreateLoggerMock<GetQuestionsUseCase>();
-        var useCase = new GetQuestionsUseCase(loggerMock.Object, repository);
+        var useCase = new GetQuestionsUseCase(loggerMock.Object, questionRepository, attachmentRepository);
 
         var result = await useCase.GetQuestionsUseCaseHandler();
 

@@ -8,12 +8,12 @@ public record GetQuestionsResponse(IEnumerable<QuestionDto> Questions);
 
 public static class GetQuestionsEndpoint
 {
-    private const string Route = "/question";
+    private const string Route = "/question/{id}";
 
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(Route,
-                async ([FromServices] IGetQuestionsUseCase handler) =>
+                async ([FromRoute] string id, [FromServices] IGetQuestionsUseCase handler) =>
                 {
                     var result = await handler.GetQuestionsUseCaseHandler();
 
@@ -24,12 +24,12 @@ public static class GetQuestionsEndpoint
                         {
                             Id = questionEntity.Id.ToString(),
                             AuthorId = questionEntity.AuthorId.ToString(),
-                            BestAnswerId = questionEntity.BestAnswerId.ToString(),
+                            BestAnswerId = questionEntity.BestAnswerId?.ToString(),
                             Title = questionEntity.Title,
                             Content = questionEntity.Content,
                             Slug = questionEntity.Slug?.Value ?? string.Empty,
                             IsOpen = questionEntity.IsOpen,
-                            Attachments = questionEntity.Attachments.CurrentItems.Select(a => new AttachmentDto
+                            Attachments = questionEntity.Attachments?.CurrentItems.Select(a => new AttachmentDto
                             {
                                 Id = a.Id.ToString(), OwnerId = a.OwnerId.ToString(), Link = a.Link, Title = a.Title
                             })
