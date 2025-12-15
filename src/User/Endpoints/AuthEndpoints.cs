@@ -106,8 +106,7 @@ public static class AuthEndpoints
         HttpContext http)
     {
         var response = await tokenService.RefreshAsync(dto.AccessToken, dto.RefreshToken, GetIpAddress(http));
-        if (response == null) return Results.BadRequest(new { message = "Invalid Token" });
-        return Results.Ok(response);
+        return response is null ? Results.BadRequest(new { message = "Invalid Token" }) : Results.Ok(response);
     }
 
     private static async Task<IResult> Revoke(
