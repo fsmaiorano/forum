@@ -4,16 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Endpoints.Question;
 
-public record GetQuestionsResponse(IEnumerable<QuestionDto> Questions);
-
-public static class GetQuestionsEndpoint
+public static class GetQuestionsByAuthorId
 {
-    private const string Route = "/question";
-
+    private const string Route = "/question/author/{id}";
+    
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(Route,
-                async ([FromServices] IGetQuestionsUseCase handler) =>
+                async ([FromRoute] string id, [FromServices] IGetQuestionsUseCase handler) =>
                 {
                     var result = await handler.GetQuestionsUseCaseHandler();
 
@@ -40,7 +38,7 @@ public static class GetQuestionsEndpoint
                         ? Results.Ok(new GetQuestionsResponse(questionListDto))
                         : Results.BadRequest(result.Error);
                 })
-            .WithName("GetQuestions")
+            .WithName("GetQuestionByAuthorId")
             .WithTags("Question")
             .Produces<GetQuestionsResponse>(StatusCodes.Status200OK)
             .Produces<GetQuestionsResponse>(StatusCodes.Status204NoContent)

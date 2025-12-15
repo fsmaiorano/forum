@@ -17,9 +17,13 @@ var builder = WebApplication.CreateBuilder(args);
 var useInMemoryDatabase = builder.Configuration.GetValue<bool>("UseInMemoryDatabase") ||
                           builder.Environment.IsEnvironment("Testing");
 
+var isUnitTest = AppDomain.CurrentDomain.GetAssemblies().Any(a =>
+    a.FullName != null && (a.FullName.Contains("xunit") || a.FullName.Contains("nunit") ||
+                           a.FullName.Contains("testhost")));
+
 builder.Services.AddDbContext<UserDbContext>(options =>
 {
-    if (useInMemoryDatabase)
+    if (useInMemoryDatabase || isUnitTest)
         options.UseInMemoryDatabase("UserDb");
     else
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));

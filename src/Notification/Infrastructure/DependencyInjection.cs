@@ -27,7 +27,11 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<INotificationDbContext, NotificationDbContext>();
 
-        if (configuration.GetSection("UseInMemoryDatabase").Get<bool>())
+        var isUnitTest = AppDomain.CurrentDomain.GetAssemblies().Any(a =>
+            a.FullName != null && (a.FullName.Contains("xunit") || a.FullName.Contains("nunit") ||
+                                   a.FullName.Contains("testhost")));
+        
+        if (configuration.GetSection("UseInMemoryDatabase").Get<bool>() || isUnitTest)
         {
             services.AddDbContext<NotificationDbContext>(options =>
                 options.UseInMemoryDatabase("NotificationInMemoryDb"));

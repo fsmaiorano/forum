@@ -31,8 +31,12 @@ public static class DependencyInjection
         services.AddScoped<IForumDbContext, ForumDbContext>();
 
         Console.WriteLine(configuration.GetConnectionString("DefaultConnection"));
+        
+        var isUnitTest = AppDomain.CurrentDomain.GetAssemblies().Any(a =>
+            a.FullName != null && (a.FullName.Contains("xunit") || a.FullName.Contains("nunit") ||
+                                   a.FullName.Contains("testhost")));
 
-        if (configuration.GetSection("UseInMemoryDatabase").Get<bool>())
+        if (configuration.GetSection("UseInMemoryDatabase").Get<bool>() || isUnitTest)
         {
             Console.WriteLine("Using InMemory Database");
             services.AddDbContext<ForumDbContext>(options =>

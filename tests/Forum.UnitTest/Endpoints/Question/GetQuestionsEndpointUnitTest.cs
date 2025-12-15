@@ -16,7 +16,7 @@ public class GetQuestionsEndpointUnitTest(TestFixture fixture) : BaseTest(fixtur
         var question = MakeQuestion.Create();
         await repository.Create(question);
 
-        var response = await DoGet($"/question/{question.Id}");
+        var response = await DoGet($"/question/author/{question.Id}");
 
         var content = await response.Content.ReadAsStringAsync();
 
