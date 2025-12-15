@@ -30,11 +30,19 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<IForumDbContext, ForumDbContext>();
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        Console.WriteLine(configuration.GetConnectionString("DefaultConnection"));
+
         if (configuration.GetSection("UseInMemoryDatabase").Get<bool>())
         {
+            Console.WriteLine("Using InMemory Database");
             services.AddDbContext<ForumDbContext>(options =>
                 options.UseInMemoryDatabase("ForumInMemoryDb"));
+        }
+        else
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            Console.WriteLine("Using PostgreSQL Database");
+            services.AddDbContext<ForumDbContext>((options) => { options.UseNpgsql(connectionString); });
         }
     }
 

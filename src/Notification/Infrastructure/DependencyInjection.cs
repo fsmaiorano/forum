@@ -27,11 +27,15 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<INotificationDbContext, NotificationDbContext>();
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
         if (configuration.GetSection("UseInMemoryDatabase").Get<bool>())
         {
             services.AddDbContext<NotificationDbContext>(options =>
                 options.UseInMemoryDatabase("NotificationInMemoryDb"));
+        }
+        else
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<NotificationDbContext>((options) => { options.UseNpgsql(connectionString); });
         }
     }
 

@@ -13,14 +13,14 @@ public interface IForumDbContext
 
 public class ForumDbContext : DbContext, IForumDbContext
 {
-    public DbSet<QuestionEntity> Question => Set<QuestionEntity>();
-    public DbSet<AnswerEntity> Answer => Set<AnswerEntity>();
-    public DbSet<AttachmentEntity> Attachment => Set<AttachmentEntity>();
-
     public ForumDbContext(DbContextOptions<ForumDbContext> options)
         : base(options)
     {
     }
+    
+    public DbSet<QuestionEntity> Question => Set<QuestionEntity>();
+    public DbSet<AnswerEntity> Answer => Set<AnswerEntity>();
+    public DbSet<AttachmentEntity> Attachment => Set<AttachmentEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

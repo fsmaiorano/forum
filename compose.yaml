@@ -48,6 +48,36 @@
       - postgres_user:/var/lib/postgresql
     networks:
       - forum-network
+  forumdb:
+    image: postgres
+    container_name: forumdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=ForumDb
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_user:/var/lib/postgresql
+    networks:
+      - forum-network
+      
+  notificationdb:
+    image: postgres
+    container_name: notificationdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=UserDb
+    restart: always
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_user:/var/lib/postgresql
+    networks:
+      - forum-network
+  
 volumes:
   postgres_user:
 networks:
