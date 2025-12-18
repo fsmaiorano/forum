@@ -51,7 +51,8 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 GetQuestionsEndpoint.MapEndpoint(app);
-GetQuestionsByAuthorId.MapEndpoint(app);
+GetQuestionByIdEndpoint.MapEndpoint(app);
+GetQuestionsByAuthorIdEndpoint.MapEndpoint(app);
 CreateQuestionEndpoint.MapEndpoint(app);
 UpdateQuestionEndpoint.MapEndpoint(app);
 DeleteQuestionEndpoint.MapEndpoint(app);

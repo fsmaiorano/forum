@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Endpoints.Question;
 
-public static class GetQuestionsByAuthorId
+public static class GetQuestionsByAuthorIdEndpoint
 {
     private const string Route = "/question/author/{id}";
     
