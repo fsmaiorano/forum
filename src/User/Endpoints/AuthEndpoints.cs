@@ -40,8 +40,12 @@ public static class AuthEndpoints
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
         ITokenService tokenService,
-        HttpContext http)
+        HttpContext http,
+        ILoggerFactory loggerFactory)
     {
+        var logger = loggerFactory.CreateLogger("AuthEndpoints");
+        logger.LogInformation("Register attempt for email: {Email}", dto.Email);
+        
         var isInMemory = dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
         var transaction = isInMemory ? null : await dbContext.Database.BeginTransactionAsync();
 
@@ -49,30 +53,52 @@ public static class AuthEndpoints
         {
             var existing = await userManager.FindByEmailAsync(dto.Email);
             if (existing is not null)
+            {
+                logger.LogWarning("Registration failed: Email {Email} already exists", dto.Email);
                 return Results.BadRequest(new { message = "E-mail already exists." });
+            }
 
             var user = new ApplicationUser { UserName = dto.Email, Email = dto.Email };
 
             var identityResult = await userManager.CreateAsync(user, dto.Password);
             if (!identityResult.Succeeded)
-                return Results.BadRequest(identityResult.Errors);
+            {
+                var errors = string.Join("; ", identityResult.Errors.Select(e => e.Description));
+                logger.LogWarning("Registration failed for {Email}: {Errors}", dto.Email, errors);
+                return Results.BadRequest(new 
+                { 
+                    message = "Registration failed",
+                    errors = identityResult.Errors.Select(e => e.Description).ToList()
+                });
+            }
 
             if (!await roleManager.RoleExistsAsync("Member"))
                 await roleManager.CreateAsync(new IdentityRole("Member"));
 
             var addToRoleResult = await userManager.AddToRoleAsync(user, "Member");
             if (!addToRoleResult.Succeeded)
+            {
+                logger.LogError("Failed to assign role to user {Email}", dto.Email);
                 return Results.BadRequest(new
                 {
                     message = "Failed to assign role to user",
-                    errors = addToRoleResult.Errors
+                    errors = addToRoleResult.Errors.Select(e => e.Description).ToList()
                 });
+            }
 
             if (transaction is not null)
                 await transaction.CommitAsync();
 
+            logger.LogInformation("User {Email} registered successfully", dto.Email);
             var tokens = await tokenService.CreateTokensAsync(user, GetIpAddress(http));
             return Results.Ok(tokens);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error during registration for {Email}", dto.Email);
+            if (transaction is not null)
+                await transaction.RollbackAsync();
+            throw;
         }
         finally
         {

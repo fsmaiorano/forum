@@ -37,8 +37,14 @@ export function AuthPage() {
       }
       navigate('/questions')
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Authentication failed. Please try again.')
       console.error('Auth error:', err)
+      if (err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+        setError(err.response.data.errors.join(' '))
+      } else if (err.response?.data?.message) {
+        setError(err.response.data.message)
+      } else {
+        setError('Authentication failed. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }

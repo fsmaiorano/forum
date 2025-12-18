@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 // API Base URLs - can be configured via environment variables
-export const USER_API_URL = import.meta.env.VITE_USER_API_URL || 'http://localhost:5002/api'
-export const FORUM_API_URL = import.meta.env.VITE_FORUM_API_URL || 'http://localhost:5000'
+export const USER_API_URL = import.meta.env.VITE_USER_API_URL || 'http://localhost:5052/api'
+export const FORUM_API_URL = import.meta.env.VITE_FORUM_API_URL || 'http://localhost:5050'
 
 // User API instance
 export const userApi = axios.create({
