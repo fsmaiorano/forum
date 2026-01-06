@@ -20,7 +20,7 @@ public class PatchQuestionSetBestAnswerUseCaseUnitTest(TestFixture fixture) : Ba
         var question = MakeQuestion.Create();
         await repository.Create(question);
 
-        var command = new PatchQuestionSetBestAnswerCommand(question.Id, question.AuthorId, new UniqueEntityId());
+        var command = new PatchQuestionSetBestAnswerCommand(question.Id, new UniqueEntityId());
 
         await useCase.PatchQuestionSetBestAnswerUseCaseHandler(command);
         var updatedQuestion = await repository.FindById(question.Id);
@@ -41,7 +41,7 @@ public class PatchQuestionSetBestAnswerUseCaseUnitTest(TestFixture fixture) : Ba
         var question = MakeQuestion.Create();
         await repository.Create(question);
 
-        var command = new PatchQuestionSetBestAnswerCommand(question.Id, question.AuthorId, new UniqueEntityId());
+        var command = new PatchQuestionSetBestAnswerCommand(question.Id, new UniqueEntityId());
 
         await useCase.PatchQuestionSetBestAnswerUseCaseHandler(command);
         var updatedQuestion = await repository.FindById(question.Id);

@@ -7,7 +7,6 @@ namespace Forum.Application.UseCases.Question.PatchQuestionSetBestAnswer;
 
 public record PatchQuestionSetBestAnswerCommand(
     UniqueEntityId QuestionId,
-    UniqueEntityId AuthorId,
     UniqueEntityId AnswerId);
 
 public record PatchQuestionSetBestAnswerResult();
@@ -29,9 +28,6 @@ public class PatchQuestionSetBestAnswerUseCase(
 
         if (question is null)
             throw new NotFoundException(nameof(Question), command.QuestionId);
-
-        if (question.AuthorId != command.AuthorId)
-            throw new ForbiddenException("You are not allowed to update this question.");
         
         QuestionEntity.SelectBestAnswer(question, command.AnswerId);
         await questionRepository.SelectBestAnswer(question);

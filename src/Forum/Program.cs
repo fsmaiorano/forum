@@ -59,6 +59,7 @@ GetQuestionsByAuthorIdEndpoint.MapEndpoint(app);
 CreateQuestionEndpoint.MapEndpoint(app);
 UpdateQuestionEndpoint.MapEndpoint(app);
 DeleteQuestionEndpoint.MapEndpoint(app);
+PatchQuestionSetBestAnswerEndpoint.MapEndpoint(app);
 
 GetAnswersEndpoint.MapEndpoint(app);
 CreateAnswerEndpoint.MapEndpoint(app);

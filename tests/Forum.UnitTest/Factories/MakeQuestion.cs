@@ -26,7 +26,7 @@ public static class MakeQuestion
         string? title = null,
         string? content = null,
         List<AttachmentRequest>? attachments = null)
-    {               
+    {
         var faker = new Bogus.Faker();
         return new CreateQuestionRequest(
             title ?? faker.Lorem.Sentence(3),
@@ -89,5 +89,11 @@ public static class MakeQuestion
             Slug: slug ?? faker.Lorem.Slug(),
             Attachments: attachments ?? []
         );
+    }
+
+    public static PatchQuestionSetBestAnswerRequest PatchQuestionSetBestAnswerRequest(string questionId,
+        string bestAnswerId)
+    {
+        return new PatchQuestionSetBestAnswerRequest(questionId, bestAnswerId);
     }
 }
