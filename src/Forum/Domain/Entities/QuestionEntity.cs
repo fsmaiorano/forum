@@ -23,7 +23,7 @@ public sealed record QuestionEntity : Aggregate
             AuthorId = authorId,
             Title = title,
             Content = content,
-            Slug = string.IsNullOrWhiteSpace(slug) ? Slug.Create(title) : new Slug(slug),
+            Slug = string.IsNullOrWhiteSpace(slug) ? Slug.CreateFromText(title) : new Slug(slug),
             Attachments = attachments ?? AttachmentList.Create()
         };
 
