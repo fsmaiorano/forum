@@ -2,10 +2,11 @@ using Microsoft.OpenApi.Models;
 using Notification.Application;
 using Notification.Endpoints.Notification;
 using Notification.Infrastructure;
+using Notification.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApplication();
+builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration, builder);
 
 builder.Services.AddCors(options =>
@@ -36,6 +37,8 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Notification API v1");
     options.RoutePrefix = "swagger";
 });
+
+await app.InitialiseDatabaseAsync();
 
 app.UseCors();
 app.UseHttpsRedirection();

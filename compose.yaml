@@ -1,39 +1,52 @@
 ﻿services:
-#  forum:
-#    image: forum
-#    container_name: forumapi
-#    build:
-#      context: .
-#      dockerfile: src/Forum/Dockerfile
-#    ports:
-#      - "6000:8080"
-#      - "6060:8081"
-#    networks:
-#      - forum-network
-#  notification:
-#    image: notification
-#    container_name: notificationapi
-#    build:
-#      context: .
-#      dockerfile: src/Notification/Dockerfile
-#    ports:
-#      - "6001:8080"
-#      - "6061:8081"
-#    networks:
-#      - forum-network
-#  user:
-#    image: user
-#    container_name: userapi
-#    build:
-#      context: .
-#      dockerfile: src/User/Dockerfile
-#    ports:
-#      - "6002:8080"
-#      - "6062:8081"
-#    environment:
-#      - ConnectionStrings__DefaultConnection=Host=userdb;Port=5432;Database=UserDb;Username=postgres;Password=postgres
-#    networks:
-#      - forum-network
+  #  forum:
+  #    image: forum
+  #    container_name: forumapi
+  #    build:
+  #      context: .
+  #      dockerfile: src/Forum/Dockerfile
+  #    ports:
+  #      - "6000:8080"
+  #      - "6060:8081"
+  #    networks:
+  #      - forum-network
+  #  notification:
+  #    image: notification
+  #    container_name: notificationapi
+  #    build:
+  #      context: .
+  #      dockerfile: src/Notification/Dockerfile
+  #    ports:
+  #      - "6001:8080"
+  #      - "6061:8081"
+  #    networks:
+  #      - forum-network
+  #  user:
+  #    image: user
+  #    container_name: userapi
+  #    build:
+  #      context: .
+  #      dockerfile: src/User/Dockerfile
+  #    ports:
+  #      - "6002:8080"
+  #      - "6062:8081"
+  #    environment:
+  #      - ConnectionStrings__DefaultConnection=Host=userdb;Port=5432;Database=UserDb;Username=postgres;Password=postgres
+  #    networks:
+  #      - forum-network
+  messagebroker:
+    image: rabbitmq:management
+    container_name: messagebroker
+    hostname: forum-mq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - forum-network
   userdb:
     image: postgres
     container_name: userdb
@@ -62,7 +75,7 @@
       - postgres_forum:/var/lib/postgresql
     networks:
       - forum-network
-      
+  
   notificationdb:
     image: postgres
     container_name: notificationdb
@@ -77,7 +90,7 @@
       - postgres_notification:/var/lib/postgresql
     networks:
       - forum-network
-  
+
 volumes:
   postgres_user:
   postgres_forum:

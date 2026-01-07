@@ -19,10 +19,19 @@ namespace Forum.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton(typeof(IAppLogger<>), typeof(AppLogger<>));
-        services.AddSingleton<IEventBus, InMemoryEventBus>();
+        
+        var rabbitMqConnectionString = configuration["RabbitMQ:ConnectionString"] 
+            ?? throw new InvalidOperationException("RabbitMQ:ConnectionString is not configured");
+        
+        services.AddSingleton<IEventBus>(sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<EventBus>>();
+            return new EventBus(sp, logger, rabbitMqConnectionString);
+        });
+        
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
         services.AddExceptionHandler<CustomExceptionHandler>();
