@@ -1,39 +1,77 @@
 ﻿services:
-  #  forum:
-  #    image: forum
-  #    container_name: forumapi
-  #    build:
-  #      context: .
-  #      dockerfile: src/Forum/Dockerfile
-  #    ports:
-  #      - "6000:8080"
-  #      - "6060:8081"
-  #    networks:
-  #      - forum-network
-  #  notification:
-  #    image: notification
-  #    container_name: notificationapi
-  #    build:
-  #      context: .
-  #      dockerfile: src/Notification/Dockerfile
-  #    ports:
-  #      - "6001:8080"
-  #      - "6061:8081"
-  #    networks:
-  #      - forum-network
-  #  user:
-  #    image: user
-  #    container_name: userapi
-  #    build:
-  #      context: .
-  #      dockerfile: src/User/Dockerfile
-  #    ports:
-  #      - "6002:8080"
-  #      - "6062:8081"
-  #    environment:
-  #      - ConnectionStrings__DefaultConnection=Host=userdb;Port=5432;Database=UserDb;Username=postgres;Password=postgres
-  #    networks:
-  #      - forum-network
+  forum:
+    image: forum
+    container_name: forumapi
+    build:
+      context: .
+      dockerfile: src/Forum/Dockerfile
+    ports:
+      - "8000:8080"
+      - "8443:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:8080;https://+:8081
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - forum_https:/https
+    depends_on:
+      forumdb:
+        condition: service_healthy
+      messagebroker:
+        condition: service_healthy
+    networks:
+      - forum-network
+    restart: unless-stopped
+
+  notification:
+    image: notification
+    container_name: notificationapi
+    build:
+      context: .
+      dockerfile: src/Notification/Dockerfile
+    ports:
+      - "8001:8080"
+      - "8444:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:8080;https://+:8081
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - notification_https:/https
+    depends_on:
+      notificationdb:
+        condition: service_healthy
+      messagebroker:
+        condition: service_healthy
+    networks:
+      - forum-network
+    restart: unless-stopped
+
+  user:
+    image: user
+    container_name: userapi
+    build:
+      context: .
+      dockerfile: src/User/Dockerfile
+    ports:
+      - "8002:8080"
+      - "8445:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:8080;https://+:8081
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - user_https:/https
+    depends_on:
+      userdb:
+        condition: service_healthy
+    networks:
+      - forum-network
+    restart: unless-stopped
+
   messagebroker:
     image: rabbitmq:management
     container_name: messagebroker
@@ -47,6 +85,11 @@
       - "15672:15672"
     networks:
       - forum-network
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
   userdb:
     image: postgres
     container_name: userdb
@@ -61,6 +104,11 @@
       - postgres_user:/var/lib/postgresql
     networks:
       - forum-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   forumdb:
     image: postgres
     container_name: forumdb
@@ -75,6 +123,11 @@
       - postgres_forum:/var/lib/postgresql
     networks:
       - forum-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   
   notificationdb:
     image: postgres
@@ -90,11 +143,19 @@
       - postgres_notification:/var/lib/postgresql
     networks:
       - forum-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_user:
   postgres_forum:
   postgres_notification:
+  forum_https:
+  notification_https:
+  user_https:
 networks:
   forum-network:
     driver: bridge

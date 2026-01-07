@@ -84,11 +84,13 @@ Each microservice has its own dedicated database:
 
 ### Microservices
 
-| Service       | Local Development | Docker | Docker Internal |
-|---------------|-------------------|--------|-----------------|
-| Forum         | 5000 - 5050       | 6000 - 6060 | 8080 - 8081    |
-| Notification  | 5001 - 5051       | 6001 - 6061 | 8080 - 8081    |
-| User          | 5002 - 5052       | 6002 - 6062 | 8080 - 8081    |
+| Service       | Local HTTP | Local HTTPS | Docker HTTP | Docker HTTPS | Docker Internal |
+|---------------|------------|-------------|-------------|--------------|-----------------|
+| Forum         | 5000       | 5050        | 8000        | 8443         | 8080 - 8081     |
+| Notification  | 5001       | 5051        | 8001        | 8444         | 8080 - 8081     |
+| User          | 5002       | 5052        | 8002        | 8445         | 8080 - 8081     |
+
+**Note**: Docker uses safe ports (8000-8002, 8443-8445) to avoid browser blocking issues. Ports 6000-6007 are considered unsafe by modern browsers.
 
 ### Infrastructure
 
@@ -182,13 +184,27 @@ git clone <repository-url>
 cd Forum
 ```
 
-2. Start the infrastructure (databases and message broker):
+2. **Option A - Run Everything in Docker (Recommended)**
 ```bash
+# Start all services (APIs + Databases + RabbitMQ)
 docker-compose up -d
+
+# Access the APIs:
+# Forum API:        http://localhost:8000/swagger
+# Notification API: http://localhost:8001/swagger
+# User API:         http://localhost:8002/swagger
+
+# HTTPS is also available:
+# Forum API:        https://localhost:8443/swagger
+# Notification API: https://localhost:8444/swagger
+# User API:         https://localhost:8445/swagger
 ```
 
-3. Run the microservices locally:
+3. **Option B - Run APIs Locally (For Debugging)**
 ```bash
+# Start only infrastructure (databases and RabbitMQ)
+docker-compose up -d userdb forumdb notificationdb messagebroker
+
 # Terminal 1 - Forum Service
 cd src/Forum
 dotnet run
@@ -200,18 +216,20 @@ dotnet run
 # Terminal 3 - Notification Service
 cd src/Notification
 dotnet run
+
+# Access the APIs:
+# Forum API:        http://localhost:5000/swagger
+# Notification API: http://localhost:5001/swagger
+# User API:         http://localhost:5002/swagger
 ```
 
-### Running Everything in Docker
+### HTTPS Certificates in Docker
 
-Uncomment the service definitions in `compose.yaml` and run:
-```bash
-docker-compose up -d
-```
+HTTPS certificates are automatically generated inside containers on first startup. No manual configuration needed!
 
 ### Database Migrations
 
-Run migrations for each service:
+Migrations run automatically when starting services. To run manually:
 
 ```bash
 # Forum Service
@@ -229,11 +247,29 @@ dotnet ef database update
 
 ## 📖 API Documentation
 
-Once the services are running, access the Swagger documentation:
+### Local Development
 
-- **Forum API**: `http://localhost:5000/swagger` (local) or `http://localhost:6000/swagger` (Docker)
-- **User API**: `http://localhost:5002/swagger` (local) or `http://localhost:6002/swagger` (Docker)
-- **Notification API**: `http://localhost:5001/swagger` (local) or `http://localhost:6001/swagger` (Docker)
+- **Forum API**: http://localhost:5000/swagger
+- **User API**: http://localhost:5002/swagger
+- **Notification API**: http://localhost:5001/swagger
+
+### Docker Environment
+
+**HTTP:**
+- **Forum API**: http://localhost:8000/swagger
+- **User API**: http://localhost:8002/swagger
+- **Notification API**: http://localhost:8001/swagger
+
+**HTTPS:**
+- **Forum API**: https://localhost:8443/swagger
+- **User API**: https://localhost:8445/swagger
+- **Notification API**: https://localhost:8444/swagger
+
+### RabbitMQ Management
+
+- **URL**: http://localhost:15672
+- **Username**: guest
+- **Password**: guest
 
 ## 🧪 Testing
 
@@ -295,6 +331,103 @@ The application implements comprehensive error handling with:
 - **Global Exception Handler**: Centralized exception processing
 - **Result Pattern**: Functional error handling for operations
 - **Structured Logging**: All errors are logged with context
+
+## 🐳 Docker
+
+### Quick Commands
+
+```bash
+# Start everything
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# View specific service logs
+docker-compose logs -f forum
+docker-compose logs -f notification
+docker-compose logs -f user
+
+# Check status
+docker-compose ps
+
+# Stop everything
+docker-compose down
+
+# Stop and remove volumes (clean slate)
+docker-compose down -v
+
+# Restart a specific service
+docker-compose restart forum
+```
+
+### Docker Features
+
+✅ **Automatic HTTPS Certificates** - Generated automatically inside containers  
+✅ **Safe Ports** - Uses browser-safe ports (8000-8002, 8443-8445)  
+✅ **Health Checks** - All services have health monitoring  
+✅ **Persistent Data** - Databases use volumes for data persistence  
+✅ **Auto-restart** - Services restart automatically on failure  
+✅ **Zero Configuration** - Just run `docker-compose up -d`
+
+### Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        Host Machine                         │
+│                                                             │
+│  Browser → :8000 (Forum HTTP)    → :8443 (Forum HTTPS)     │
+│         → :8001 (Notification)   → :8444 (Notification)     │
+│         → :8002 (User)          → :8445 (User)             │
+│         → :15672 (RabbitMQ UI)                             │
+│                                                             │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │              Docker Network                          │  │
+│  │                                                      │  │
+│  │  ┏━━━━━━━━━━┓  ┏━━━━━━━━━━━━━┓  ┏━━━━━━━━━━┓       │  │
+│  │  ┃ Forum    ┃  ┃ Notification┃  ┃  User    ┃       │  │
+│  │  ┃   API    ┃  ┃     API     ┃  ┃   API    ┃       │  │
+│  │  ┗━━━━━━━━━━┛  ┗━━━━━━━━━━━━━┛  ┗━━━━━━━━━━┛       │  │
+│  │       ↓              ↓                ↓              │  │
+│  │  ┌────────┐    ┌────────┐      ┌────────┐          │  │
+│  │  │ForumDB │    │NotifyDB│      │UserDB  │          │  │
+│  │  └────────┘    └────────┘      └────────┘          │  │
+│  │       ↓              ↓                ↓              │  │
+│  │            ┌───────────────────┐                     │  │
+│  │            │    RabbitMQ       │                     │  │
+│  │            └───────────────────┘                     │  │
+│  └──────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Troubleshooting
+
+**APIs not responding?**
+```bash
+# Check if containers are running
+docker-compose ps
+
+# Check logs for errors
+docker-compose logs -f
+```
+
+**Database connection issues?**
+```bash
+# Restart databases
+docker-compose restart forumdb notificationdb userdb
+```
+
+**RabbitMQ issues?**
+```bash
+# Restart RabbitMQ
+docker-compose restart messagebroker
+```
+
+**Clean everything and start fresh?**
+```bash
+docker-compose down -v
+docker-compose up -d --build
+```
 
 ## 🤝 Contributing
 
