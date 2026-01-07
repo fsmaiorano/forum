@@ -1,39 +1,39 @@
 ﻿services:
-  forum:
-    image: forum
-    container_name: forumapi
-    build:
-      context: .
-      dockerfile: src/Forum/Dockerfile
-    ports:
-      - "6000:8080"
-      - "6060:8081"
-    networks:
-      - forum-network
-  notification:
-    image: notification
-    container_name: notificationapi
-    build:
-      context: .
-      dockerfile: src/Notification/Dockerfile
-    ports:
-      - "6001:8080"
-      - "6061:8081"
-    networks:
-      - forum-network
-  user:
-    image: user
-    container_name: userapi
-    build:
-      context: .
-      dockerfile: src/User/Dockerfile
-    ports:
-      - "6002:8080"
-      - "6062:8081"
-    environment:
-      - ConnectionStrings__DefaultConnection=Host=userdb;Port=5432;Database=UserDb;Username=postgres;Password=postgres
-    networks:
-      - forum-network
+#  forum:
+#    image: forum
+#    container_name: forumapi
+#    build:
+#      context: .
+#      dockerfile: src/Forum/Dockerfile
+#    ports:
+#      - "6000:8080"
+#      - "6060:8081"
+#    networks:
+#      - forum-network
+#  notification:
+#    image: notification
+#    container_name: notificationapi
+#    build:
+#      context: .
+#      dockerfile: src/Notification/Dockerfile
+#    ports:
+#      - "6001:8080"
+#      - "6061:8081"
+#    networks:
+#      - forum-network
+#  user:
+#    image: user
+#    container_name: userapi
+#    build:
+#      context: .
+#      dockerfile: src/User/Dockerfile
+#    ports:
+#      - "6002:8080"
+#      - "6062:8081"
+#    environment:
+#      - ConnectionStrings__DefaultConnection=Host=userdb;Port=5432;Database=UserDb;Username=postgres;Password=postgres
+#    networks:
+#      - forum-network
   userdb:
     image: postgres
     container_name: userdb
@@ -59,7 +59,7 @@
     ports:
       - "5433:5432"
     volumes:
-      - postgres_user:/var/lib/postgresql
+      - postgres_forum:/var/lib/postgresql
     networks:
       - forum-network
       
@@ -69,17 +69,19 @@
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=UserDb
+      - POSTGRES_DB=NotificationDb
     restart: always
     ports:
       - "5434:5432"
     volumes:
-      - postgres_user:/var/lib/postgresql
+      - postgres_notification:/var/lib/postgresql
     networks:
       - forum-network
   
 volumes:
   postgres_user:
+  postgres_forum:
+  postgres_notification:
 networks:
   forum-network:
     driver: bridge

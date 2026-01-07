@@ -1,5 +1,4 @@
 using Forum.Infrastructure.Data.Context;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -73,19 +72,19 @@ public static class DatabaseExtensions
 
             Console.WriteLine("Database initialization completed successfully.");
 
-            // Initialize roles
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            if (!await roleManager.RoleExistsAsync("Admin"))
-            {
-                Console.WriteLine("Creating Admin role...");
-                await roleManager.CreateAsync(new IdentityRole("Admin"));
-            }
-
-            if (!await roleManager.RoleExistsAsync("Member"))
-            {
-                Console.WriteLine("Creating Member role...");
-                await roleManager.CreateAsync(new IdentityRole("Member"));
-            }
+            // // Initialize roles
+            // var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            // if (!await roleManager.RoleExistsAsync("Admin"))
+            // {
+            //     Console.WriteLine("Creating Admin role...");
+            //     await roleManager.CreateAsync(new IdentityRole("Admin"));
+            // }
+            //
+            // if (!await roleManager.RoleExistsAsync("Member"))
+            // {
+            //     Console.WriteLine("Creating Member role...");
+            //     await roleManager.CreateAsync(new IdentityRole("Member"));
+            // }
 
             Console.WriteLine("Role initialization completed successfully.");
         }

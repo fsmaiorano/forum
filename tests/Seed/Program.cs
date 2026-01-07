@@ -7,10 +7,10 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .Build();
 
-var apiSettings = configuration.GetSection("ApiSettings").Get<ApiSettings>() 
+var apiSettings = configuration.GetSection("ApiSettings").Get<ApiSettings>()
     ?? throw new InvalidOperationException("ApiSettings not found in configuration");
 
-var seedSettings = configuration.GetSection("SeedSettings").Get<SeedSettings>() 
+var seedSettings = configuration.GetSection("SeedSettings").Get<SeedSettings>()
     ?? throw new InvalidOperationException("SeedSettings not found in configuration");
 
 var userHttpClient = new HttpClient { BaseAddress = new Uri(apiSettings.UserApiBaseUrl) };
@@ -39,11 +39,11 @@ for (var i = 0; i < seedSettings.NumberOfUsers; i++)
 {
     var registerRequest = dataGenerator.GenerateUser();
     var authResponse = await userApiService.RegisterUserAsync(registerRequest);
-    
+
     if (authResponse != null)
     {
         var (userId, token) = await userApiService.GetUserIdFromTokenAsync(authResponse.AccessToken);
-        
+
         if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(token))
         {
             users.Add(new UserInfo
@@ -55,7 +55,7 @@ for (var i = 0; i < seedSettings.NumberOfUsers; i++)
             });
         }
     }
-    
+
     await Task.Delay(100);
 }
 
@@ -78,7 +78,7 @@ foreach (var user in users)
     {
         var questionRequest = dataGenerator.GenerateQuestion(user.UserId);
         var questionResponse = await forumApiService.CreateQuestionAsync(questionRequest, user.AccessToken);
-        
+
         if (questionResponse != null)
         {
             allQuestions.Add(new QuestionInfo
@@ -88,7 +88,7 @@ foreach (var user in users)
                 Title = questionRequest.Title
             });
         }
-        
+
         await Task.Delay(100);
     }
 }
@@ -110,15 +110,15 @@ var totalAnswersCreated = 0;
 foreach (var question in allQuestions)
 {
     var eligibleAnswerers = users.Where(u => u.UserId != question.AuthorId).ToList();
-    
+
     var numberOfAnswers = Math.Min((int)seedSettings.AnswersPerQuestion, eligibleAnswerers.Count);
     var selectedAnswerers = eligibleAnswerers.OrderBy(_ => random.Next()).Take(numberOfAnswers).ToList();
-    
+
     foreach (var answerer in selectedAnswerers)
     {
         var answerRequest = dataGenerator.GenerateAnswer(question.QuestionId, answerer.UserId, question.Title);
         var answerResponse = await forumApiService.CreateAnswerAsync(answerRequest, answerer.AccessToken);
-        
+
         if (answerResponse != null)
         {
             question.Answers.Add(new AnswerInfo
@@ -129,7 +129,7 @@ foreach (var question in allQuestions)
             });
             totalAnswersCreated++;
         }
-        
+
         await Task.Delay(100);
     }
 }
@@ -147,20 +147,18 @@ foreach (var question in allQuestions.Where(q => q.Answers.Any()))
     {
         var questionAuthor = users.FirstOrDefault(u => u.UserId == question.AuthorId);
         if (questionAuthor == null) continue;
-        
+
         var bestAnswer = question.Answers[random.Next(question.Answers.Count)];
-        
+
         var success = await forumApiService.SetBestAnswerAsync(
             question.QuestionId,
             question.AuthorId,
             bestAnswer.AnswerId,
             questionAuthor.AccessToken);
-        
+
         if (success)
-        {
             bestAnswersMarked++;
-        }
-        
+
         await Task.Delay(100);
     }
 }
@@ -181,9 +179,7 @@ Console.WriteLine("📋 Sample Created Data:");
 Console.WriteLine("───────────────────────────────────────────────────────────");
 Console.WriteLine("\n👤 Sample Users:");
 foreach (var user in users.Take(3))
-{
     Console.WriteLine($"   • {user.Email} (ID: {user.UserId[..8]}...)");
-}
 
 Console.WriteLine("\n❓ Sample Questions:");
 foreach (var question in allQuestions.Take(3))
@@ -195,4 +191,3 @@ foreach (var question in allQuestions.Take(3))
 Console.WriteLine();
 Console.WriteLine("✅ Database seeding completed successfully!");
 Console.WriteLine("═══════════════════════════════════════════════════════════\n");
-

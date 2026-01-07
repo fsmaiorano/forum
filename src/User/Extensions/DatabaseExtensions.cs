@@ -74,6 +74,7 @@ public static class DatabaseExtensions
             
             // Initialize roles
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            
             if (!await roleManager.RoleExistsAsync("Admin"))
             {
                 Console.WriteLine("Creating Admin role...");
@@ -87,6 +88,42 @@ public static class DatabaseExtensions
             }
             
             Console.WriteLine("Role initialization completed successfully.");
+            
+            // Initialize admin user
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            
+            const string adminEmail = "admin@forum.com";
+            const string adminPassword = "Admin123!";
+            
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
+            if (adminUser == null)
+            {
+                Console.WriteLine("Creating admin user...");
+                adminUser = new ApplicationUser
+                {
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    EmailConfirmed = true,
+                    EnableNotifications = true
+                };
+                
+                var result = await userManager.CreateAsync(adminUser, adminPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                    Console.WriteLine($"Admin user created successfully with email: {adminEmail}");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to create admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Admin user already exists.");
+            }
+            
+            Console.WriteLine("User initialization completed successfully.");
         }
         catch (Exception ex)
         {

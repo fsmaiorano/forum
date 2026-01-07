@@ -6,6 +6,8 @@
 
 
 
-| Others | Local Env | Docker Env | Docker Inside |
-|--------|-----------|------------|---------------|
-| UserDB | 5435      | 5435       | 5435          |
+| Others         | Local Env | Docker Env | Docker Inside |
+|----------------|-----------|------------|---------------|
+| ForumDb        | 5433      | 5433       | 5433          |
+| NotificationDb | 5434      | 5434       | 5434          |
+| UserDb         | 5435      | 5435       | 5435          |

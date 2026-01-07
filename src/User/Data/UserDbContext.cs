@@ -34,6 +34,6 @@ public class UserDbContext : IdentityDbContext<ApplicationUser, IdentityRole, st
                 .HasDefaultValue(true);
         });
       
-        builder.HasDefaultSchema("identity");
+        // builder.HasDefaultSchema("identity");
     }
 }
