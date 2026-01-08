@@ -1,36 +1,35 @@
 meta {
-}
-  - 2: Answer
-  - 1: Question
-  AttachmentOwnerType:
-  
-  Create a new question.
-docs {
-
-}
-  }
-    ]
-      }
-        "link": "https://example.com/document.pdf"
-        "title": "Example Document",
-        "ownerType": 1,
-        "ownerId": "sample-owner-id",
-      {
-    "attachments": [
-    "authorId": "{{user_id}}",
-    "content": "I am looking for best practices to implement authentication in an ASP.NET Core web application. Any suggestions or resources would be appreciated?",
-    "title": "How to implement authentication in ASP.NET Core?",
-  {
-body:json {
-
-}
-  auth: none
-  body: json
-  url: {{forum_base_url}}/question
-post {
-
-}
-  seq: 1
-  type: http
   name: Create Question
+  type: http
+  seq: 1
+}
 
+post {
+  url: {{forum_base_url}}/question
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "How to implement authentication in ASP.NET Core?",
+    "content": "I am looking for best practices to implement authentication in an ASP.NET Core web application. Any suggestions or resources would be appreciated?",
+    "authorId": "{{user_id}}",
+    "attachments": [
+      {
+        "ownerId": "{{user_id}}",
+        "ownerType": 1,
+        "title": "Example Document",
+        "link": "https://example.com/document.pdf"
+      }
+    ]
+  }
+}
+
+docs {
+  Create a new question.
+  
+  AttachmentOwnerType:
+  - 1: Question
+  - 2: Answer
+}

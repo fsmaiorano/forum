@@ -41,7 +41,6 @@ app.UseSwaggerUI(options =>
 await app.InitialiseDatabaseAsync();
 
 app.UseCors();
-app.UseHttpsRedirection();
 
 ReadNotificationEndpoint.MapEndpoint(app);
 SendNotificationEndpoint.MapEndpoint(app);

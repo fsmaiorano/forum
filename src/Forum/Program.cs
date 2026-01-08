@@ -51,7 +51,6 @@ app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 app.UseSerilogRequestLogging();
 
-app.UseHttpsRedirection();
 
 GetQuestionsEndpoint.MapEndpoint(app);
 GetQuestionByIdEndpoint.MapEndpoint(app);
