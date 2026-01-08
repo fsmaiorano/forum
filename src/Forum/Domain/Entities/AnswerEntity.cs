@@ -12,7 +12,7 @@ public sealed record AnswerEntity : Aggregate
     public UniqueEntityId QuestionId { get; private set; } = null!;
     public string Content { get; private set; } = null!;
     public bool IsClosed { get; private set; }
-    public WatchedList<AttachmentEntity> Attachments { get; private set; } = null!;
+    public WatchedList<AttachmentEntity> Attachments { get; private init; } = AttachmentList.Create();
 
 
     public static AnswerEntity Create(
