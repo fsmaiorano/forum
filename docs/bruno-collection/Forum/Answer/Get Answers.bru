@@ -1,0 +1,20 @@
+meta {
+  name: Get Answers
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{forum_base_url}}/answer/{questionId}
+  body: none
+  auth: none
+}
+
+params:path {
+  questionId: replace-with-question-id
+}
+
+docs {
+  Get all answers for a specific question.
+}
+

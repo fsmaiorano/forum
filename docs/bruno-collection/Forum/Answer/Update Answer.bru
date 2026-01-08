@@ -1,0 +1,36 @@
+meta {
+  name: Update Answer
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{forum_base_url}}/answer
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "answerId": "replace-with-answer-id",
+    "authorId": "{{user_id}}",
+    "content": "Updated answer content with more detailed information...",
+    "attachments": [
+      {
+        "ownerId": "sample-owner-id",
+        "ownerType": 2,
+        "title": "Updated Code Example",
+        "link": "https://example.com/updated-code-example.cs"
+      }
+    ]
+  }
+}
+
+docs {
+  Update an existing answer.
+  
+  AttachmentOwnerType:
+  - 1: Question
+  - 2: Answer
+}
+

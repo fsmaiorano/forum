@@ -1,0 +1,32 @@
+meta {
+  name: Register
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{user_base_url}}/api/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "user@example.com",
+    "password": "Password123!"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setVar("access_token", res.body.accessToken);
+    bru.setVar("refresh_token", res.body.refreshToken);
+  }
+}
+
+docs {
+  Register a new user account.
+  
+  On success, the access and refresh tokens are automatically saved to environment variables.
+}
+

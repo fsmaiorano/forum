@@ -1,0 +1,27 @@
+meta {
+  name: Set Best Answer
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{forum_base_url}}/question/{questionId}/best-answer
+  body: json
+  auth: none
+}
+
+params:path {
+  questionId: replace-with-question-id
+}
+
+body:json {
+  {
+    "questionId": "replace-with-question-id",
+    "answerId": "replace-with-answer-id"
+  }
+}
+
+docs {
+  Mark an answer as the best answer for a question.
+}
+

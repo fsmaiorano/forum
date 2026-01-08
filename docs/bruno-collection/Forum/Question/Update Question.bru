@@ -1,0 +1,38 @@
+meta {
+  name: Update Question
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{forum_base_url}}/question
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "questionId": "replace-with-question-id",
+    "authorId": "{{user_id}}",
+    "title": "Updated: How to implement authentication in ASP.NET Core?",
+    "content": "Updated content with more details...",
+    "slug": "custom-slug",
+    "attachments": [
+      {
+        "ownerId": "sample-owner-id",
+        "ownerType": 1,
+        "title": "Updated Document",
+        "link": "https://example.com/updated-document.pdf"
+      }
+    ]
+  }
+}
+
+docs {
+  Update an existing question.
+  
+  AttachmentOwnerType:
+  - 1: Question
+  - 2: Answer
+}
+

@@ -1,0 +1,32 @@
+meta {
+  name: Refresh Token
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{user_base_url}}/api/auth/refresh
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "accessToken": "{{access_token}}",
+    "refreshToken": "{{refresh_token}}"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setVar("access_token", res.body.accessToken);
+    bru.setVar("refresh_token", res.body.refreshToken);
+  }
+}
+
+docs {
+  Refresh the access token using a valid refresh token.
+  
+  On success, new tokens are automatically saved to environment variables.
+}
+

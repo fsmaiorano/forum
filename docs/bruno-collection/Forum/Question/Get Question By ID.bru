@@ -1,0 +1,20 @@
+meta {
+  name: Get Question By ID
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{forum_base_url}}/question/{questionId}
+  body: none
+  auth: none
+}
+
+params:path {
+  questionId: replace-with-question-id
+}
+
+docs {
+  Get a specific question by its ID.
+}
+

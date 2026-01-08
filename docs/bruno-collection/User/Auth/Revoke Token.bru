@@ -1,0 +1,23 @@
+meta {
+  name: Revoke Token
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{user_base_url}}/api/auth/revoke
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "accessToken": "{{access_token}}",
+    "refreshToken": "{{refresh_token}}"
+  }
+}
+
+docs {
+  Revoke a refresh token to invalidate it.
+}
+

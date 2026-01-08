@@ -1,0 +1,23 @@
+meta {
+  name: Read Notification
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{notification_base_url}}/notification/read
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "notificationId": "replace-with-notification-id",
+    "recipientId": "{{user_id}}"
+  }
+}
+
+docs {
+  Mark a notification as read.
+}
+

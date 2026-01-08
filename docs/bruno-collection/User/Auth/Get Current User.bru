@@ -1,0 +1,28 @@
+meta {
+  name: Get Current User
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{user_base_url}}/api/auth/me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setVar("user_id", res.body.userId);
+  }
+}
+
+docs {
+  Get the current authenticated user information.
+  Requires authentication.
+  
+  On success, the user ID is automatically saved to environment variables.
+}
