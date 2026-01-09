@@ -8,14 +8,14 @@ public record GetAnswersResponse(List<AnswerDto> Answers);
 
 public static class GetAnswersEndpoint
 {
-    private const string Route = "/answer/{questionId}";
+    private const string Route = "/answer/{id}";
 
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(Route,
-                async (string questionId, [FromServices] IGetAnswersUseCase handler) =>
+                async ([FromRoute] string id, [FromServices] IGetAnswersUseCase handler) =>
                 {
-                    var query = new GetAnswersQuery(questionId);
+                    var query = new GetAnswersQuery(id);
                     var result = await handler.GetAnswersUseCaseHandler(query);
 
                     if (result.IsSuccess && !result.Value.Answers.Any())
@@ -30,7 +30,9 @@ public static class GetAnswersEndpoint
                             Attachments = answerEntity.Attachments?.CurrentItems.Select(a => new AttachmentDto
                             {
                                 Id = a.Id.ToString(), OwnerId = a.OwnerId.ToString(), Link = a.Link, Title = a.Title
-                            })
+                            }),
+                            CreatedAt = answerEntity.CreatedAt,
+                            UpdatedAt = answerEntity.UpdatedAt,
                         })
                         .ToList();
 
